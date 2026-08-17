@@ -64,6 +64,18 @@ namespace Game.Core
         public static void RaiseBatteryChargeCompleted() => OnBatteryChargeCompleted?.Invoke();
 
         // ================= MINIGAME / MÃ KHÓA =================
+        /// <summary>
+        /// Bắn 1 LẦN DUY NHẤT lúc bắt đầu run, do LockController tự random rồi phát ra.
+        /// Truyền 1 Dictionary ánh xạ minigameId -> chữ số (0-9) mà minigame đó sẽ trả về
+        /// khi hoàn thành. VD: {"maze": 7, "cardmatch": 2, "wire": 9}.
+        /// Mỗi MinigameController lắng nghe event này, tự tra cứu digit của riêng mình
+        /// theo đúng minigameId, rồi dùng số đó khi bắn OnMinigameCompleted lúc chơi xong.
+        /// LockController là nguồn chân lý (source of truth) duy nhất cho đáp án —
+        /// minigame KHÔNG tự random số của mình.
+        /// </summary>
+        public static event Action<System.Collections.Generic.Dictionary<string, int>> OnPasscodeGenerated;
+        public static void RaisePasscodeGenerated(System.Collections.Generic.Dictionary<string, int> minigameDigitMap)
+            => OnPasscodeGenerated?.Invoke(minigameDigitMap);
 
         /// <summary>Bắn khi 1 minigame hoàn thành, trả về (id minigame, chữ số nhận được).
         /// LockController lắng nghe để cộng số vào hộp mã.</summary>
@@ -91,6 +103,7 @@ namespace Game.Core
         {
             OnViewChangeStarted = null;
             OnViewChangeFinished = null;
+            OnPasscodeGenerated = null;
             OnEntityStateChanged = null;
             OnEntityDangerZoneEntered = null;
             OnJumpscareTriggered = null;
