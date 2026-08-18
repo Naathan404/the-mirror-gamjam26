@@ -6,10 +6,10 @@ namespace Game.Minigames.Maze
 {
     public class MazeController : MonoBehaviour
     {
+        private MinigameType minigameType = MinigameType.Maze;
+
         [Header("Cài đặt Minigame")]
-        public MinigameType minigameType = MinigameType.Maze;
-        public int mazeWidth = 8;
-        public int mazeHeight = 8;
+        public MazeConfig mazeConfig;
 
         [Header("Tham chiếu")]
         public GameObject visualRoot;
@@ -52,9 +52,9 @@ namespace Game.Minigames.Maze
         }
 
         // ================= XỬ LÝ LẮNG NGHE EVENT =================
-        private void HandlePasscodeGenerated(Dictionary<string, int> dict)
+        private void HandlePasscodeGenerated(Dictionary<MinigameType, int> dict)
         {
-            if (dict.TryGetValue(minigameType.ToString(), out int digit))
+            if (dict.TryGetValue(minigameType, out int digit))
             {
                 secretDigit = digit;
                 visualRoot.SetActive(false);
@@ -75,9 +75,15 @@ namespace Game.Minigames.Maze
         {
             if (type != minigameType) return;
 
-            visualRoot.SetActive(true); // Bật lưới, giấy, và cả nút Close 3D
+            if (mazeConfig == null)
+            {
+                Debug.LogError("[Maze] Thiếu file MazeConfig! Hãy kéo SO vào Inspector.");
+                return;
+            }
 
-            currentMazeData = MazeGenerator.Generate(mazeWidth, mazeHeight);
+            visualRoot.SetActive(true);
+
+            currentMazeData = MazeGenerator.Generate(mazeConfig.mazeWidth, mazeConfig.mazeHeight);
             mazeRenderer.RenderMaze(currentMazeData);
 
             if (currentPlayerInstance == null)

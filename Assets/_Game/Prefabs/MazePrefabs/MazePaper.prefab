@@ -368,9 +368,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c9bc5f81a5809744b9dde4170a8b0c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minigameType: 0
-  mazeWidth: 20
-  mazeHeight: 20
+  mazeConfig: {fileID: 11400000, guid: 50a7b18668256094fbefdeac0cfe666d, type: 2}
   visualRoot: {fileID: 4162130549954534917}
   mazeRenderer: {fileID: 1572578226532466489}
   playerPrefab: {fileID: 7531584946611662521, guid: 0fd0374bd38e2244daecdafbeb47ed2e, type: 3}

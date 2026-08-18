@@ -8,11 +8,13 @@ public class MinigameTogglesController : MonoBehaviour
     void Start()
     {
         GameEvents.OnMinigameOpened += HideAllToggles;
+        GameEvents.OnMinigameClosed += ShowAllToggles;
     }
 
     private void OnDestroy()
     {
         GameEvents.OnMinigameOpened -= HideAllToggles;
+        GameEvents.OnMinigameClosed -= ShowAllToggles;
     }
 
     private void HideAllToggles(MinigameType _)
@@ -20,6 +22,14 @@ public class MinigameTogglesController : MonoBehaviour
         foreach(var t in _toggles)
         {
             t.SetActive(false);
+        }
+    }
+
+    private void ShowAllToggles(MinigameType _) //TODO: show toggles when minigame unlocked
+    {
+        foreach (var t in _toggles)
+        {
+            t.SetActive(true);
         }
     }
 }
