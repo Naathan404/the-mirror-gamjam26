@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Game.Core;
+using Game.Managers;
 using UnityEngine;
 
 
@@ -24,6 +25,10 @@ namespace Game.Entity
         [Header("State Readonly")]
         [SerializeField] public int CurrentState { get; private set; }
         [SerializeField] private float _baseTimeScaleAccelaration = 1f;
+
+
+        private View _currentView = View.Mirror;
+        private bool _gameOverBuffer = false;
         
         #region Base
         private void Start()
@@ -50,21 +55,49 @@ namespace Game.Entity
         private void Update()
         {
             UpdateTimer();
-
+#if UNITY_EDITOR
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 GameEvents.RaiseLightFlashed();
             }
+#endif
         }
 
         private void UpdateTimer()
         {
+            if (_gameOverBuffer)
+            {
+                if (_currentView == View.Mirror)
+                {
+                    GameEvents.RaiseJumpscareTriggered();
+                    GameManager.Instance.SetGameOver();
+                    _gameOverBuffer = false;
+                }
+                return;
+            }
+
+            if (GameManager.Instance.CurrentState == GameState.GameOver) 
+                return;
+
             _timer += Time.deltaTime * _currentTimeScale;
             if (_timer > _maxTimerTime)
             {
                 _timer = -1f;
                 CurrentState--;
                 GameEvents.RaiseEntityStateChanged(CurrentState);
+
+                if (CurrentState == 0)
+                {
+                    if (_currentView == View.Mirror)
+                    {
+                        GameEvents.RaiseJumpscareTriggered();   
+                        GameManager.Instance.SetGameOver();
+                    }
+                    else
+                    {
+                        _gameOverBuffer = true;
+                    }
+                }
             }
         }
         
@@ -72,6 +105,7 @@ namespace Game.Entity
         {
             CurrentState = state;
             GameEvents.RaiseEntityStateChanged(state);
+            _currentTimeScale = GetTimeScaleByView(_currentView);
 
             if (_resetTimeWhenJumpState)
             {
@@ -91,6 +125,7 @@ namespace Game.Entity
         private void HandleViewChanged(View view)
         {
             _currentTimeScale = GetTimeScaleByView(view);
+            _currentView = view;
         }
 
         private void HandleLightFlashed()
