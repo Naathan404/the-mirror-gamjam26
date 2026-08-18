@@ -1,6 +1,7 @@
 using System.Collections;
 using DG.Tweening;
 using Game.Core;
+using Game.Effect;
 using Game.Managers;
 using UnityEngine;
 using UnityEngine.UI;
@@ -48,6 +49,8 @@ namespace Game.Entity
             _jumpscareSpriteRenderer.gameObject.SetActive(true);
 
             UnityEngine.Camera.main.transform.DOShakePosition(0.5f, 1f, 25, 90f);
+
+            FilterController.Instance.FlashScreen(FilterController.Instance.HazardColor, 0.5f);
             
             yield return new WaitForSeconds(_holdDuration);
         }
