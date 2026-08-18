@@ -84,6 +84,13 @@ namespace Game.Managers
             }
         }
         #endregion
+
+        #region Button Events
+        public void LightFlash()
+        {
+            GameEvents.RaiseLightFlashed();
+        }
+        #endregion
     }
     
 }
