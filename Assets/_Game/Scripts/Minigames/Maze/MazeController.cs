@@ -1,88 +1,21 @@
 using UnityEngine;
-using Game.Core;
-using System.Collections.Generic;
 
 namespace Game.Minigames.Maze
 {
-    public class MazeController : MonoBehaviour
+    // Kế thừa class cha
+    public class MazeController : MinigameBaseController
     {
-        private MinigameType minigameType = MinigameType.Maze;
-
-        [Header("Cài đặt Minigame")]
+        [Header("Tham chiếu Maze")]
         public MazeConfig mazeConfig;
-
-        [Header("Tham chiếu")]
-        public GameObject visualRoot;
         public MazeRenderer mazeRenderer;
         public MazePlayer playerPrefab;
 
-        // Dữ liệu nội bộ
         private MazeData currentMazeData;
         private MazePlayer currentPlayerInstance;
-        private int secretDigit = -1;
-        private bool isPlaying = false;
-        private bool isFocused = true;
 
-        // ================= ĐĂNG KÝ EVENT =================
-        private void OnEnable()
+        // 1. CHẠY KHI GAME MỞ LÊN
+        protected override void OnGameStart()
         {
-            GameEvents.OnPasscodeGenerated += HandlePasscodeGenerated;
-            GameEvents.OnLightFlashed += HandleLightFlashed;
-            GameEvents.OnMinigameOpened += HandleMinigameOpened;
-            GameEvents.OnMinigameClosed += HandleMinigameClosed;
-            GameEvents.OnViewChangeFinished += HandleViewChangeFinished;
-        }
-
-        private void OnDisable()
-        {
-            GameEvents.OnPasscodeGenerated -= HandlePasscodeGenerated;
-            GameEvents.OnLightFlashed -= HandleLightFlashed;
-            GameEvents.OnMinigameOpened -= HandleMinigameOpened;
-            GameEvents.OnMinigameClosed -= HandleMinigameClosed;
-            GameEvents.OnViewChangeFinished -= HandleViewChangeFinished;
-        }
-
-        private void Start()
-        {
-            // Chỉ cần tắt VisualRoot là mọi thứ (kể cả nút Close 3D bên trong) sẽ tự ẩn
-            if (visualRoot != null)
-            {
-                visualRoot.SetActive(false);
-            }
-        }
-
-        // ================= XỬ LÝ LẮNG NGHE EVENT =================
-        private void HandlePasscodeGenerated(Dictionary<MinigameType, int> dict)
-        {
-            if (dict.TryGetValue(minigameType, out int digit))
-            {
-                secretDigit = digit;
-                visualRoot.SetActive(false);
-            }
-        }
-
-        private void HandleViewChangeFinished(View currentView) => isFocused = (currentView == View.Desk);
-
-        private void HandleLightFlashed()
-        {
-            if (!isPlaying || currentPlayerInstance == null) return;
-
-            ResetPlayerPosition();
-            GameEvents.RaiseMinigameProgressReset(minigameType.ToString());
-        }
-
-        private void HandleMinigameOpened(MinigameType type)
-        {
-            if (type != minigameType) return;
-
-            if (mazeConfig == null)
-            {
-                Debug.LogError("[Maze] Thiếu file MazeConfig! Hãy kéo SO vào Inspector.");
-                return;
-            }
-
-            visualRoot.SetActive(true);
-
             currentMazeData = MazeGenerator.Generate(mazeConfig.mazeWidth, mazeConfig.mazeHeight);
             mazeRenderer.RenderMaze(currentMazeData);
 
@@ -90,28 +23,20 @@ namespace Game.Minigames.Maze
                 currentPlayerInstance = Instantiate(playerPrefab, mazeRenderer.mazeTilemap.layoutGrid.transform);
 
             currentPlayerInstance.transform.rotation = mazeRenderer.paperQuad.rotation;
-            ResetPlayerPosition();
-
-            isPlaying = true;
+            OnGameReset();
         }
 
-        private void HandleMinigameClosed(MinigameType type)
+        // 2. CHẠY KHI BỊ GIẬT ĐÈN (Hoặc lúc mới vào)
+        protected override void OnGameReset()
         {
-            if (type != minigameType || !isPlaying) return;
-
-            isPlaying = false;
-            visualRoot.SetActive(false); // Tắt sạch sẽ
-            GameEvents.RaiseMinigameProgressReset(minigameType.ToString());
+            if (currentPlayerInstance != null && currentMazeData != null)
+            {
+                Vector3 startWorldPos = mazeRenderer.GetWorldPosition(currentMazeData.StartPos);
+                currentPlayerInstance.Initialize(currentMazeData.StartPos, startWorldPos);
+            }
         }
 
-        // ================= LOGIC ĐIỀU KHIỂN =================
-
-        private void ResetPlayerPosition()
-        {
-            Vector3 startWorldPos = mazeRenderer.GetWorldPosition(currentMazeData.StartPos);
-            currentPlayerInstance.Initialize(currentMazeData.StartPos, startWorldPos);
-        }
-
+        // 3. LOGIC RIÊNG: ĐIỀU KHIỂN
         private void Update()
         {
             if (!isPlaying || !isFocused || currentPlayerInstance == null || currentPlayerInstance.IsMoving)
@@ -131,16 +56,12 @@ namespace Game.Minigames.Maze
             {
                 Vector2Int nextPos = currentPos + offset;
                 currentPlayerInstance.MoveTo(nextPos, mazeRenderer.GetWorldPosition(nextPos));
-                CheckWinCondition(nextPos);
-            }
-        }
 
-        private void CheckWinCondition(Vector2Int pos)
-        {
-            if (pos == currentMazeData.EndPos)
-            {
-                GameEvents.RaiseMinigameCompleted(minigameType.ToString(), secretDigit);
-                GameEvents.RaiseMinigameClosed(minigameType);
+                // KIỂM TRA ĐIỀU KIỆN THẮNG
+                if (nextPos == currentMazeData.EndPos)
+                {
+                    CompleteMinigame();
+                }
             }
         }
     }

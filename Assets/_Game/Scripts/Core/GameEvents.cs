@@ -87,12 +87,12 @@ namespace Game.Core
 
         /// <summary>Bắn khi 1 minigame hoàn thành, trả về (id minigame, chữ số nhận được).
         /// LockController lắng nghe để cộng số vào hộp mã.</summary>
-        public static event Action<string, int> OnMinigameCompleted;
-        public static void RaiseMinigameCompleted(string minigameId, int digit) => OnMinigameCompleted?.Invoke(minigameId, digit);
+        public static event Action<MinigameType, int> OnMinigameCompleted;
+        public static void RaiseMinigameCompleted(MinigameType minigameType, int digit) => OnMinigameCompleted?.Invoke(minigameType, digit);
 
         /// <summary>Bắn khi tiến trình 1 minigame bị reset (do giật đèn hoặc chuyển minigame khác).</summary>
-        public static event Action<string> OnMinigameProgressReset;
-        public static void RaiseMinigameProgressReset(string minigameId) => OnMinigameProgressReset?.Invoke(minigameId);
+        public static event Action<MinigameType> OnMinigameProgressReset;
+        public static void RaiseMinigameProgressReset(MinigameType minigameType) => OnMinigameProgressReset?.Invoke(minigameType);
 
         /// <summary>Bắn khi đủ 3 số, hộp khóa tự mở, chìa khóa xuất hiện.</summary>
         public static event Action OnLockUnlocked;
