@@ -13,21 +13,29 @@ namespace Game.Managers
         [SerializeField] private GameObject _behindPanel;
 
         #region Base
-        private void OnEnable()
-        {
-            GameEvents.OnViewChangeStarted += HideAllPanels;
-            GameEvents.OnViewChangeFinished += ActivateView;
-        }
+        // private void Star()
+        // {
+        //     GameEvents.OnViewChangeStarted += HideAllPanels;
+        //     GameEvents.OnViewChangeFinished += ActivateView;
+        // }
         
-        private void OnDisable()
-        {
-            GameEvents.OnViewChangeStarted -= HideAllPanels;
-            GameEvents.OnViewChangeFinished -= ActivateView;
-        }
+        // private void OnDisable()
+        // {
+        //     GameEvents.OnViewChangeStarted -= HideAllPanels;
+        //     GameEvents.OnViewChangeFinished -= ActivateView;
+        // }
 
         private void Start()
         {
             ActivateView(View.Mirror);
+            GameEvents.OnViewChangeStarted += HideAllPanels;
+            GameEvents.OnViewChangeFinished += ActivateView;
+        }
+
+        private void OnDestroy()
+        {
+            GameEvents.OnViewChangeStarted -= HideAllPanels;
+            GameEvents.OnViewChangeFinished -= ActivateView;
         }
         #endregion
 
