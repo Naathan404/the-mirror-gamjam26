@@ -77,6 +77,14 @@ namespace Game.Core
         public static void RaisePasscodeGenerated(System.Collections.Generic.Dictionary<string, int> minigameDigitMap)
             => OnPasscodeGenerated?.Invoke(minigameDigitMap);
 
+        /// <summary>Bắn khi một Object trong môi trường (vd: quyển sách) yêu cầu mở minigame.</summary>
+        public static event Action<MinigameType> OnMinigameOpened;
+        public static void RaiseMinigameOpened(MinigameType type) => OnMinigameOpened?.Invoke(type);
+
+        /// <summary>Bắn khi người chơi bấm nút thoát hoặc minigame tự đóng.</summary>
+        public static event Action<MinigameType> OnMinigameClosed;
+        public static void RaiseMinigameClosed(MinigameType type) => OnMinigameClosed?.Invoke(type);
+
         /// <summary>Bắn khi 1 minigame hoàn thành, trả về (id minigame, chữ số nhận được).
         /// LockController lắng nghe để cộng số vào hộp mã.</summary>
         public static event Action<string, int> OnMinigameCompleted;

@@ -12,5 +12,12 @@ namespace Game.Core
         Mirror, 
         Desk, 
         Behind
-    }    
+    }
+    
+    public enum MinigameType
+    {
+        Maze,
+        CardMatch,
+        Wires
+    }
 }
