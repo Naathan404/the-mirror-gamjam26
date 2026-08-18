@@ -1,22 +1,20 @@
 using UnityEngine;
 using Game.Core;
 using System.Collections.Generic;
-using UnityEngine.UI;
 
 namespace Game.Minigames.Maze
 {
     public class MazeController : MonoBehaviour
     {
+        private MinigameType minigameType = MinigameType.Maze;
+
         [Header("Cài đặt Minigame")]
-        public MinigameType minigameType = MinigameType.Maze;
-        public int mazeWidth = 8;
-        public int mazeHeight = 8;
+        public MazeConfig mazeConfig;
 
         [Header("Tham chiếu")]
         public GameObject visualRoot;
         public MazeRenderer mazeRenderer;
         public MazePlayer playerPrefab;
-        public Button closeButton;
 
         // Dữ liệu nội bộ
         private MazeData currentMazeData;
@@ -41,17 +39,12 @@ namespace Game.Minigames.Maze
             GameEvents.OnLightFlashed -= HandleLightFlashed;
             GameEvents.OnMinigameOpened -= HandleMinigameOpened;
             GameEvents.OnMinigameClosed -= HandleMinigameClosed;
-
             GameEvents.OnViewChangeFinished -= HandleViewChangeFinished;
         }
 
         private void Start()
         {
-            if (closeButton != null)
-            {
-                closeButton.onClick.AddListener(CloseMinigame);
-                closeButton.gameObject.SetActive(false); // Ép ẩn nút ngay frame đầu tiên
-            }
+            // Chỉ cần tắt VisualRoot là mọi thứ (kể cả nút Close 3D bên trong) sẽ tự ẩn
             if (visualRoot != null)
             {
                 visualRoot.SetActive(false);
@@ -59,12 +52,12 @@ namespace Game.Minigames.Maze
         }
 
         // ================= XỬ LÝ LẮNG NGHE EVENT =================
-        private void HandlePasscodeGenerated(Dictionary<string, int> dict)
+        private void HandlePasscodeGenerated(Dictionary<MinigameType, int> dict)
         {
-            if (dict.TryGetValue(minigameType.ToString(), out int digit))
+            if (dict.TryGetValue(minigameType, out int digit))
             {
                 secretDigit = digit;
-                visualRoot.SetActive(false); // Mặc định ẩn khi mới nạp game
+                visualRoot.SetActive(false);
             }
         }
 
@@ -80,12 +73,17 @@ namespace Game.Minigames.Maze
 
         private void HandleMinigameOpened(MinigameType type)
         {
-            //if (type != minigameType || secretDigit == -1) return;
             if (type != minigameType) return;
 
+            if (mazeConfig == null)
+            {
+                Debug.LogError("[Maze] Thiếu file MazeConfig! Hãy kéo SO vào Inspector.");
+                return;
+            }
+
             visualRoot.SetActive(true);
-            closeButton.gameObject.SetActive(true);
-            currentMazeData = MazeGenerator.Generate(mazeWidth, mazeHeight);
+
+            currentMazeData = MazeGenerator.Generate(mazeConfig.mazeWidth, mazeConfig.mazeHeight);
             mazeRenderer.RenderMaze(currentMazeData);
 
             if (currentPlayerInstance == null)
@@ -102,17 +100,9 @@ namespace Game.Minigames.Maze
             if (type != minigameType || !isPlaying) return;
 
             isPlaying = false;
-            visualRoot.SetActive(false);
-            if (closeButton != null) closeButton.gameObject.SetActive(false);
+            visualRoot.SetActive(false); // Tắt sạch sẽ
             GameEvents.RaiseMinigameProgressReset(minigameType.ToString());
         }
-
-        // ================= API CHO BUTTON UI =================
-
-        // Cực kỳ tinh gọn: Nút UI bấm vào thì chỉ việc bắn Event.
-        // Hàm Handle ở trên sẽ tự động bắt được và xử lý logic Đóng/Mở.
-        public void OpenMinigame() => GameEvents.RaiseMinigameOpened(minigameType);
-        public void CloseMinigame() => GameEvents.RaiseMinigameClosed(minigameType);
 
         // ================= LOGIC ĐIỀU KHIỂN =================
 
@@ -149,8 +139,8 @@ namespace Game.Minigames.Maze
         {
             if (pos == currentMazeData.EndPos)
             {
-                isPlaying = false;
                 GameEvents.RaiseMinigameCompleted(minigameType.ToString(), secretDigit);
+                GameEvents.RaiseMinigameClosed(minigameType);
             }
         }
     }

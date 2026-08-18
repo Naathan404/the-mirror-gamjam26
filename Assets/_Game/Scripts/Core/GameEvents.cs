@@ -73,8 +73,8 @@ namespace Game.Core
         /// LockController là nguồn chân lý (source of truth) duy nhất cho đáp án —
         /// minigame KHÔNG tự random số của mình.
         /// </summary>
-        public static event Action<System.Collections.Generic.Dictionary<string, int>> OnPasscodeGenerated;
-        public static void RaisePasscodeGenerated(System.Collections.Generic.Dictionary<string, int> minigameDigitMap)
+        public static event Action<System.Collections.Generic.Dictionary<MinigameType, int>> OnPasscodeGenerated;
+        public static void RaisePasscodeGenerated(System.Collections.Generic.Dictionary<MinigameType, int> minigameDigitMap)
             => OnPasscodeGenerated?.Invoke(minigameDigitMap);
 
         /// <summary>Bắn khi một Object trong môi trường (vd: quyển sách) yêu cầu mở minigame.</summary>
