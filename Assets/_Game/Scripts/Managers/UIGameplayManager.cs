@@ -30,18 +30,32 @@ namespace Game.Managers
             ActivateView(View.Mirror);
             GameEvents.OnViewChangeStarted += HideAllPanels;
             GameEvents.OnViewChangeFinished += ActivateView;
+            
+            GameEvents.OnJumpscareTriggered += HideAllPanels;
         }
 
         private void OnDestroy()
         {
             GameEvents.OnViewChangeStarted -= HideAllPanels;
             GameEvents.OnViewChangeFinished -= ActivateView;
+
+            GameEvents.OnJumpscareTriggered += HideAllPanels;
         }
         #endregion
 
 
         #region Panels
         private void HideAllPanels(View _)
+        {
+            if (_mirrorPanel != null)
+                _mirrorPanel.gameObject.SetActive(false);
+            if (_deskPanel != null)
+                _deskPanel.gameObject.SetActive(false);
+            if (_behindPanel != null)
+                _behindPanel.gameObject.SetActive(false);
+        }
+
+        private void HideAllPanels()
         {
             if (_mirrorPanel != null)
                 _mirrorPanel.gameObject.SetActive(false);
