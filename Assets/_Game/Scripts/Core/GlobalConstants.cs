@@ -20,4 +20,26 @@ namespace Game.Core
         CardMatch,
         Wires
     }
+
+    public enum ColorId
+    {
+        Red, 
+        Orange,
+        Yellow,
+        Green,
+        Blue,
+        Purple,
+        Pink,
+        Brown,
+        Black,
+        White,
+        Gray,
+        Teal,
+        Cyan,
+        Navy,
+        Maroon,
+        Olive,
+        Gold,
+        Coral
+    }
 }

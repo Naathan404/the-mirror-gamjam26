@@ -1,5 +1,5 @@
 using System;
-using Game.Camera;
+using Game.Cameras;
 using UnityEngine;
 
 /// <summary>
