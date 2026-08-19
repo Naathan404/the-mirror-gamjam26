@@ -374,6 +374,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd2e82cb742736343b14c319bd10b006, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _difficultyConfig: {fileID: 11400000, guid: f1014d0dd73bf7f488435077bc19879b, type: 2}
   minigameType: 3
   visualRoot: {fileID: 2979883506177334436}
   config: {fileID: 11400000, guid: 60d9379b5448e964fb37c6cbea6cbf76, type: 2}

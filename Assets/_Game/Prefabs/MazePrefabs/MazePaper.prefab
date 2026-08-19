@@ -102,7 +102,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3874248298364165137
 Transform:
   m_ObjectHideFlags: 0
@@ -336,6 +336,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c9bc5f81a5809744b9dde4170a8b0c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _difficultyConfig: {fileID: 11400000, guid: f1014d0dd73bf7f488435077bc19879b, type: 2}
   minigameType: 0
   visualRoot: {fileID: 4162130549954534917}
   mazeConfig: {fileID: 11400000, guid: 50a7b18668256094fbefdeac0cfe666d, type: 2}

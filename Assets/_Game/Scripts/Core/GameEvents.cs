@@ -94,6 +94,10 @@ namespace Game.Core
         public static event Action<MinigameType> OnMinigameProgressReset;
         public static void RaiseMinigameProgressReset(MinigameType minigameType) => OnMinigameProgressReset?.Invoke(minigameType);
 
+        /// <summary> Bắn khi tăng độ khó của minigame lên </sumary>
+        public static event Action<int> OnDifficultyIncreased;
+        public static void RaiseDifficultyIncreased(int minigamePassed) => OnDifficultyIncreased?.Invoke(minigamePassed);
+
         /// <summary>Bắn khi đủ 3 số, hộp khóa tự mở, chìa khóa xuất hiện.</summary>
         public static event Action OnLockUnlocked;
         public static void RaiseLockUnlocked() => OnLockUnlocked?.Invoke();

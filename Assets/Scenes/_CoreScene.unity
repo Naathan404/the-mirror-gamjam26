@@ -167,10 +167,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4690681761170977767, guid: 61a3796945a32bb42b15b4f826d92c43, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8137816822120468182, guid: 61a3796945a32bb42b15b4f826d92c43, type: 3}
       propertyPath: m_Name
       value: CardMatchPaper
@@ -370,10 +366,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4162130549954534917, guid: 3281f5afa1cd974478215737ea036316, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5533935052466573044, guid: 3281f5afa1cd974478215737ea036316, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1058,22 +1050,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1795091796110074020, guid: 22ae32a0a40a8534794b81b0f6fe1f8a, type: 3}
-      propertyPath: _verticalPaddingPercent
-      value: 0.15
-      objectReference: {fileID: 0}
-    - target: {fileID: 4999900140362683032, guid: 22ae32a0a40a8534794b81b0f6fe1f8a, type: 3}
-      propertyPath: m_Color.b
-      value: 0.69016856
-      objectReference: {fileID: 0}
-    - target: {fileID: 4999900140362683032, guid: 22ae32a0a40a8534794b81b0f6fe1f8a, type: 3}
-      propertyPath: m_Color.g
-      value: 0.80576783
-      objectReference: {fileID: 0}
-    - target: {fileID: 4999900140362683032, guid: 22ae32a0a40a8534794b81b0f6fe1f8a, type: 3}
-      propertyPath: m_Color.r
-      value: 0.8436657
-      objectReference: {fileID: 0}
     - target: {fileID: 5257739718066296102, guid: 22ae32a0a40a8534794b81b0f6fe1f8a, type: 3}
       propertyPath: m_Name
       value: Minigame_Wires
@@ -1517,6 +1493,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 900273400086484660, guid: cf17094e63ec42741960fa962d82cb78, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 14.13
+      objectReference: {fileID: 0}
     - target: {fileID: 2373219333861293520, guid: cf17094e63ec42741960fa962d82cb78, type: 3}
       propertyPath: m_LocalPosition.x
       value: -8.482506
@@ -1560,6 +1540,10 @@ PrefabInstance:
     - target: {fileID: 6031300085054101162, guid: cf17094e63ec42741960fa962d82cb78, type: 3}
       propertyPath: m_Name
       value: '[---Minigame Toggles Controller---]'
+      objectReference: {fileID: 0}
+    - target: {fileID: 6303594459245165812, guid: cf17094e63ec42741960fa962d82cb78, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 8.86
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

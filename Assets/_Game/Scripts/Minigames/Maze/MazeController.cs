@@ -265,5 +265,10 @@ namespace Game.Minigames.Maze
         }
 
         protected override void OnGameClosed() => ClearEntities();
+
+        protected override void OnDifficultyIncrease(int minigamePassed)
+        {
+            mazeConfig = _difficultyConfig.GetMinigameConfig<MazeConfig>(minigamePassed);
+        }
     }
 }

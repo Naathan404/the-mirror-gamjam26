@@ -4,8 +4,12 @@ using System.Collections.Generic;
 
 namespace Game.Minigames
 {
+    [DefaultExecutionOrder(-5)]
     public abstract class MinigameBaseController : MonoBehaviour
     {
+        [Header("Difficulty SO")]
+        [SerializeField] protected MinigameDifficultyConfigSO _difficultyConfig;
+
         [Header("Base Cấu hình")]
         public MinigameType minigameType;
 
@@ -26,6 +30,9 @@ namespace Game.Minigames
             GameEvents.OnMinigameClosed += HandleMinigameClosed;
             GameEvents.OnViewChangeFinished += HandleViewChangeFinished;
 
+            GameEvents.OnDifficultyIncreased += HandleDifficultyIncreased;
+            OnDifficultyIncrease(0);
+
             if (visualRoot != null) visualRoot.SetActive(false);
         }
 
@@ -36,10 +43,12 @@ namespace Game.Minigames
             GameEvents.OnMinigameOpened -= HandleMinigameOpened;
             GameEvents.OnMinigameClosed -= HandleMinigameClosed;
             GameEvents.OnViewChangeFinished -= HandleViewChangeFinished;
+
+            GameEvents.OnDifficultyIncreased -= HandleDifficultyIncreased;
         }
 
         // ================= XỬ LÝ VÒNG ĐỜI CHUNG =================
-        private void HandlePasscodeGenerated(Dictionary<MinigameType, int> dict)
+        protected void HandlePasscodeGenerated(Dictionary<MinigameType, int> dict)
         {
             if (dict.TryGetValue(minigameType, out int digit))
             {
@@ -48,7 +57,7 @@ namespace Game.Minigames
             }
         }
 
-        private void HandleViewChangeFinished(View currentView) => isFocused = (currentView == View.Desk);
+        protected void HandleViewChangeFinished(View currentView) => isFocused = (currentView == View.Desk);
 
         private void HandleLightFlashed()
         {
@@ -57,7 +66,7 @@ namespace Game.Minigames
             GameEvents.RaiseMinigameProgressReset(minigameType);
         }
 
-        private void HandleMinigameOpened(MinigameType type)
+        protected void HandleMinigameOpened(MinigameType type)
         {
             if (type != minigameType || secretDigit == -1) return;
 
@@ -67,7 +76,7 @@ namespace Game.Minigames
             OnGameStart();
         }
 
-        private void HandleMinigameClosed(MinigameType type)
+        protected void HandleMinigameClosed(MinigameType type)
         {
             if (type != minigameType || !isPlaying) return;
 
@@ -89,9 +98,15 @@ namespace Game.Minigames
             GameEvents.RaiseMinigameClosed(minigameType);
         }
 
+        protected void HandleDifficultyIncreased(int minigamePassed)
+        {
+            OnDifficultyIncrease(minigamePassed);
+        }
+
         // ================= CÁC HÀM TRỪU TƯỢNG =================
         protected abstract void OnGameStart();
         protected abstract void OnGameReset();
+        protected abstract void OnDifficultyIncrease(int minigamePassed);
         protected virtual void OnGameClosed() { }
     }
 }
