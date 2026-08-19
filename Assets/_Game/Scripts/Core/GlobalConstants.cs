@@ -18,6 +18,7 @@ namespace Game.Core
     {
         Maze,
         CardMatch,
-        Wires
+        Wires,
+        WordSearch
     }
 }
