@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e704f66ab40ce534c92b382a38f0a012, type: 3}
   m_Name: CardMatchConfig
   m_EditorClassIdentifier: 
-  rows: 2
-  columns: 3
+  rows: 4
+  columns: 5
   cardBackSprite: {fileID: -4571828015118065507, guid: e2931fa48a5acf1448eadb56a19aba46, type: 3}
   cardFaceSprites:
   - {fileID: -7245866468247524007, guid: 59a91ae92cd1af54e9dc25d7b29d1f6a, type: 3}
@@ -26,9 +26,9 @@ MonoBehaviour:
   - {fileID: 2433783391455003196, guid: 26cd67e81f92c54428afcb4a2090cc2b, type: 3}
   - {fileID: -2036430572945357876, guid: 02733ab1afdf374499c95701f4fb637c, type: 3}
   - {fileID: 6103351784708059954, guid: 03820765fa577604f94257c87c51ce8d, type: 3}
-  previewTime: 2
-  delayBeforeFlipBack: 1
-  flipAnimationDuration: 0.2
+  previewTime: 1
+  delayBeforeFlipBack: 0.2
+  flipAnimationDuration: 0.3
   cardSize: {x: 1, y: 1.5}
   spacing: {x: 0.2, y: 0.2}
   paperPadding: 0.9
