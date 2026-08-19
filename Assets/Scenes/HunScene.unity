@@ -127,14 +127,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 215221182251093443, guid: 3281f5afa1cd974478215737ea036316, type: 3}
-      propertyPath: entityPrefab
-      value: 
-      objectReference: {fileID: 7531584946611662521, guid: 0145f13b0a158be4c8165fd86900c349, type: 3}
-    - target: {fileID: 4162130549954534917, guid: 3281f5afa1cd974478215737ea036316, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5533935052466573044, guid: 3281f5afa1cd974478215737ea036316, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -178,14 +170,6 @@ PrefabInstance:
     - target: {fileID: 5818126139438917460, guid: 3281f5afa1cd974478215737ea036316, type: 3}
       propertyPath: m_Name
       value: MazePaper
-      objectReference: {fileID: 0}
-    - target: {fileID: 7234599288672608962, guid: 3281f5afa1cd974478215737ea036316, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 7234599288672608962, guid: 3281f5afa1cd974478215737ea036316, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
