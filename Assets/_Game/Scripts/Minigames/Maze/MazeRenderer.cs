@@ -33,23 +33,18 @@ namespace Game.Minigames.Maze
                 for (int y = 0; y < padHeight; y++)
                 {
                     int tileIndex = -1;
-
-                    // Xác định tọa độ Góc (Dùng ô 15 như Hưn yêu cầu)
-                    if ((x == 0 && y == 0) || (x == 0 && y == padHeight - 1) ||
-                        (x == padWidth - 1 && y == 0) || (x == padWidth - 1 && y == padHeight - 1))
+                    tileIndex = (x == 0, x == padWidth - 1, y == 0, y == padHeight - 1) switch
                     {
-                        tileIndex = 15;
-                    }
-                    // Xác định các cạnh đệm (Các ô chỉ có 1 nét viền bao bọc bên ngoài)
-                    else if (x == 0) tileIndex = 7;             // Viền Trái (Bức tường nằm bên trái)
-                    else if (x == padWidth - 1) tileIndex = 11;   // Viền Phải (Bức tường nằm bên phải)
-                    else if (y == 0) tileIndex = 14;             // Viền Dưới (Bức tường nằm bên dưới)
-                    else if (y == padHeight - 1) tileIndex = 13; // Viền Trên (Bức tường nằm bên trên)
-                    else
-                    {
-                        // LÕI MÊ CUNG: Lùi tọa độ x, y đi 1 để map đúng vào ma trận Data
-                        tileIndex = data.Grid[x - 1, y - 1];
-                    }
+                        (true, _, true, _) => 9,   // Góc Trái - Dưới
+                        (true, _, _, true) => 10,  // Góc Trái - Trên
+                        (_, true, true, _) => 5,   // Góc Phải - Dưới
+                        (_, true, _, true) => 6,   // Góc Phải - Trên
+                        (true, _, _, _) => 3,      // Nguyên cột Viền Trái
+                        (_, true, _, _) => 3,      // Nguyên cột Viền Phải
+                        (_, _, true, _) => 12,     // Nguyên hàng Viền Dưới
+                        (_, _, _, true) => 12,     // Nguyên hàng Viền Trên
+                        _ => data.Grid[x - 1, y - 1] // Lõi mê cung
+                    };
 
                     // Đặt gạch
                     if (tileIndex >= 0 && tileIndex < 16 && wallTiles[tileIndex] != null)
