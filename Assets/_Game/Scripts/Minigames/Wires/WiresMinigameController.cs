@@ -20,10 +20,8 @@ namespace Game.Minigames.Wires
         [SerializeField] private Transform _rightSocketsContainer;
 
         [Header("Hint Indicator")]
-        [Tooltip("Prefab hiển thị màu ĐÍCH bắt buộc phải nối tới, đặt bên trái mỗi socket trái. Dùng chung component WireSocket cho tiện set màu, nhưng KHÔNG được nằm trong _socketLayerMask kẻo bị raycast nhầm thành socket thật.")]
         [SerializeField] private WireSocket _hintIndicatorPrefab;
         [SerializeField] private Transform _hintIndicatorsContainer;
-        [Tooltip("Đẩy hint ra xa thêm khỏi socket trái, theo % chiều rộng background")]
         [Range(0f, 0.3f)]
         [SerializeField] private float _hintExtraOffsetPercent = 0.08f;
 
@@ -75,29 +73,25 @@ namespace Game.Minigames.Wires
         #region Event
         protected override void OnGameStart()
         {
+            WarmUp();
             ResetVisualsAndState();
-            SetVisibleWireSockets(true);
             AssignRandomColors();
+            SetVisibleWireSockets(true);
             HideMistakeWarningPanel();
         }
 
         protected override void OnGameReset()
         {
             ResetVisualsAndState();
+            DestroyAllSockets();
         }
 
         protected override void OnGameClosed()
         {
             ResetVisualsAndState();
+            DestroyAllSockets();
         }
         #endregion
-
-        protected override void Start()
-        {
-            base.Start();
-
-            WarmUp();
-        }
 
         private void Update()
         {
@@ -108,6 +102,10 @@ namespace Game.Minigames.Wires
         #region Core Logic
         private void WarmUp()
         {
+            _leftSockets.Clear();
+            _rightSockets.Clear();
+            _hintIndicators.Clear();
+            
             int count = Mathf.Min(WireCount, _config.ColorCount);
 
             List<Vector3> leftPositions = ComputeSocketPositions(count, WireSide.Left);
@@ -127,6 +125,9 @@ namespace Game.Minigames.Wires
 
                 _leftSockets.Add(left);
                 _rightSockets.Add(right);
+
+                left.transform.localScale = _config.Scale;
+                right.transform.localScale = _config.Scale;
 
                 left.gameObject.SetActive(false);
                 right.gameObject.SetActive(false);
@@ -162,13 +163,27 @@ namespace Game.Minigames.Wires
             }
         }
 
-        /// <summary>
-        /// Tính vị trí cho hint indicator - dùng CHUNG công thức X với socket
-        /// trái, chỉ lùi thêm ra ngoài 1 khoảng (_hintExtraOffsetPercent) để
-        /// không bị double-scale hay lệch hướng khi background bị xoay
-        /// (xem lý do KHÔNG dùng TransformDirection/Vector3.left trực tiếp
-        /// trong ghi chú ComputeSocketPositions bên dưới).
-        /// </summary>
+        private void DestroyAllSockets()
+        {
+            foreach(Transform child in _leftSocketsContainer)
+            {
+                Destroy(child.gameObject);
+            }
+
+            foreach(Transform child in _rightSocketsContainer)
+            {
+                Destroy(child.gameObject);
+            }
+
+            if (_hintIndicatorsContainer != null)
+            {
+                foreach (Transform child in _hintIndicatorsContainer)
+                {
+                    Destroy(child.gameObject);
+                }
+            }
+        }
+
         private List<Vector3> ComputeHintPositions(int count)
         {
             var positions = new List<Vector3>(count);
@@ -243,7 +258,6 @@ namespace Game.Minigames.Wires
                 allColors.RemoveAt(r);
             }
 
-            // Sinh luật "màu nguồn -> màu đích bắt buộc", không cho map vào chính nó.
             _requiredMatch.Clear();
             foreach (var kvp in GenerateRequiredMatchMap(pickedColors))
             {
@@ -268,12 +282,7 @@ namespace Game.Minigames.Wires
             }
         }
 
-        /// <summary>
-        /// Sinh map "màu nguồn -> màu đích bắt buộc" sao cho KHÔNG có màu nào
-        /// map vào chính nó (không cho A nối A). Dùng thuật toán Sattolo -
-        /// luôn cho ra 1 hoán vị dạng single-cycle, đảm bảo perm[i] != i với
-        /// mọi i (derangement) một cách ngẫu nhiên thật sự.
-        /// </summary>
+
         private Dictionary<ColorId, ColorId> GenerateRequiredMatchMap(List<ColorId> colors)
         {
             var map = new Dictionary<ColorId, ColorId>();
@@ -281,7 +290,6 @@ namespace Game.Minigames.Wires
 
             if (n <= 1)
             {
-                // Không đủ màu để tránh A-A, đành chấp nhận map vào chính nó.
                 foreach (var c in colors) map[c] = c;
                 return map;
             }
@@ -291,7 +299,7 @@ namespace Game.Minigames.Wires
 
             for (int i = n - 1; i > 0; i--)
             {
-                int j = Random.Range(0, i); // 0..i-1, KHÔNG bao gồm i -> đảm bảo derangement
+                int j = Random.Range(0, i);
                 (perm[i], perm[j]) = (perm[j], perm[i]);
             }
 
@@ -535,8 +543,6 @@ namespace Game.Minigames.Wires
 
             foreach (var s in _leftSockets) s.ResetSocket();
             foreach (var s in _rightSockets) s.ResetSocket();
-
-            SetVisibleWireSockets(false);
         }
 
         private void CheckMistakeCountToReset()
@@ -557,13 +563,21 @@ namespace Game.Minigames.Wires
             if (_mistakeCount > _maxMistakeCount)
             {
                 _mistakeCount = 0;
-                OnGameStart();
+                ResetVisualsAndState();
+                AssignRandomColors();
+                // SetVisibleWireSockets(true);
+                HideMistakeWarningPanel();
             }
         }
 
         private void HideMistakeWarningPanel()
         {
             foreach(var o in _mistakeWarnings) o.SetActive(false);
+        }
+
+        protected override void OnDifficultyIncrease(int minigamePassed)
+        {
+            _config = _difficultyConfig.GetMinigameConfig<WiresConfig>(minigamePassed);
         }
         #endregion
     }

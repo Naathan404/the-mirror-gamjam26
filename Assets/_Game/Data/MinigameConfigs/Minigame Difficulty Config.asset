@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65297bc96da7c0d4d819c3cddf651d37, type: 3}
+  m_Name: Minigame Difficulty Config
+  m_EditorClassIdentifier: 
+  _mazeConfigs:
+  - {fileID: 11400000, guid: 9a3c4369a86b47749ac3a1b83007aee0, type: 2}
+  - {fileID: 11400000, guid: 01fb6ceafe1addd4586de3a750e73f29, type: 2}
+  - {fileID: 11400000, guid: ee7dbf8136567f845bea7456ae6f157e, type: 2}
+  - {fileID: 11400000, guid: 4cd65c6fa7943c947ba1dcc71859b16b, type: 2}
+  _cardsConfigs:
+  - {fileID: 11400000, guid: 11fb7d9e8b181484e985ea4b6cf2995c, type: 2}
+  - {fileID: 11400000, guid: 27cace378adafab4ab67dfb1a7789b9e, type: 2}
+  - {fileID: 11400000, guid: 0cb87d681faffec48ad46afea2327f17, type: 2}
+  - {fileID: 11400000, guid: 334767d1dfb13c743849e42d83c2236b, type: 2}
+  _wiresConfigs:
+  - {fileID: 11400000, guid: 66458569d795dbf4a90abc3c3aab6ca2, type: 2}
+  - {fileID: 11400000, guid: 85da42366a57c1a4db4194cd470bd33f, type: 2}
+  - {fileID: 11400000, guid: 430d4b27131937f41b002970a733c731, type: 2}
+  - {fileID: 11400000, guid: 0b521f2852ffd6e419da4eb2801506a6, type: 2}
+  _wordsConfigs:
+  - {fileID: 11400000, guid: ff99fc0a0446832498ab8a9ebad16265, type: 2}
+  - {fileID: 11400000, guid: 5ca7b36c25cbadd49af7b51c13a5a8e5, type: 2}
+  - {fileID: 11400000, guid: d423fbd613396f241b39083d5d0c7c9f, type: 2}
+  - {fileID: 11400000, guid: 781006a323fc85342b21e8953bf399f8, type: 2}

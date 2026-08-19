@@ -241,5 +241,10 @@ namespace Game.Minigames.CardMatch
                 list[randomIndex] = temp;
             }
         }
+
+        protected override void OnDifficultyIncrease(int minigamePassed)
+        {
+            config = _difficultyConfig.GetMinigameConfig<CardMatchConfig>(minigamePassed);
+        }
     }
 }

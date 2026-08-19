@@ -336,5 +336,10 @@ namespace Game.Minigames.WordSearch
 
         protected override void OnGameClosed() => ClearGame();
         protected override void OnGameReset() { if (isPlaying) OnGameStart(); }
+
+        protected override void OnDifficultyIncrease(int minigamePassed)
+        {
+            config = _difficultyConfig.GetMinigameConfig<WordSearchConfig>(minigamePassed);
+        }
     }
 }

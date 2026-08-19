@@ -77,7 +77,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 5361879805376855263, guid: 65e3e910e0db57a48a8c08d35a4b2133, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.8436657, g: 0.80576783, b: 0.69016856, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -430,6 +430,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38e4dda30f31b81489f22b1d2406fbe6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _difficultyConfig: {fileID: 11400000, guid: f1014d0dd73bf7f488435077bc19879b, type: 2}
   minigameType: 2
   visualRoot: {fileID: 7830215745170949518}
   _config: {fileID: 11400000, guid: ad375e9fffe934f41acd82a4fce73941, type: 2}
@@ -441,7 +442,7 @@ MonoBehaviour:
   _hintIndicatorsContainer: {fileID: 7736307100353242028}
   _hintExtraOffsetPercent: 0.25
   _horizontalPaddingPercent: 0.4
-  _verticalPaddingPercent: 0.2
+  _verticalPaddingPercent: 0.15
   _socketZOffset: -0.3
   _mistakeWarnings:
   - {fileID: 4880799178655046384}
