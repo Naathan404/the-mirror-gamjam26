@@ -14,7 +14,7 @@ namespace Game.Systems.Lock
 
     public class PasscodeController : MonoBehaviour
     {
-        public int requiredDigits = 3;
+        public int requiredDigits = 4;
 
         // Dữ liệu gốc (Chạy logic)
         private Dictionary<MinigameType, int> minigameDigitMap;
@@ -47,6 +47,7 @@ namespace Game.Systems.Lock
             minigameDigitMap.Add(MinigameType.Maze, Random.Range(0, 10));
             minigameDigitMap.Add(MinigameType.CardMatch, Random.Range(0, 10));
             minigameDigitMap.Add(MinigameType.Wires, Random.Range(0, 10));
+            minigameDigitMap.Add(MinigameType.WordSearch, Random.Range(0, 10));
 
             // Cập nhật lên Inspector ngay sau khi tạo
             SyncDictionaryToLists();

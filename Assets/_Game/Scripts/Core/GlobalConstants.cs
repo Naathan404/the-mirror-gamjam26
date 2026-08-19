@@ -18,7 +18,8 @@ namespace Game.Core
     {
         Maze,
         CardMatch,
-        Wires
+        Wires,
+        WordSearch
     }
 
     public enum ColorId
