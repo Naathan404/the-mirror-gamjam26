@@ -12,5 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fc647ce176593a4a8a0e451848a408b, type: 3}
   m_Name: MazeConfig
   m_EditorClassIdentifier: 
-  mazeWidth: 5
-  mazeHeight: 5
+  mazeWidth: 15
+  mazeHeight: 15
+  entityCount: 5
+  safeDistanceFromPlayer: 5
+  safeDistanceBetweenEntities: 2

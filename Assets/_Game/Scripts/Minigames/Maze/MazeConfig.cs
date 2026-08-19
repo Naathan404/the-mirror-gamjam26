@@ -13,5 +13,10 @@ namespace Game.Minigames.Maze
         [Tooltip("Chiều cao (Số ô)")]
         [Min(3)]
         public int mazeHeight = 8;
+
+        [Header("Cài đặt Thực thể")]
+        public int entityCount = 3; // Số lượng thực thể sinh ra
+        public int safeDistanceFromPlayer = 5; // Khoảng cách an toàn tối thiểu (tính theo số ô) so với người chơi
+        public int safeDistanceBetweenEntities = 3; // Khoảng cách giãn cách giữa các thực thể với nhau
     }
 }
