@@ -84,6 +84,8 @@ namespace Game.Minigames.Wires
         {
             ResetVisualsAndState();
             DestroyAllSockets();
+
+            OnGameStart();
         }
 
         protected override void OnGameClosed()
@@ -105,7 +107,7 @@ namespace Game.Minigames.Wires
             _leftSockets.Clear();
             _rightSockets.Clear();
             _hintIndicators.Clear();
-            
+
             int count = Mathf.Min(WireCount, _config.ColorCount);
 
             List<Vector3> leftPositions = ComputeSocketPositions(count, WireSide.Left);
