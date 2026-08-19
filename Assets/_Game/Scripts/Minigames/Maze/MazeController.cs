@@ -37,6 +37,8 @@ namespace Game.Minigames.Maze
 
             SpawnEntities(); // Sinh thực thể
             OnGameReset();
+
+            visualRoot.gameObject.SetActive(true);
         }
 
         // 2. CHẠY KHI BỊ GIẬT ĐÈN (Restore vị trí nhưng không đổi map)

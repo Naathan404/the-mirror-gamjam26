@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e704f66ab40ce534c92b382a38f0a012, type: 3}
   m_Name: CardMatchConfig
   m_EditorClassIdentifier: 
-  rows: 4
-  columns: 5
+  rows: 5
+  columns: 6
   cardBackSprite: {fileID: -4571828015118065507, guid: e2931fa48a5acf1448eadb56a19aba46, type: 3}
   cardFaceSprites:
   - {fileID: -7245866468247524007, guid: 59a91ae92cd1af54e9dc25d7b29d1f6a, type: 3}

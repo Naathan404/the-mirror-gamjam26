@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80728c4221ad66e478508f5f157116c7, type: 3}
   m_Name: WiresConfig
   m_EditorClassIdentifier: 
-  _wireCount: 12
+  _wireCount: 14
   _wireColors:
   - ColorId: 0
     Color: {r: 1, g: 0, b: 0, a: 1}
@@ -33,7 +33,7 @@ MonoBehaviour:
   - ColorId: 8
     Color: {r: 0, g: 0, b: 0, a: 1}
   - ColorId: 9
-    Color: {r: 0.8706199, g: 0.8706199, b: 0.8706199, a: 1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
   - ColorId: 10
     Color: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
   - ColorId: 11
