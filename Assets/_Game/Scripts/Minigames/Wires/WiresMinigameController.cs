@@ -414,7 +414,7 @@ namespace Game.Minigames.Wires
             _draggingLine = Instantiate(_linePrefab, _linesContainer);
             _draggingLine.positionCount = _curveSegments;
             _draggingLine.startColor = _config.GetColorById(from.ColorId);
-            _draggingLine.endColor = _pendingDragColor;
+            _draggingLine.endColor = _config.GetColorById(from.ColorId);
         }
 
         private void UpdateDragPreview()
@@ -564,6 +564,8 @@ namespace Game.Minigames.Wires
 
             if (_mistakeCount > _maxMistakeCount)
             {
+                OnFailed();
+
                 _mistakeCount = 0;
                 ResetVisualsAndState();
                 AssignRandomColors();

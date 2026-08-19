@@ -21,6 +21,7 @@ namespace Game.Entity
 
         [Header("State Settings")]
         [SerializeField] private int _jumpStepWhenGotLightFlashed = 2;
+        [SerializeField] private float _accelaration = 1.15f;
 
         [Header("State Readonly")]
         [SerializeField] public int CurrentState { get; private set; }
@@ -42,12 +43,14 @@ namespace Game.Entity
             // register event
             GameEvents.OnViewChangeFinished += HandleViewChanged;
             GameEvents.OnLightFlashed += HandleLightFlashed;
+            GameEvents.OnMinigameFailed += HandleMinigameFailed;
         }
 
         private void OnDestroy()
         {
             GameEvents.OnViewChangeFinished -= HandleViewChanged;
             GameEvents.OnLightFlashed -= HandleLightFlashed;
+            GameEvents.OnMinigameFailed -= HandleMinigameFailed;
         }
         #endregion
 
@@ -132,7 +135,12 @@ namespace Game.Entity
         {
             int clamp = Mathf.Clamp(CurrentState + _jumpStepWhenGotLightFlashed, 0, GameConstants.ENTITY_MAX_STATE);
             JumpToState(clamp);
-            SetTimeScaleAccelaration(1.15f);
+            SetTimeScaleAccelaration(_accelaration);
+        }
+
+        private void HandleMinigameFailed(float accel)
+        {
+            SetTimeScaleAccelaration(accel);
         }
         #endregion
 
