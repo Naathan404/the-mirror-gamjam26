@@ -1,4 +1,4 @@
-using Game.Camera;
+using Game.Cameras;
 using Game.Core;
 using KingCat.Base;
 using UnityEngine;

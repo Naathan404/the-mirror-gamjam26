@@ -26,9 +26,9 @@ MonoBehaviour:
   - {fileID: 2433783391455003196, guid: 26cd67e81f92c54428afcb4a2090cc2b, type: 3}
   - {fileID: -2036430572945357876, guid: 02733ab1afdf374499c95701f4fb637c, type: 3}
   - {fileID: 6103351784708059954, guid: 03820765fa577604f94257c87c51ce8d, type: 3}
-  previewTime: 2
+  previewTime: 1
   delayBeforeFlipBack: 0.2
-  flipAnimationDuration: 0.2
+  flipAnimationDuration: 0.3
   cardSize: {x: 1, y: 1.5}
   spacing: {x: 0.2, y: 0.2}
   paperPadding: 0.9

@@ -5,7 +5,7 @@ using Mono.Cecil;
 using Unity.VisualScripting;
 using UnityEngine;
 
-namespace Game.Camera
+namespace Game.Cameras
 {
     public class CameraviewController : MonoBehaviour
     {
