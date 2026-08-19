@@ -18,16 +18,18 @@ namespace Game.Minigames
         protected bool isFocused = true;
 
         // ================= ĐĂNG KÝ EVENT =================
-        protected virtual void OnEnable()
+        protected virtual void Start()
         {
             GameEvents.OnPasscodeGenerated += HandlePasscodeGenerated;
             GameEvents.OnLightFlashed += HandleLightFlashed;
             GameEvents.OnMinigameOpened += HandleMinigameOpened;
             GameEvents.OnMinigameClosed += HandleMinigameClosed;
             GameEvents.OnViewChangeFinished += HandleViewChangeFinished;
+
+            if (visualRoot != null) visualRoot.SetActive(false);
         }
 
-        protected virtual void OnDisable()
+        protected virtual void OnDestroy()
         {
             GameEvents.OnPasscodeGenerated -= HandlePasscodeGenerated;
             GameEvents.OnLightFlashed -= HandleLightFlashed;
@@ -36,17 +38,13 @@ namespace Game.Minigames
             GameEvents.OnViewChangeFinished -= HandleViewChangeFinished;
         }
 
-        protected virtual void Start()
-        {
-            if (visualRoot != null) visualRoot.SetActive(false);
-        }
-
         // ================= XỬ LÝ VÒNG ĐỜI CHUNG =================
         private void HandlePasscodeGenerated(Dictionary<MinigameType, int> dict)
         {
             if (dict.TryGetValue(minigameType, out int digit))
             {
                 secretDigit = digit;
+                Debug.Log($"{secretDigit}");
             }
         }
 
