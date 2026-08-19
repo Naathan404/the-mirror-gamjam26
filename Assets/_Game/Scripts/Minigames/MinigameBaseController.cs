@@ -16,6 +16,9 @@ namespace Game.Minigames
         [Header("Base Tham chiếu")]
         public GameObject visualRoot;
 
+        [Header("Fail Penalty Config")]
+        [SerializeField] private float _increaseEntityStateChangeAccelaration = 1.2f;
+
         // Dữ liệu dùng chung
         protected int secretDigit = -1;
         protected bool isPlaying = false;
@@ -108,5 +111,9 @@ namespace Game.Minigames
         protected abstract void OnGameReset();
         protected abstract void OnDifficultyIncrease(int minigamePassed);
         protected virtual void OnGameClosed() { }
+        protected virtual void OnFailed()
+        {
+            GameEvents.RaiseMinigameFailed(_increaseEntityStateChangeAccelaration);
+        }
     }
 }

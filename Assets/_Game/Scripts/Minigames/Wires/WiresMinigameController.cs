@@ -84,6 +84,8 @@ namespace Game.Minigames.Wires
         {
             ResetVisualsAndState();
             DestroyAllSockets();
+
+            OnGameStart();
         }
 
         protected override void OnGameClosed()
@@ -105,7 +107,7 @@ namespace Game.Minigames.Wires
             _leftSockets.Clear();
             _rightSockets.Clear();
             _hintIndicators.Clear();
-            
+
             int count = Mathf.Min(WireCount, _config.ColorCount);
 
             List<Vector3> leftPositions = ComputeSocketPositions(count, WireSide.Left);
@@ -412,7 +414,7 @@ namespace Game.Minigames.Wires
             _draggingLine = Instantiate(_linePrefab, _linesContainer);
             _draggingLine.positionCount = _curveSegments;
             _draggingLine.startColor = _config.GetColorById(from.ColorId);
-            _draggingLine.endColor = _pendingDragColor;
+            _draggingLine.endColor = _config.GetColorById(from.ColorId);
         }
 
         private void UpdateDragPreview()
@@ -562,6 +564,8 @@ namespace Game.Minigames.Wires
 
             if (_mistakeCount > _maxMistakeCount)
             {
+                OnFailed();
+
                 _mistakeCount = 0;
                 ResetVisualsAndState();
                 AssignRandomColors();

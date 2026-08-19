@@ -98,6 +98,12 @@ namespace Game.Core
         public static event Action<int> OnDifficultyIncreased;
         public static void RaiseDifficultyIncreased(int minigamePassed) => OnDifficultyIncreased?.Invoke(minigamePassed);
 
+        /// <summary>
+        /// Bắn sự kiện này khi một minigame bị fail. Dùng để tắng tốc độ chuyển state của entity coi như hình phatjj
+        /// </summary>
+        public static event Action<float> OnMinigameFailed;
+        public static void RaiseMinigameFailed(float increased) => OnMinigameFailed?.Invoke(increased);
+
         /// <summary>Bắn khi đủ 3 số, hộp khóa tự mở, chìa khóa xuất hiện.</summary>
         public static event Action OnLockUnlocked;
         public static void RaiseLockUnlocked() => OnLockUnlocked?.Invoke();

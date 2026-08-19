@@ -8,11 +8,21 @@ namespace Game.Effect
     public class VhsController : MonoBehaviour
     {
         [Header("Vhs")]
-        [SerializeField] private SpriteRenderer _vhsSpriteRenderer;
+        [SerializeField] private SpriteRenderer _vhsEntityChangeStateSpriteRenderer;
+        [SerializeField] private SpriteRenderer _vhsRandomFlickerSpriteRenderer;
+
         [SerializeField] private float _minVhsDuration = 0.2f;
         [SerializeField] private float _maxVhsDuration = 1f;
 
+        [Header("Ambient Random Glitch")]
+        [SerializeField] private bool _enableAmbientGlitch = true;
+        [SerializeField] private float _ambientMinInterval = 12f;
+        [SerializeField] private float _ambientMaxInterval = 30f;
+        [SerializeField] private float _ambientGlitchMinDuration = 0.1f;
+        [SerializeField] private float _ambientGlitchMaxDuration = 0.35f;
+
         private bool _isPlaying = false;
+        private bool _isAmbientPlaying = false;
         private View _currentView = View.Mirror;
 
         private void Start()
@@ -20,7 +30,15 @@ namespace Game.Effect
             GameEvents.OnEntityStateChanged += PlayVhsEffect;
             GameEvents.OnViewChangeFinished += HandleViewChanged;
 
-            _vhsSpriteRenderer.gameObject.SetActive(false);
+            _vhsEntityChangeStateSpriteRenderer.gameObject.SetActive(false);
+
+            if (_vhsRandomFlickerSpriteRenderer != null)
+            {
+                _vhsRandomFlickerSpriteRenderer.gameObject.SetActive(false);
+
+                if (_enableAmbientGlitch)
+                    StartCoroutine(AmbientGlitchRoutine());
+            }
         }
 
         private void OnDestroy()
@@ -35,11 +53,11 @@ namespace Game.Effect
 
             _isPlaying = true;
 
-            if (_vhsSpriteRenderer != null && !_vhsSpriteRenderer.gameObject.activeSelf)
+            if (_vhsEntityChangeStateSpriteRenderer != null && !_vhsEntityChangeStateSpriteRenderer.gameObject.activeSelf)
             {
                 float duration = Random.Range(_minVhsDuration, _maxVhsDuration);
-                _vhsSpriteRenderer.gameObject.SetActive(true);
-                _vhsSpriteRenderer.transform.DOShakePosition(duration, 0.5f, 30, 90f);
+                _vhsEntityChangeStateSpriteRenderer.gameObject.SetActive(true);
+                _vhsEntityChangeStateSpriteRenderer.transform.DOShakePosition(duration, 0.5f, 30, 90f);
                 StartCoroutine(VhsEffectRoutine(duration));
             }
         }
@@ -47,13 +65,40 @@ namespace Game.Effect
         private IEnumerator VhsEffectRoutine(float duration)
         {
             yield return new WaitForSeconds(duration);
-            _vhsSpriteRenderer.gameObject.SetActive(false);
+            _vhsEntityChangeStateSpriteRenderer.gameObject.SetActive(false);
             _isPlaying = false;
         }
 
         private void HandleViewChanged(View view)
         {
             _currentView = view;
+        }
+
+        /// <summary>
+        /// Chạy nền suốt game, glitch hình ngẫu nhiên theo khoảng thời gian random để tạo không khí.
+        /// hiệu ứng này ddeerte thuần túy tạo cảm giác
+        /// bất an, không mang ý nghĩa cảnh báo gì cho người chơi.
+        /// </summary>
+        private IEnumerator AmbientGlitchRoutine()
+        {
+            while (true)
+            {
+                float wait = Random.Range(_ambientMinInterval, _ambientMaxInterval);
+                yield return new WaitForSeconds(wait);
+
+                if (_isPlaying || _isAmbientPlaying) continue;
+
+                _isAmbientPlaying = true;
+
+                float duration = Random.Range(_ambientGlitchMinDuration, _ambientGlitchMaxDuration);
+                _vhsRandomFlickerSpriteRenderer.gameObject.SetActive(true);
+                _vhsRandomFlickerSpriteRenderer.transform.DOShakePosition(duration, 0.3f, 20, 60f);
+
+                yield return new WaitForSeconds(duration);
+
+                _vhsRandomFlickerSpriteRenderer.gameObject.SetActive(false);
+                _isAmbientPlaying = false;
+            }
         }
     }
 }

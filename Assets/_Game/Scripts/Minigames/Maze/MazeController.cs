@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
+using Game.Effect;
 using UnityEngine;
 
 namespace Game.Minigames.Maze
@@ -207,6 +209,9 @@ namespace Game.Minigames.Maze
             // 5. XỬ LÝ HẬU QUẢ THẮNG / THUA
             if (collisionDetected)
             {
+                FilterController.Instance.FlashScreen(FilterController.Instance.HazardColor, 0.5f);
+                Camera.main.transform.DOShakePosition(0.5f, 1f, 15, 90f);
+                mazeRenderer.paperQuad.DOShakePosition(0.3f, 0.5f, 10, 90f);
                 StartCoroutine(FailAndRestartRoutine());
             }
             else if (playerMoved && playerNextPos == currentMazeData.EndPos)
@@ -240,9 +245,9 @@ namespace Game.Minigames.Maze
 
             while (elapsed < duration)
             {
-                float x = originalLocalPos.x + Random.Range(-1f, 1f) * magnitude;
-                float y = originalLocalPos.y + Random.Range(-1f, 1f) * magnitude;
-                mazeRenderer.paperQuad.localPosition = new Vector3(x, y, originalLocalPos.z);
+                // float x = originalLocalPos.x + Random.Range(-1f, 1f) * magnitude;
+                // float y = originalLocalPos.y + Random.Range(-1f, 1f) * magnitude;
+                // mazeRenderer.paperQuad.localPosition = new Vector3(x, y, originalLocalPos.z);
 
                 elapsed += Time.deltaTime;
                 yield return null;
