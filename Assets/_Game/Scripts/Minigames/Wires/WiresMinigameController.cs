@@ -4,27 +4,30 @@ using UnityEngine;
 
 namespace Game.Minigames.Wires
 {
-    public class WiresMinigameController : MonoBehaviour
+    public class WiresMinigameController : MinigameBaseController
     {
         [Header("Wires MNG Settings")]
         private MinigameType _type = MinigameType.Wires;
 
 
-        private int _passcodeNumber;
 
         #region Base
         private void Start()
         {
-            GameEvents.OnPasscodeGenerated += HandlePasscodeGenerated;
+
         }
         #endregion
 
 
         #region Handle events
-        private void HandlePasscodeGenerated(Dictionary<MinigameType, int> dic)
+        protected override void OnGameStart()
         {
-            dic.TryGetValue(_type, out _passcodeNumber);
-            Debug.Log("");
+            throw new System.NotImplementedException();
+        }
+
+        protected override void OnGameReset()
+        {
+            throw new System.NotImplementedException();
         }
         #endregion
     }

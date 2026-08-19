@@ -439,7 +439,7 @@ GameObject:
   - component: {fileID: 850180761}
   - component: {fileID: 850180760}
   m_Layer: 0
-  m_Name: "passcode (c\u1EA7n s\u1EAFp x\u1EBFp l\u1EA1i)"
+  m_Name: PasscodeGenerator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
