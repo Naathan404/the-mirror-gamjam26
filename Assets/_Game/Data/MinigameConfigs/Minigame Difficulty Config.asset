@@ -33,4 +33,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d423fbd613396f241b39083d5d0c7c9f, type: 2}
   - {fileID: 11400000, guid: 781006a323fc85342b21e8953bf399f8, type: 2}
   _enableDebug: 0
-  _debugDifficultLevel: 3
+  _debugDifficultLevel: 0
