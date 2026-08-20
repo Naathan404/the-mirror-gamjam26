@@ -1,7 +1,7 @@
 using System.Collections;
 using DG.Tweening;
 using Game.Core;
-using KingCat.Base;
+using Game.Utils;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -21,6 +21,7 @@ namespace Game.Effect
     {
         [Header("References")]
         [SerializeField] private Light2D[] _targetLights;
+        [SerializeField] private Light[] _target3DLights;
 
         [Header("Settings")]
         [SerializeField] private float _minIntensityFloor = 0.05f;
@@ -35,6 +36,7 @@ namespace Game.Effect
         [SerializeField] private float _ambientDoubleFlashChance = 0.3f; // Xác suất chớp 2 nhịp liên tiếp thay vì 1
 
         private float[] _originalIntensities;
+        private float[] _original3DIntensities;
         private Coroutine _flickerRoutine;
         private Coroutine _ambientRoutine;
         private bool _isFlickering;
@@ -43,24 +45,29 @@ namespace Game.Effect
         {
             GameEvents.OnEntityStateChanged += OnEntityStateChanged;
 
-            if (_targetLights == null || _targetLights.Length == 0)
+            if (_targetLights == null || _targetLights.Length == 0 || _target3DLights == null || _target3DLights.Length == 0)
             {
                 Debug.LogError("[FlickerController] Chưa gán _targetLights");
                 return;
             }
 
             _originalIntensities = new float[_targetLights.Length];
+            _original3DIntensities = new float[_target3DLights.Length];
             for (int i = 0; i < _targetLights.Length; i++)
             {
                 if (_targetLights[i] != null)
                     _originalIntensities[i] = _targetLights[i].intensity;
+                if (_target3DLights[i] != null)
+                    _original3DIntensities[i] = _target3DLights[i].intensity;
             }
 
             if (_enableAmbientFlicker)
                 _ambientRoutine = StartCoroutine(AmbientFlickerRoutine());
         }
 
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
         private void OnDestroy()
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
         {
             GameEvents.OnEntityStateChanged -= OnEntityStateChanged;
         }
@@ -124,6 +131,18 @@ namespace Game.Effect
                     .SetEase(Ease.OutQuad)
                     .SetTarget(light);
             }
+            for (int i = 0; i < _target3DLights.Length; i++)
+            {
+                var light = _target3DLights[i];
+                if (light == null) continue;
+
+                DOTween.Kill(light);
+                float target = _original3DIntensities[i];
+                DOTween.To(() => light.intensity, x => light.intensity = x, target, restoreDuration)
+                    .SetEase(Ease.OutQuad)
+                    .SetTarget(light);
+            }
+
         }
 
 
@@ -258,6 +277,18 @@ namespace Game.Effect
                     .SetEase(Ease.OutQuad)
                     .SetTarget(light);
             }
+
+            for (int i = 0; i < _target3DLights.Length; i++)
+            {
+                var light = _target3DLights[i];
+                if (light == null) continue;
+
+                DOTween.Kill(light);
+                float target = _original3DIntensities[i];
+                DOTween.To(() => light.intensity, x => light.intensity = x, target, upTime)
+                    .SetEase(Ease.OutQuad)
+                    .SetTarget(light);
+            }
         }
 
         private void SetIntensityScaled(float multiplier)
@@ -267,11 +298,22 @@ namespace Game.Effect
                 if (_targetLights[i] == null) continue;
                 _targetLights[i].intensity = _originalIntensities[i] * multiplier;
             }
+
+            for (int i = 0; i < _target3DLights.Length; i++)
+            {
+                if (_target3DLights[i] == null) continue;
+                _target3DLights[i].intensity = _original3DIntensities[i] * multiplier;
+            }
         }
 
         private void SetIntensityImmediate(float value)
         {
             foreach (var light in _targetLights)
+            {
+                if (light == null) continue;
+                light.intensity = value;
+            }
+            foreach (var light in _target3DLights)
             {
                 if (light == null) continue;
                 light.intensity = value;

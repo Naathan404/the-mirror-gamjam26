@@ -1,6 +1,6 @@
 
 using Game.Core;
-using KingCat.Base;
+using Game.Utils;
 
 namespace Game.Managers
 {
@@ -15,6 +15,15 @@ namespace Game.Managers
             CurrentState = GameState.Playing;
 
             GameEvents.OnMinigameCompleted += HandleMinigameCompleted;
+            GameEvents.OnGameLost += HandleGameLost;
+        }
+
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+        private void OnDestroy()
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
+        {
+            GameEvents.OnMinigameCompleted -= HandleMinigameCompleted;
+            GameEvents.OnGameLost -= HandleGameLost;
         }
 
         #region GameStates
@@ -41,6 +50,10 @@ namespace Game.Managers
             GameEvents.RaiseDifficultyIncreased(_minigamePassed);
         }
 
+        private void HandleGameLost()
+        {
+            SetGameOver();
+        }
         #endregion
     }
 

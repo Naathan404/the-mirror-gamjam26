@@ -2,9 +2,7 @@ using System.Collections;
 using DG.Tweening;
 using Game.Core;
 using Game.Effect;
-using Game.Managers;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Game.Entity
 {
@@ -58,6 +56,12 @@ namespace Game.Entity
             FilterController.Instance.FlashScreen(FilterController.Instance.HazardColor, 0.5f);
             
             yield return new WaitForSeconds(_holdDuration);
+            
+            VhsController.Instance.PlayVhsEffect();
+            FilterController.Instance.FlashScreen(Color.white, 0.5f);
+            _jumpscareSpriteRenderer.gameObject.SetActive(false);
+
+            GameEvents.RaiseGameLost();
         }
     }    
 }

@@ -1,5 +1,5 @@
 using DG.Tweening;
-using KingCat.Base;
+using Game.Utils;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -97,6 +97,23 @@ namespace Game.Effect
             )
             .SetEase(Ease.OutQuad)
             .SetTarget(_vignette);
+        }
+
+        public void PlayEyeClosedVignetteEffect(Color color, float duration = 0.5f)
+        {
+            if (_vignette == null) return;
+            DOTween.Kill(_vignette);
+
+            _vignette.color.value = color;
+            _vignette.intensity.value = 1f;
+
+            DOTween.To(
+                () => _vignette.intensity.value, 
+                x => _vignette.intensity.value = x, 
+                _vignetteIntensity, 
+                duration
+            )
+            .SetEase(Ease.InCubic);
         }
 
         /// <summary>
