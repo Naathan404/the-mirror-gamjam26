@@ -75,7 +75,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_Sprite: {fileID: 905089399360172370, guid: d4e64d862b6b7ba45a792293c9887b5c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -132,6 +132,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77d91189b6fa9144493918d3eb8b4050, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _vhsSpriteRenderer: {fileID: 1688769139356307950}
+  _vhsEntityChangeStateSpriteRenderer: {fileID: 1688769139356307950}
+  _vhsRandomFlickerSpriteRenderer: {fileID: 0}
   _minVhsDuration: 0.15
   _maxVhsDuration: 0.3
+  _enableAmbientGlitch: 1
+  _ambientMinInterval: 12
+  _ambientMaxInterval: 30
+  _ambientGlitchMinDuration: 0.1
+  _ambientGlitchMaxDuration: 0.15

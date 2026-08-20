@@ -19,6 +19,11 @@ namespace Game.Entity
         [SerializeField] private float _timer = 0f;
         [SerializeField] private bool _resetTimeWhenJumpState = true;
 
+        [Header("RampRate Settings")]
+        [SerializeField] private float _awayRampRate = 0.02f;
+        [SerializeField] private float _awayRampCap = 1.8f;
+        [SerializeField] private float _timerAwayFromMirror = 0f;
+
         [Header("State Settings")]
         [SerializeField] private int _jumpStepWhenGotLightFlashed = 2;
         [SerializeField] private float _accelaration = 1.15f;
@@ -82,7 +87,13 @@ namespace Game.Entity
             if (GameManager.Instance.CurrentState == GameState.GameOver) 
                 return;
 
-            _timer += Time.deltaTime * _currentTimeScale;
+            if (_currentView != View.Mirror)
+            {
+                _timerAwayFromMirror += Time.deltaTime;
+            }
+
+            _timer += Time.deltaTime * _currentTimeScale * GetAwayMultiplier();
+
             if (_timer > _maxTimerTime)
             {
                 _timer = -1f;
@@ -122,6 +133,12 @@ namespace Game.Entity
 
             _baseTimeScaleAccelaration *= factor;
         }
+
+        private float GetAwayMultiplier()
+        {
+            if (_currentView == View.Mirror) return 1f;
+            return Mathf.Min(1f + _timerAwayFromMirror * _awayRampRate, _awayRampCap);
+        }
         #endregion
 
         #region Handle Events
@@ -129,18 +146,23 @@ namespace Game.Entity
         {
             _currentTimeScale = GetTimeScaleByView(view);
             _currentView = view;
+            if (view == View.Mirror)
+            {
+                _timerAwayFromMirror = 0f;
+            }
         }
 
         private void HandleLightFlashed()
         {
+            SetTimeScaleAccelaration(_accelaration);
             int clamp = Mathf.Clamp(CurrentState + _jumpStepWhenGotLightFlashed, 0, GameConstants.ENTITY_MAX_STATE);
             JumpToState(clamp);
-            SetTimeScaleAccelaration(_accelaration);
         }
 
         private void HandleMinigameFailed(float accel)
         {
             SetTimeScaleAccelaration(accel);
+            _currentTimeScale = GetTimeScaleByView(_currentView);
         }
         #endregion
 

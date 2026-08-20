@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: WiresConfig_0
   m_EditorClassIdentifier: 
   _wireCount: 9
+  _hiddenCount: 4
   _wireColors:
   - ColorId: 0
     Color: {r: 1, g: 0, b: 0, a: 1}
@@ -31,7 +32,7 @@ MonoBehaviour:
   - ColorId: 7
     Color: {r: 0.64705884, g: 0.16470589, b: 0.16470589, a: 1}
   - ColorId: 8
-    Color: {r: 0, g: 0, b: 0, a: 1}
+    Color: {r: 0.101960786, g: 0.38039216, b: 0.078431375, a: 1}
   - ColorId: 9
     Color: {r: 1, g: 1, b: 1, a: 1}
   - ColorId: 10
@@ -50,3 +51,5 @@ MonoBehaviour:
     Color: {r: 0.76819396, g: 0.6620981, b: 0, a: 1}
   - ColorId: 17
     Color: {r: 1, g: 0.44705883, b: 0.3372549, a: 1}
+  _scaleThreshold: 14
+  _scaleFactor: 0.9
