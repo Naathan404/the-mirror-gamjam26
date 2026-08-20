@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 2372ebad8ca8f124fb10980079e3d3c0
+guid: c05e2eadfaf57a44b868a52a1a4f173e
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 9222361113018672819
-    second: light_button_0
+      213: 3166486292796161743
+    second: LightIcon_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 512
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -126,23 +126,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: light_button_0
+      name: LightIcon_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 512
-        height: 512
+        x: 47
+        y: 31
+        width: 418
+        height: 450
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3b6aad3f1986cff70800000000000000
-      internalID: 9222361113018672819
+      spriteID: fce324ca18e91fb20800000000000000
+      internalID: 3166486292796161743
       vertices: []
       indices: 
       edges: []
@@ -151,7 +151,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 23ac9fb6d08b9e643b2cd387c7dac089
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      light_button_0: 9222361113018672819
+      LightIcon_0: 3166486292796161743
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
