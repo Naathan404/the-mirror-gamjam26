@@ -434,6 +434,8 @@ MonoBehaviour:
   minigameType: 2
   visualRoot: {fileID: 7830215745170949518}
   _increaseEntityStateChangeAccelaration: 1.2
+  digitPaperPrefab: {fileID: 2778575679015267337, guid: 5322a9588893b344fa9de6af23a94869, type: 3}
+  deskSpawnArea: {fileID: 0}
   _config: {fileID: 11400000, guid: ad375e9fffe934f41acd82a4fce73941, type: 2}
   _leftSocketPrefab: {fileID: 7157074305890313031, guid: 0ddefd1e8c6cb5a4ebc4a531db8906fc, type: 3}
   _rightSocketPrefab: {fileID: 6902099708691451764, guid: 19d093548328c7545b7429a1c826fe80, type: 3}

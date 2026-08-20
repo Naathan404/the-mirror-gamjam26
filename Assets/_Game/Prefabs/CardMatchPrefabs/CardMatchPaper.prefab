@@ -324,6 +324,8 @@ MonoBehaviour:
   minigameType: 1
   visualRoot: {fileID: 4690681761170977767}
   _increaseEntityStateChangeAccelaration: 1.2
+  digitPaperPrefab: {fileID: 2778575679015267337, guid: 5322a9588893b344fa9de6af23a94869, type: 3}
+  deskSpawnArea: {fileID: 0}
   config: {fileID: 11400000, guid: 93c1569c55f157746aa2d73e87bbb079, type: 2}
   cardPrefab: {fileID: 1075167390666311042, guid: 157f7cc910bfcf144af31610f4185dfb, type: 3}
   gridContainer: {fileID: 8901117928677016349}

@@ -66,10 +66,10 @@ namespace Game.Systems.Lock
                 Debug.Log($"[PasscodeController] 🔑 Đã lưu thành công số {digit} vào danh sách.");
                 SyncDictionaryToLists();
 
-                if (collectedDigits.Count >= requiredDigits)
-                {
-                    Unlock();
-                }
+                //if (collectedDigits.Count >= requiredDigits)
+                //{
+                //    Unlock();
+                //}
             }
             else
             {
