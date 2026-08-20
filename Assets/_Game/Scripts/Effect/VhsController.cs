@@ -1,11 +1,12 @@
 using System.Collections;
 using DG.Tweening;
 using Game.Core;
+using Game.Utils;
 using UnityEngine;
 
 namespace Game.Effect
 {
-    public class VhsController : MonoBehaviour
+    public class VhsController : MonoSingleton<VhsController>
     {
         [Header("Vhs")]
         [SerializeField] private SpriteRenderer _vhsEntityChangeStateSpriteRenderer;
@@ -47,10 +48,21 @@ namespace Game.Effect
             GameEvents.OnViewChangeFinished -= HandleViewChanged;
         }
 
-        private void PlayVhsEffect(int _)
+        public void PlayVhsEffect()
         {
-            if (_isPlaying || _currentView != View.Mirror) return;
+            if (_vhsEntityChangeStateSpriteRenderer != null && !_vhsEntityChangeStateSpriteRenderer.gameObject.activeSelf)
+            {
+                float duration = Random.Range(_minVhsDuration, _maxVhsDuration);
+                _vhsEntityChangeStateSpriteRenderer.gameObject.SetActive(true);
+                _vhsEntityChangeStateSpriteRenderer.transform.DOShakePosition(0.2f, 0.2f, 15, 90f);
+                StartCoroutine(VhsEffectRoutine(duration));
+            }
+        }
 
+        private void PlayVhsEffect(int state)
+        {
+            if (state <= 0) return;
+            if (_isPlaying || _currentView != View.Mirror) return;
             _isPlaying = true;
 
             if (_vhsEntityChangeStateSpriteRenderer != null && !_vhsEntityChangeStateSpriteRenderer.gameObject.activeSelf)

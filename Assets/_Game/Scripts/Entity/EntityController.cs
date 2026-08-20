@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using DG.Tweening;
 using Game.Core;
+using Game.Effect;
 using Game.Managers;
 using UnityEngine;
 
@@ -67,6 +69,8 @@ namespace Game.Entity
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 GameEvents.RaiseLightFlashed();
+                FilterController.Instance.FlashScreen(FilterController.Instance.FlashColor);
+                Camera.main.transform.DOShakePosition(0.5f, 0.35f, 12, 45f);
             }
 #endif
         }

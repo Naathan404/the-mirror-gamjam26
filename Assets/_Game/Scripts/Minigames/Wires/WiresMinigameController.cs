@@ -85,7 +85,8 @@ namespace Game.Minigames.Wires
         {
             ResetVisualsAndState();
             DestroyAllSockets();
-
+            _mistakeCount = 0;
+            HideMistakeWarningPanel();
             OnGameStart();
         }
 
