@@ -32,7 +32,6 @@ MonoBehaviour:
   - HAUNT
   - BLOOD
   - TRUTH
-  - ILLUSION
   - TWIN
   - YOU
   wordsToFindPerGame: 5

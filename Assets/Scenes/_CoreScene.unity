@@ -199,14 +199,6 @@ PrefabInstance:
       propertyPath: deskSpawnArea
       value: 
       objectReference: {fileID: 1360928688}
-    - target: {fileID: 5235311476159653401, guid: 61a3796945a32bb42b15b4f826d92c43, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 6303554112431145048, guid: fbc4e3258866dbc4da8523a287bed76e, type: 3}
-    - target: {fileID: 5235311476159653401, guid: 61a3796945a32bb42b15b4f826d92c43, type: 3}
-      propertyPath: m_SortingOrder
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 8137816822120468182, guid: 61a3796945a32bb42b15b4f826d92c43, type: 3}
       propertyPath: m_Name
       value: CardMatchPaper
@@ -323,14 +315,6 @@ PrefabInstance:
       propertyPath: deskSpawnArea
       value: 
       objectReference: {fileID: 1360928688}
-    - target: {fileID: 4067999053047390420, guid: 3281f5afa1cd974478215737ea036316, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 6303554112431145048, guid: fbc4e3258866dbc4da8523a287bed76e, type: 3}
-    - target: {fileID: 4067999053047390420, guid: 3281f5afa1cd974478215737ea036316, type: 3}
-      propertyPath: m_SortingOrder
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 5533935052466573044, guid: 3281f5afa1cd974478215737ea036316, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1470,14 +1454,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1082067998584951340, guid: 22ae32a0a40a8534794b81b0f6fe1f8a, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 6303554112431145048, guid: fbc4e3258866dbc4da8523a287bed76e, type: 3}
-    - target: {fileID: 1082067998584951340, guid: 22ae32a0a40a8534794b81b0f6fe1f8a, type: 3}
-      propertyPath: m_SortingOrder
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 1795091796110074020, guid: 22ae32a0a40a8534794b81b0f6fe1f8a, type: 3}
       propertyPath: deskSpawnArea
       value: 
