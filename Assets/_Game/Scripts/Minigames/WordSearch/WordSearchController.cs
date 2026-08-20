@@ -296,11 +296,10 @@ namespace Game.Minigames.WordSearch
                 newClue.transform.localRotation = Quaternion.Euler(0f, 0f, randRot);
                 
                 // i = 0 -> tầng 10. i = 1 -> tầng 20. i = 2 -> tầng 30...
-                int uniqueSortingBase = 10 + (i * 10); 
-                
+                int uniqueSortingBase = 10 + (i * 10);
+
                 // Truyền số tầng này vào hàm Initialize
-                newClue.Initialize(activeWords[i], uniqueSortingBase);
-                // ==========================================
+                newClue.Initialize(activeWords[i], uniqueSortingBase, clueSpawnArea);
 
                 spawnedClues.Add(newClue);
             }
