@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEngine;
 using Game.Core;
 using Game.Managers;
+using Game.Effect;
+using DG.Tweening;
 
 public class LightBulbController : MonoBehaviour
 {
@@ -14,6 +16,9 @@ public class LightBulbController : MonoBehaviour
 
     [Header("Effects")]
     [SerializeField] private LightFlashEffect _lightFlashEffect;
+
+    [Header("Visual")]
+    [SerializeField] private GameObject _batteryFillObject;
 
 
     [SerializeField] private float _batteryChargingProcess;
@@ -47,7 +52,9 @@ public class LightBulbController : MonoBehaviour
 
         if (_lightFlashEffect != null)
         {
+            FilterController.Instance.FlashScreen(FilterController.Instance.FlashColor);
             _lightFlashEffect.PlayLightFlash();
+            Camera.main.transform.DOShakePosition(0.5f, 0.35f, 12, 45f);
         }
     }
 
