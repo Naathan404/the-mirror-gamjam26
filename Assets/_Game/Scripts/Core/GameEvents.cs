@@ -108,6 +108,10 @@ namespace Game.Core
         public static event Action OnLockUnlocked;
         public static void RaiseLockUnlocked() => OnLockUnlocked?.Invoke();
 
+        /// <summary>Nhặt chìa khóa sau khi hộp mở.</summary>
+        public static event Action OnKeyCollected;
+        public static void RaiseKeyCollected() => OnKeyCollected?.Invoke();
+
         // ================= WIN / LOSE =================
 
         public static event Action OnGameWon;
