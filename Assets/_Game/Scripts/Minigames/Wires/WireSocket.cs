@@ -21,6 +21,7 @@ namespace Game.Minigames.Wires
         [SerializeField] private Transform _anchor;
 
         public WireSide Side => _side;
+        public Vector3 OriginalScale => _config.Scale;
 
         public Vector3 AnchorPosition => _anchor != null ? _anchor.position : transform.position;
 
@@ -46,7 +47,7 @@ namespace Game.Minigames.Wires
 
         public void SetHidden()
         {
-            var color = _config.GetColorById(ColorId.Black);
+            var color = Color.black;
             if (_socketRenderer != null)
             {
                 var m = new MaterialPropertyBlock();

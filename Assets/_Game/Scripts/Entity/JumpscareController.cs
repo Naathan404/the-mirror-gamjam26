@@ -13,6 +13,7 @@ namespace Game.Entity
         [Header("References")]
 
         [SerializeField] private SpriteRenderer _jumpscareSpriteRenderer;
+        [SerializeField] private SpriteRenderer _jumpScareBackground;
 
         [Header("Timing")]
         [SerializeField] private float _holdDuration = 1.5f;
@@ -22,6 +23,7 @@ namespace Game.Entity
             GameEvents.OnJumpscareTriggered += HandleJumpscare;
 
             _jumpscareSpriteRenderer.gameObject.SetActive(false);
+            _jumpScareBackground.gameObject.SetActive(false);
         }
 
         private void OnDestroy()
@@ -47,6 +49,9 @@ namespace Game.Entity
         private IEnumerator PlayJumpscare()
         {
             _jumpscareSpriteRenderer.gameObject.SetActive(true);
+            _jumpScareBackground.gameObject.SetActive(true);
+
+            FlickerController.Instance.FlickerFor(FlickerPattern.Strobe, 1f);
 
             UnityEngine.Camera.main.transform.DOShakePosition(0.5f, 1f, 25, 90f);
 

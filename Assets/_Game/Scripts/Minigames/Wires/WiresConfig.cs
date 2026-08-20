@@ -12,6 +12,7 @@ namespace Game.Minigames.Maze
         [Header("Wire Settings")]
         [Range(4, 18)]
         [SerializeField] private int _wireCount;
+        [SerializeField] private int _hiddenCount;
 
         [Header("Wire Color Settings")]
         [SerializeField] private List<WireColor> _wireColors;
@@ -19,11 +20,12 @@ namespace Game.Minigames.Maze
         [Header("Visual Config")]
         [SerializeField] private int _scaleThreshold = 14;
         [Range(-0.5f, 1.5f)]
-        [SerializeField] private float _scaleFactor = 0.9f;
+        [SerializeField] private float _scaleFactor = 0.85f;
 
         public Vector3 Scale => _wireCount >= _scaleThreshold ? Vector3.one * _scaleFactor : Vector3.one;
 
         public int WireCount => _wireCount;
+        public int HiddenCount => _hiddenCount;
         public int ColorCount => _wireColors.Count;
 
         #region Helpers

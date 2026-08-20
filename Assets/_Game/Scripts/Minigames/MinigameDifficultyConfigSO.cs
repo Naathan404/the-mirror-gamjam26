@@ -23,6 +23,13 @@ namespace Game.Minigames
         [Header("Words Search")]
         [SerializeField] private WordSearchConfig[] _wordsConfigs = new WordSearchConfig[GameConstants.NUMBER_OF_MINIGAMES];
 
+#if UNITY_EDITOR
+        [Header("Debug")]
+        [SerializeField] private bool _enableDebug = false;
+        [Range(0, 3)]
+        [SerializeField] private int _debugDifficultLevel = 0;
+#endif
+
         public T GetMinigameConfig<T>(int minigamePassed) where T : class
         {
             object array = typeof(T) switch
@@ -33,6 +40,16 @@ namespace Game.Minigames
                 var t when t == typeof(WordSearchConfig) => _wordsConfigs,
                 _ => null
             };
+
+#if UNITY_EDITOR
+            if (_enableDebug)
+            {
+                if (array is T[] typedArray1 && typedArray1.Length > 0)
+                {
+                    return typedArray1[_debugDifficultLevel];
+                }
+            }
+#endif
 
             if (array is T[] typedArray && typedArray.Length > 0)
             {

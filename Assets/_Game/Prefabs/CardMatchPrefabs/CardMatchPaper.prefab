@@ -323,6 +323,7 @@ MonoBehaviour:
   _difficultyConfig: {fileID: 11400000, guid: f1014d0dd73bf7f488435077bc19879b, type: 2}
   minigameType: 1
   visualRoot: {fileID: 4690681761170977767}
+  _increaseEntityStateChangeAccelaration: 1.2
   config: {fileID: 11400000, guid: 93c1569c55f157746aa2d73e87bbb079, type: 2}
   cardPrefab: {fileID: 1075167390666311042, guid: 157f7cc910bfcf144af31610f4185dfb, type: 3}
   gridContainer: {fileID: 8901117928677016349}

@@ -153,7 +153,6 @@ namespace Game.Effect
 
                 case 0:
                 case -1:
-                    FlickerFor(FlickerPattern.Strobe, 1f);
                     break;
 
                 default:
