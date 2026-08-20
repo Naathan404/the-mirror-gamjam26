@@ -34,7 +34,7 @@ namespace Game.Core
         Purple,
         Pink,
         Brown,
-        Black,
+        DarkGreen,
         White,
         Gray,
         Teal,

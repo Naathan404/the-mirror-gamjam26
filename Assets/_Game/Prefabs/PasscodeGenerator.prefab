@@ -44,6 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 005031e8b999fa5429a265b6e6fefd7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  requiredDigits: 3
+  requiredDigits: 4
   debugMinigameDigitMap: []
   debugCollectedDigits: []

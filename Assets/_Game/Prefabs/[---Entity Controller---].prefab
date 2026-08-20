@@ -46,14 +46,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _timeScaleViews:
   - BaseView: 0
-    TimeScale: 0.9
+    TimeScale: 1
   - BaseView: 1
     TimeScale: 1.5
   - BaseView: 2
     TimeScale: 2
-  _maxTimerTime: 30
+  _maxTimerTime: 36
   _currentTimeScale: 0
   _timer: 0
   _resetTimeWhenJumpState: 1
+  _awayRampRate: 0.02
+  _awayRampCap: 1.5
+  _timerAwayFromMirror: 0
   _jumpStepWhenGotLightFlashed: 2
+  _accelaration: 1.15
   _baseTimeScaleAccelaration: 1

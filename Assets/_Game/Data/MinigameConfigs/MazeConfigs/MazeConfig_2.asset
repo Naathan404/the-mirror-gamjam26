@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mazeWidth: 20
   mazeHeight: 20
-  entityCount: 6
+  entityCount: 9
   safeDistanceFromPlayer: 5
   safeDistanceBetweenEntities: 2

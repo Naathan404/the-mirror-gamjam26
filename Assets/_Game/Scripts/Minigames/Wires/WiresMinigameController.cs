@@ -55,6 +55,7 @@ namespace Game.Minigames.Wires
         #endregion
 
         public int WireCount => _config.WireCount;
+        public int HiddenCount => _config.HiddenCount;
 
         #region Private
         private readonly Dictionary<WireSocket, LineRenderer> _activeLines = new();
@@ -407,9 +408,9 @@ namespace Game.Minigames.Wires
         private void BeginDrag(WireSocket from)
         {
             from.transform.DOKill();
-            from.transform.localScale = Vector3.one;
+            from.transform.localScale = _config.Scale;
 
-            from.transform.DOPunchScale(0.2f * Vector3.one, 0.3f);
+            from.transform.DOPunchScale(0.2f * _config.Scale, 0.3f);
             _draggingFrom = from;
             _draggingLine = Instantiate(_linePrefab, _linesContainer);
             _draggingLine.positionCount = _curveSegments;
@@ -457,8 +458,8 @@ namespace Game.Minigames.Wires
                 from.IsConnected = true;
                 to.IsConnected = true;
 
-                from.transform.DOPunchScale(0.2f * Vector3.one, 0.2f);
-                to.transform.DOPunchScale(0.2f * Vector3.one, 0.2f);
+                from.transform.DOPunchScale(0.2f * from.OriginalScale, 0.2f);
+                to.transform.DOPunchScale(0.2f * to.OriginalScale, 0.2f);
 
                 var line = Instantiate(_linePrefab, _linesContainer);
                 line.positionCount = _curveSegments;
@@ -556,10 +557,7 @@ namespace Game.Minigames.Wires
 
             if (_mistakeCount == 1)
             {
-                foreach(var socket in _rightSockets)
-                {
-                    socket.SetHidden();
-                }
+                HideRandomSockets(_rightSockets, HiddenCount);
             }
 
             if (_mistakeCount > _maxMistakeCount)
@@ -571,6 +569,27 @@ namespace Game.Minigames.Wires
                 AssignRandomColors();
                 // SetVisibleWireSockets(true);
                 HideMistakeWarningPanel();
+            }
+        }
+        
+        private void HideRandomSockets(List<WireSocket> sockets, int hiddenCount)
+        {
+            hiddenCount = Mathf.Clamp(hiddenCount, 0, sockets.Count);
+
+            // shuffle Fisher-Yates
+            List<int> indices = new List<int>(sockets.Count);
+            for (int i = 0; i < sockets.Count; i++)
+                indices.Add(i);
+
+            for (int i = indices.Count - 1; i > 0; i--)
+            {
+                int j = UnityEngine.Random.Range(0, i + 1);
+                (indices[i], indices[j]) = (indices[j], indices[i]);
+            }
+
+            for (int i = 0; i < hiddenCount; i++)
+            {
+                sockets[indices[i]].SetHidden();
             }
         }
 
