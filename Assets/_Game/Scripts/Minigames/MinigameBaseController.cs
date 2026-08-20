@@ -14,6 +14,7 @@ namespace Game.Minigames
 
         [Header("Base Cấu hình")]
         public MinigameType minigameType;
+        public Color minigameColor;
 
         [Header("Base Tham chiếu")]
         public GameObject visualRoot;
@@ -162,7 +163,8 @@ namespace Game.Minigames
             {
                 // unique layer để giấy nọ đè giấy kia
                 int uniqueLayer = 50 + Random.Range(1, 10);
-                paperScript.Initialize(secretDigit.ToString(), uniqueLayer, deskSpawnArea);
+                Color targetColor = minigameColor;
+                paperScript.Initialize(secretDigit.ToString(), uniqueLayer, deskSpawnArea, targetColor);
             }
         }
 

@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using TMPro;
-using Game.Core; // Thêm thư viện này để nghe Event
+using Game.Core;
 
 namespace Game.Minigames
 {
@@ -17,7 +17,7 @@ namespace Game.Minigames
 
         private Camera mainCam;
         private BoxCollider spawnArea;
-        private BoxCollider paperCollider; // Thêm biến giữ Collider của tờ giấy
+        private BoxCollider paperCollider;
         private Vector3 dragOffset;
         private int currentBaseSortingOrder;
         private bool isDragging = false;
@@ -33,50 +33,44 @@ namespace Game.Minigames
         private void Start()
         {
             mainCam = Camera.main;
-
-            // Đăng ký nghe sự kiện đóng/mở Minigame
             GameEvents.OnMinigameOpened += HidePaper;
             GameEvents.OnMinigameClosed += ShowPaper;
         }
 
         private void OnDestroy()
         {
-            // Hủy nghe sự kiện khi tờ giấy bị xóa (reset game)
             GameEvents.OnMinigameOpened -= HidePaper;
             GameEvents.OnMinigameClosed -= ShowPaper;
         }
 
-        public void Initialize(string digit, int baseSortingOrder, BoxCollider area)
+        public void Initialize(string digit, int baseSortingOrder, BoxCollider area, Color paperColor)
         {
             if (digitText != null) digitText.text = digit;
             spawnArea = area;
+
+            // Đổi màu mảnh giấy (Yêu cầu ảnh Sprite gốc phải là màu Trắng/Xám)
+            if (paperBg != null) paperBg.color = paperColor;
 
             globalTopSortingOrder += 10;
             currentBaseSortingOrder = globalTopSortingOrder;
             UpdateSortingOrder(currentBaseSortingOrder);
         }
 
-        // ================= CƠ CHẾ ẨN/HIỆN THÔNG MINH =================
         private void HidePaper(MinigameType _)
         {
-            // Tắt hình ảnh và khóa tương tác, NHƯNG object vẫn active để nghe ngóng
             if (paperBg != null) paperBg.enabled = false;
             if (digitText != null) digitText.enabled = false;
             if (paperCollider != null) paperCollider.enabled = false;
-
-            // Nếu đang kéo dở tờ giấy mà game mở lên thì thả ra luôn
             isDragging = false;
         }
 
         private void ShowPaper(MinigameType _)
         {
-            // Bật lại hình ảnh và tương tác khi về màn hình chính
             if (paperBg != null) paperBg.enabled = true;
             if (digitText != null) digitText.enabled = true;
             if (paperCollider != null) paperCollider.enabled = true;
         }
 
-        // ================= LOGIC KÉO THẢ GIỮ NGUYÊN =================
         private void OnMouseDown()
         {
             isDragging = true;

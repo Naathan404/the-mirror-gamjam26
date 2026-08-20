@@ -17,7 +17,7 @@ MonoBehaviour:
   cellSize: {x: 1, y: 1}
   spacing: {x: 0, y: 0}
   paperPadding: 0.9
-  allowedFlipTypes: 0200000001000000
+  allowedFlipTypes: 02000000
   wordPool:
   - SOUL
   - DEMON

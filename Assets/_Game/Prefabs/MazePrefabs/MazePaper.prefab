@@ -150,9 +150,9 @@ Transform:
   m_GameObject: {fileID: 4875402366258235519}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -2.54, y: -15.8, z: -13.73}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 7.79, y: -15.8, z: -13.89}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 3874248298364165137}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
@@ -199,8 +199,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_SortingOrder: 10
+  m_Sprite: {fileID: 6303554112431145048, guid: fbc4e3258866dbc4da8523a287bed76e, type: 3}
   m_Color: {r: 0.97735846, g: 0.23419717, b: 0.23419717, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -338,6 +338,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _difficultyConfig: {fileID: 11400000, guid: f1014d0dd73bf7f488435077bc19879b, type: 2}
   minigameType: 0
+  minigameColor: {r: 0.85660374, g: 0.166472, b: 0.166472, a: 1}
   visualRoot: {fileID: 4162130549954534917}
   _increaseEntityStateChangeAccelaration: 1.2
   digitPaperPrefab: {fileID: 2778575679015267337, guid: 5322a9588893b344fa9de6af23a94869, type: 3}
