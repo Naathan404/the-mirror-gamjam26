@@ -5,6 +5,7 @@ using Game.Effect;
 using Game.Utils;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Game.Managers
 {
@@ -21,6 +22,11 @@ namespace Game.Managers
         [SerializeField] private GameObject _mirrorPanel;
         [SerializeField] private GameObject _deskPanel;
         [SerializeField] private GameObject _behindPanel;
+
+        [Header("Flash Light Buttona")]
+        [SerializeField] private Button _lightButton;
+        [SerializeField] private Sprite _activateSprite;
+        [SerializeField] private Sprite _deactivateSprite;
 
         private string[] _loseText = new string[]
         {
@@ -54,6 +60,10 @@ namespace Game.Managers
 
             GameEvents.OnGameLost += ShowLosePanel;
 
+            GameEvents.OnBatteryChargeCompleted += HandleBatteryChargeCompleted;
+
+            HandleBatteryChargeCompleted();
+
             _losePanel.gameObject.SetActive(false);
             _replayButton.gameObject.SetActive(false);
             _loseCanvasGroup.alpha = 0f;
@@ -67,6 +77,8 @@ namespace Game.Managers
             GameEvents.OnViewChangeFinished -= ActivateView;
 
             GameEvents.OnJumpscareTriggered += HideAllPanels;
+
+            GameEvents.OnBatteryChargeCompleted -= HandleBatteryChargeCompleted;
 
             GameEvents.OnGameLost -= ShowLosePanel;
         }
@@ -136,6 +148,14 @@ namespace Game.Managers
         public void LightFlash()
         {
             GameEvents.RaiseLightFlashed();
+            _lightButton.interactable = false;
+            _lightButton.GetComponent<Image>().sprite = _deactivateSprite;
+        }
+
+        private void HandleBatteryChargeCompleted()
+        {
+            _lightButton.interactable = true;
+            _lightButton.GetComponent<Image>().sprite = _activateSprite;
         }
 
         public void Replay()
