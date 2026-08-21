@@ -48,7 +48,7 @@ namespace Game.Managers
         #endregion
 
         #region eVENTS
-        private void HandleMinigameCompleted(MinigameType _, int ___)
+        private void HandleMinigameCompleted(MinigameType _, KeyCode ___)
         {
             _minigamePassed++;
             GameEvents.RaiseDifficultyIncreased(_minigamePassed);

@@ -1,6 +1,8 @@
 using UnityEngine;
 using Game.Core;
 using System.Collections.Generic;
+using KeyCode = Game.Core.KeyCode;
+using Game.Utils;
 
 namespace Game.Systems.Lock
 {
@@ -8,8 +10,8 @@ namespace Game.Systems.Lock
     [System.Serializable]
     public struct MinigameDigitPair
     {
-        public MinigameType minigame;
-        public int digit;
+        public MinigameType Minigame;
+        public KeyCode KeyCode;
     }
 
     public class PasscodeController : MonoBehaviour
@@ -17,13 +19,37 @@ namespace Game.Systems.Lock
         public int requiredDigits = 4;
 
         // Dữ liệu gốc (Chạy logic)
-        private Dictionary<MinigameType, int> minigameDigitMap;
-        private Dictionary<MinigameType, int> collectedDigits;
+        private Dictionary<MinigameType, KeyCode> minigameDigitMap = new();
+        private Dictionary<MinigameType, KeyCode> collectedDigits = new();
 
         // 2. LIST ĐỂ PHẢN CHIẾU LÊN INSPECTOR (Chỉ dùng để xem)
         [Header("Góc nhìn trộm (Debug View)")]
         public List<MinigameDigitPair> debugMinigameDigitMap = new List<MinigameDigitPair>();
         public List<MinigameDigitPair> debugCollectedDigits = new List<MinigameDigitPair>();
+
+        private List<KeyShape> keyShapes = new List<KeyShape>()
+        {
+            KeyShape.Square,
+            KeyShape.Cross,
+            KeyShape.Triangle,
+            KeyShape.Circle
+        };
+
+        private List<KeyColor> keyColors = new List<KeyColor>()
+        {
+            KeyColor.Red,
+            KeyColor.Blue,
+            KeyColor.Yellow,
+            KeyColor.Green 
+        };
+
+        private List<MinigameType> minigameTypes = new List<MinigameType>()
+        {
+            MinigameType.Maze,
+            MinigameType.CardMatch,
+            MinigameType.Wires,
+            MinigameType.WordSearch
+        };
 
         private void OnEnable()
         {
@@ -36,18 +62,19 @@ namespace Game.Systems.Lock
         }
         private void Start()
         {
+            keyShapes = ShuffleHelper.Shuffle(keyShapes);
+            keyColors = ShuffleHelper.Shuffle(keyColors);
+            minigameTypes = ShuffleHelper.Shuffle(minigameTypes);
             GenerateNewPasscode();
         }
 
         public void GenerateNewPasscode()
         {
-            minigameDigitMap = new Dictionary<MinigameType, int>();
-            collectedDigits = new Dictionary<MinigameType, int>();
+            for (int i = 0; i < GameConstants.NUMBER_OF_MINIGAMES; i++)
+            {
+                minigameDigitMap.Add(minigameTypes[i], new KeyCode(Random.Range(0, 10), keyShapes[i], keyColors[i]));
+            }
 
-            minigameDigitMap.Add(MinigameType.Maze, Random.Range(0, 10));
-            minigameDigitMap.Add(MinigameType.CardMatch, Random.Range(0, 10));
-            minigameDigitMap.Add(MinigameType.Wires, Random.Range(0, 10));
-            minigameDigitMap.Add(MinigameType.WordSearch, Random.Range(0, 10));
 
             // Cập nhật lên Inspector ngay sau khi tạo
             SyncDictionaryToLists();
@@ -55,7 +82,8 @@ namespace Game.Systems.Lock
             GameEvents.RaisePasscodeGenerated(minigameDigitMap); // Lưu ý: Cần đổi kiểu dữ liệu Event này sang Dictionary<MinigameType, int> nhé
         }
 
-        private void HandleMinigameCompleted(MinigameType minigameType, int digit)
+
+        private void HandleMinigameCompleted(MinigameType minigameType, KeyCode digit)
         {
             // Đặt trạm gác BÊN NGOÀI lệnh if để xem tín hiệu có tới cửa không
             Debug.Log($"[PasscodeController] ⚡ ĐÃ NHẬN TÍN HIỆU TỪ MÊ CUNG {minigameType} VỚI SỐ {digit}!");
@@ -90,13 +118,13 @@ namespace Game.Systems.Lock
             debugMinigameDigitMap.Clear();
             foreach (var kvp in minigameDigitMap)
             {
-                debugMinigameDigitMap.Add(new MinigameDigitPair { minigame = kvp.Key, digit = kvp.Value });
+                debugMinigameDigitMap.Add(new MinigameDigitPair { Minigame = kvp.Key, KeyCode = kvp.Value });
             }
 
             debugCollectedDigits.Clear();
             foreach (var kvp in collectedDigits)
             {
-                debugCollectedDigits.Add(new MinigameDigitPair { minigame = kvp.Key, digit = kvp.Value });
+                debugCollectedDigits.Add(new MinigameDigitPair { Minigame = kvp.Key, KeyCode = kvp.Value });
             }
         }
     }

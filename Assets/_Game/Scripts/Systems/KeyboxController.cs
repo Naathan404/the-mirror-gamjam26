@@ -5,29 +5,44 @@ using Game.Core;
 using DG.Tweening;
 using Game.Managers;
 using Game.Effect;
+using KeyCode = Game.Core.KeyCode;
+using Game.Utils;
 
 namespace Game.Systems.Lock
 {
+
     public class KeyboxController : MonoBehaviour
     {
-        [Header("Tham chiếu Cơ khí")]
+        public class ShapeDigit
+        {
+            public KeyShape Shape;
+            public int Digit;    
+        }
+
+        [Header("Button Refs")]
         public NumberWheel[] digitWheels = new NumberWheel[4];
         public KeyboxButton submitButton;
 
-        [Header("Hiệu ứng Keybox (DOTween)")]
+        [Header("Animation")]
         [Tooltip("Object chứa toàn bộ hình ảnh hộp khóa")]
         public Transform boxTransform;
         public float scrambleTime = 1f; // Thời gian quay số loạn xạ sau khi đóng
 
-        [Header("Phần thưởng (Cơ quan ẩn)")]
+        [Header("Key Drawer")]
         public Transform drawerTransform;
         public float drawerOpenTargetX = 3f;
         public float drawerMoveDuration = 0.8f;
 
-        [Tooltip("Kéo Collider của chiếc chìa khóa vào đây")]
+        [Header("KeyCode")]
+        [SerializeField] private List<SpriteRenderer> _allKeyShapes = new List<SpriteRenderer>(4);
+        [SerializeField] private Sprite _squareSprite;
+        [SerializeField] private Sprite _crossSprite;
+        [SerializeField] private Sprite _cirleSprite;
+        [SerializeField] private Sprite _triangleSprite;
+
         public Collider roomKeyCollider;
 
-        private int[] targetPasscode = new int[4];
+        private List<KeyCode> targetPasscode = new List<KeyCode>(4);
         private bool isUnlocked = false;
         private bool isProcessing = false;
 
@@ -61,33 +76,113 @@ namespace Game.Systems.Lock
             if (submitButton != null) submitButton.OnClicked -= TryOpenBox;
         }
 
-        private void SetupTargetPasscode(Dictionary<MinigameType, int> minigameDigitMap)
+        private void SetupTargetPasscode(Dictionary<MinigameType, KeyCode> minigameDigitMap)
         {
-            // (Giữ nguyên logic lấy Passcode như cũ)
-            if (minigameDigitMap.TryGetValue(MinigameType.Maze, out int d0)) targetPasscode[0] = d0;
-            if (minigameDigitMap.TryGetValue(MinigameType.CardMatch, out int d1)) targetPasscode[1] = d1;
-            if (minigameDigitMap.TryGetValue(MinigameType.Wires, out int d2)) targetPasscode[2] = d2;
-            if (minigameDigitMap.TryGetValue(MinigameType.WordSearch, out int d3)) targetPasscode[3] = d3;
+            if (minigameDigitMap == null)
+            {
+                Debug.LogError("[KeyboxController] Passcode setup failed because minigame digit map is null.");
+                return;
+            }
+
+            targetPasscode.Clear();
+
+            AddPasscodeDigit(minigameDigitMap, MinigameType.Maze);
+            AddPasscodeDigit(minigameDigitMap, MinigameType.CardMatch);
+            AddPasscodeDigit(minigameDigitMap, MinigameType.Wires);
+            AddPasscodeDigit(minigameDigitMap, MinigameType.WordSearch);
+
+            if (targetPasscode.Count < GameConstants.NUMBER_OF_MINIGAMES)
+            {
+                Debug.LogError($"[KeyboxController] Passcode setup failed. Expected {GameConstants.NUMBER_OF_MINIGAMES} digits but received {targetPasscode.Count}.");
+                return;
+            }
+
+            targetPasscode = ShuffleHelper.Shuffle(targetPasscode);
+            UpdateKeyShapeSprites();
+        }
+
+        private void AddPasscodeDigit(Dictionary<MinigameType, KeyCode> minigameDigitMap, MinigameType minigameType)
+        {
+            if (minigameDigitMap.TryGetValue(minigameType, out KeyCode keyCode))
+            {
+                targetPasscode.Add(keyCode);
+            }
+        }
+
+        private void UpdateKeyShapeSprites()
+        {
+            if (_allKeyShapes == null)
+            {
+                Debug.LogError("[KeyboxController] Key shape sprite renderers are not assigned.");
+                return;
+            }
+
+            int count = Mathf.Min(targetPasscode.Count, _allKeyShapes.Count);
+
+            for (int i = 0; i < count; i++)
+            {
+                if (_allKeyShapes[i] == null)
+                {
+                    continue;
+                }
+
+                _allKeyShapes[i].sprite = GetShapeSprite(targetPasscode[i].Shape);
+            }
+        }
+
+        private Sprite GetShapeSprite(KeyShape shape)
+        {
+            if (shape == KeyShape.Square)
+            {
+                return _squareSprite;
+            }
+
+            if (shape == KeyShape.Cross)
+            {
+                return _crossSprite;
+            }
+
+            if (shape == KeyShape.Circle)
+            {
+                return _cirleSprite;
+            }
+
+            if (shape == KeyShape.Triangle)
+            {
+                return _triangleSprite;
+            }
+
+            return null;
         }
 
         private void TryOpenBox()
         {
-            if (isUnlocked || isProcessing) return;
+            if (isUnlocked || isProcessing)
+            {
+                return;
+            }
+
+            if (targetPasscode.Count < GameConstants.NUMBER_OF_MINIGAMES)
+            {
+                Debug.LogError($"[KeyboxController] Cannot open box because passcode is incomplete. Expected {GameConstants.NUMBER_OF_MINIGAMES} digits but has {targetPasscode.Count}.");
+                return;
+            }
 
             if (GameManager.Instance.MinigamePassed < GameConstants.NUMBER_OF_MINIGAMES)
             {
-                #if UNITY_EDITOR
+#if UNITY_EDITOR
                 Debug.Log("Chưa giải đủ Minigame");
-                #endif
+#endif
                 StartCoroutine(ScrambleOnFailRoutine());
                 FilterController.Instance.FlashScreen(Color.white, 0.25f);
                 return;
             }
 
+            int digitCount = Mathf.Min(GameConstants.NUMBER_OF_MINIGAMES, digitWheels.Length);
             bool isCorrect = true;
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < digitCount; i++)
             {
-                if (digitWheels[i] != null && digitWheels[i].CurrentValue != targetPasscode[i])
+                if (digitWheels[i] != null && digitWheels[i].CurrentValue != targetPasscode[i].Digit)
                 {
                     isCorrect = false; break;
                 }
