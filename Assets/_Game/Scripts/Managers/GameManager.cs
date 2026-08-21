@@ -11,6 +11,8 @@ namespace Game.Managers
 
         private int _minigamePassed = 0;
 
+        public int MinigamePassed => _minigamePassed;
+
         private void Start()
         {
             CurrentState = GameState.Playing;
