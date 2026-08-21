@@ -77,6 +77,7 @@ namespace Game.Minigames
             globalTopSortingOrder += 10;
             currentBaseSortingOrder = globalTopSortingOrder;
             UpdateSortingOrder(currentBaseSortingOrder + 100);
+            AudioController.Instance.PlaySFX(SoundName.Pick_Clue);
 
             if (snapBackCoroutine != null) StopCoroutine(snapBackCoroutine);
 

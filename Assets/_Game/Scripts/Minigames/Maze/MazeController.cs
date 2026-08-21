@@ -122,7 +122,7 @@ namespace Game.Minigames.Maze
             Vector2Int playerOldPos = currentPlayerInstance.CurrentGridPos;
             Vector2Int playerNextPos = playerOldPos;
             bool playerMoved = false;
-
+            AudioController.Instance.PlaySFX(SoundName.Maze_Moving);
             // 1. Tính toán vị trí tương lai của Player
             if (currentMazeData.IsPathOpen(playerOldPos, playerDir))
             {
@@ -209,6 +209,7 @@ namespace Game.Minigames.Maze
             // 5. XỬ LÝ HẬU QUẢ THẮNG / THUA
             if (collisionDetected)
             {
+                AudioController.Instance.PlaySFX(SoundName.Maze_Fail);
                 FilterController.Instance.FlashScreen(FilterController.Instance.HazardColor, 0.5f);
                 Camera.main.transform.DOShakePosition(0.5f, 1f, 15, 90f);
                 mazeRenderer.paperQuad.DOShakePosition(0.3f, 0.5f, 10, 90f);
@@ -216,6 +217,7 @@ namespace Game.Minigames.Maze
             }
             else if (playerMoved && playerNextPos == currentMazeData.EndPos)
             {
+                AudioController.Instance.PlaySFX(SoundName.Maze_Success);
                 CompleteMinigame(); // Win
             }
         }

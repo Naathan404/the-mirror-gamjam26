@@ -10,11 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2e171e760773a4d488f7f6f6438e3dd4, type: 3}
-  m_Name: mazeMoving
+  m_Name: SFX_Entity_ChangeState
   m_EditorClassIdentifier: 
-  soundName: 9
+  soundName: 16
   audioClips:
-  - {fileID: 8300000, guid: 8519e00c7a4580743a05cdb08e16da68, type: 3}
+  - {fileID: 8300000, guid: 0f80cd9b3050c6f418c992ef79762274, type: 3}
+  - {fileID: 8300000, guid: 1d7cd811ce3bb72409388b8b28bb5901, type: 3}
+  - {fileID: 8300000, guid: adf05a6415fd5f54bb5a4c413a4dee1b, type: 3}
   volume: 1
   minPitch: 0.95
   maxPitch: 1.05
