@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Game.Core;
 using DG.Tweening;
+using Game.Managers;
+using Game.Effect;
 
 namespace Game.Systems.Lock
 {
@@ -72,6 +74,16 @@ namespace Game.Systems.Lock
         {
             if (isUnlocked || isProcessing) return;
 
+            if (GameManager.Instance.MinigamePassed < GameConstants.NUMBER_OF_MINIGAMES)
+            {
+                #if UNITY_EDITOR
+                Debug.Log("Chưa giải đủ Minigame");
+                #endif
+                StartCoroutine(ScrambleOnFailRoutine());
+                FilterController.Instance.FlashScreen(Color.white, 0.25f);
+                return;
+            }
+
             bool isCorrect = true;
             for (int i = 0; i < 4; i++)
             {
@@ -89,6 +101,7 @@ namespace Game.Systems.Lock
             }
             else
             {
+                FilterController.Instance.FlashScreen(Color.white, 0.25f);
                 StartCoroutine(ScrambleOnFailRoutine());
             }
         }
