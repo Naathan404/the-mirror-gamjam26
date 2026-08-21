@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26ea83ecef314cd4f995e08097d4c5f5, type: 3}
   m_Name: WordSearchConfig_2
   m_EditorClassIdentifier: 
-  rows: 11
-  columns: 11
+  rows: 12
+  columns: 12
   cellSize: {x: 1, y: 1}
   spacing: {x: 0, y: 0}
   paperPadding: 0.9

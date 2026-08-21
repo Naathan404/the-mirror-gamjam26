@@ -5,6 +5,7 @@ using Game.Core;
 using Game.Effect;
 using Game.Managers;
 using UnityEngine;
+using KeyCode = Game.Core.KeyCode;
 
 
 namespace Game.Entity
@@ -30,9 +31,19 @@ namespace Game.Entity
         [SerializeField] private int _jumpStepWhenGotLightFlashed = 2;
         [SerializeField] private float _accelaration = 1.15f;
 
+        [Header("Accelaration Caps")]
+        [SerializeField] private float _flashAccelCap = 2.5f;
+        [SerializeField] private float _mistakeAccelCap = 3f;
+
+        [Header("Mercy Jump Settings")]
+        [SerializeField] private float _mercyAccelThreshold = 2f;
+        [SerializeField] private int _mercyJumpStepMin = 2;
+        [SerializeField] private int _mercyJumpStepMax = 3;
+
         [Header("State Readonly")]
         [SerializeField] public int CurrentState { get; private set; }
-        [SerializeField] private float _baseTimeScaleAccelaration = 1f;
+        [SerializeField] private float _flashAccelaration = 1f;
+        [SerializeField] private float _mistakeAccelaration = 1f;
 
 
         private View _currentView = View.Mirror;
@@ -51,6 +62,8 @@ namespace Game.Entity
             GameEvents.OnViewChangeFinished += HandleViewChanged;
             GameEvents.OnLightFlashed += HandleLightFlashed;
             GameEvents.OnMinigameFailed += HandleMinigameFailed;
+
+            GameEvents.OnMinigameCompleted += HandleMinigameCompleted;
         }
 
         private void OnDestroy()
@@ -58,6 +71,8 @@ namespace Game.Entity
             GameEvents.OnViewChangeFinished -= HandleViewChanged;
             GameEvents.OnLightFlashed -= HandleLightFlashed;
             GameEvents.OnMinigameFailed -= HandleMinigameFailed;
+
+            GameEvents.OnMinigameCompleted -= HandleMinigameCompleted;
         }
         #endregion
 
@@ -118,6 +133,16 @@ namespace Game.Entity
                 }
             }
         }
+
+        private int GetJumpStep()
+        {
+            float totalAccel = _flashAccelaration * _mistakeAccelaration;
+            if (totalAccel >= _mercyAccelThreshold)
+            {
+                return UnityEngine.Random.Range(_mercyJumpStepMin, _mercyJumpStepMax + 1); // 2 hoặc 3
+            }
+            return _jumpStepWhenGotLightFlashed;
+        }
         
         private void JumpToState(int state)
         {
@@ -131,11 +156,18 @@ namespace Game.Entity
             }
         }
 
-        private void SetTimeScaleAccelaration(float factor)
+        private void SetFlashAccelaration(float factor)
         {
             if (factor <= 0) return;
 
-            _baseTimeScaleAccelaration *= factor;
+            _flashAccelaration = Mathf.Min(_flashAccelaration * factor, _flashAccelCap);
+        }
+
+        private void SetMistakeAccelaration(float factor)
+        {
+            if (factor <= 0) return;
+
+            _mistakeAccelaration = Mathf.Min(_mistakeAccelaration * factor, _mistakeAccelCap);
         }
 
         private float GetAwayMultiplier()
@@ -158,27 +190,33 @@ namespace Game.Entity
 
         private void HandleLightFlashed()
         {
-            SetTimeScaleAccelaration(_accelaration);
-            int clamp = Mathf.Clamp(CurrentState + _jumpStepWhenGotLightFlashed, 0, GameConstants.ENTITY_MAX_STATE);
+            SetFlashAccelaration(_accelaration);
+            int clamp = Mathf.Clamp(CurrentState + GetJumpStep(), 0, GameConstants.ENTITY_MAX_STATE);
             JumpToState(clamp);
         }
 
         private void HandleMinigameFailed(float accel)
         {
-            SetTimeScaleAccelaration(accel);
+            SetMistakeAccelaration(accel);
             _currentTimeScale = GetTimeScaleByView(_currentView);
+        }
+
+        private void HandleMinigameCompleted(MinigameType _, KeyCode __)
+        {
+            _timer = 0f;
         }
         #endregion
 
         #region Helpers
         private float GetTimeScaleByView(View view)
         {
+            float totalAccel = _flashAccelaration * _mistakeAccelaration;
             foreach(var timeview in _timeScaleViews)
             {
                 if (timeview.BaseView == view)
-                    return timeview.TimeScale * _baseTimeScaleAccelaration;
+                    return timeview.TimeScale * totalAccel;
             }
-            return 1f * _baseTimeScaleAccelaration;
+            return 1f * totalAccel;
         }
         #endregion
     }

@@ -13,6 +13,7 @@ public class LightBulbController : MonoBehaviour
     [SerializeField] private int _batteryCount = 0;
     [Tooltip("Thời gian pin cần sạc để có thể sử dụng đèn")]
     [SerializeField] private float _batteryLife = 20f;
+    [SerializeField] private float _batteryLifeAddition = 1f;
 
     [Header("Effects")]
     [SerializeField] private LightFlashEffect _lightFlashEffect;
@@ -51,6 +52,7 @@ public class LightBulbController : MonoBehaviour
 
         _batteryCount--;
         _batteryChargingProcess = 0;
+        _batteryLife += _batteryLifeAddition;
         OnBatteryProgressChanged?.Invoke(_batteryChargingProcess);
 
         if (_lightFlashEffect != null)

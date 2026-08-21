@@ -19,6 +19,9 @@ namespace Game.Systems.Lock
             public int Digit;    
         }
 
+        [Header("Debug")]
+        [SerializeField] private bool _enableDebugOpenBox = false;
+
         [Header("Button Refs")]
         public NumberWheel[] digitWheels = new NumberWheel[4];
         public KeyboxButton submitButton;
@@ -58,6 +61,17 @@ namespace Game.Systems.Lock
 
             // Chìa khóa vẫn hiện hình (đi theo ngăn kéo), nhưng KHÔNG THỂ click
             if (roomKeyCollider != null) roomKeyCollider.enabled = false;
+
+#if UNITY_EDITOR
+            string passcode = "| ";
+
+            foreach(var c in targetPasscode)
+            {
+                passcode += c.Digit + " | ";
+            }
+
+            Debug.Log($"PASSWORD: <color=red> {passcode} </color>");
+#endif
         }
 
         private void OnEnable()
@@ -168,14 +182,16 @@ namespace Game.Systems.Lock
                 return;
             }
 
-            if (GameManager.Instance.MinigamePassed < GameConstants.NUMBER_OF_MINIGAMES)
+
+            if(!_enableDebugOpenBox)
             {
-#if UNITY_EDITOR
-                Debug.Log("Chưa giải đủ Minigame");
-#endif
-                StartCoroutine(ScrambleOnFailRoutine());
-                FilterController.Instance.FlashScreen(Color.white, 0.25f);
-                return;
+                if (GameManager.Instance.MinigamePassed < GameConstants.NUMBER_OF_MINIGAMES)
+                {
+                    Debug.Log("Chưa giải đủ Minigame");
+                    StartCoroutine(ScrambleOnFailRoutine());
+                    FilterController.Instance.FlashScreen(Color.white, 0.25f);
+                    return;
+                }
             }
 
             int digitCount = Mathf.Min(GameConstants.NUMBER_OF_MINIGAMES, digitWheels.Length);

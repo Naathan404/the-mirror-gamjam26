@@ -10,7 +10,7 @@ namespace Game.Minigames.Maze
     public class WiresConfig : ScriptableObject
     {
         [Header("Wire Settings")]
-        [Range(4, 18)]
+        [Range(4, 25)]
         [SerializeField] private int _wireCount;
         [SerializeField] private int _hiddenCount;
 
