@@ -159,12 +159,14 @@ namespace Game.Minigames.WordSearch
                 foreach (var clue in spawnedClues)
                 {
                     if (clue.TargetWord == foundTarget) clue.MarkAsFound();
+                    AudioController.Instance.PlaySFX(SoundName.Word_Success);
                 }
 
                 activeWords.Remove(foundTarget);
                 wordsFoundCount++;
 
                 if (wordsFoundCount >= config.wordsToFindPerGame) CompleteMinigame();
+
             }
             else
             {
@@ -174,6 +176,8 @@ namespace Game.Minigames.WordSearch
                     item.ClearHighlight();
                     item.Shake(config.shakeDuration, config.shakeMagnitude);
                 }
+
+                AudioController.Instance.PlaySFX(SoundName.Word_Fail);
             }
 
             currentDragList.Clear();

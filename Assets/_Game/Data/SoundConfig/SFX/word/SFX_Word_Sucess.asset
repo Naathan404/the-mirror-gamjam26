@@ -10,11 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2e171e760773a4d488f7f6f6438e3dd4, type: 3}
-  m_Name: cardFlipDown
+  m_Name: SFX_Word_Sucess
   m_EditorClassIdentifier: 
-  soundName: 7
+  soundName: 12
   audioClips:
-  - {fileID: 8300000, guid: 772863bd99269d34eb9e07dcc5620289, type: 3}
+  - {fileID: 8300000, guid: adf05a6415fd5f54bb5a4c413a4dee1b, type: 3}
+  - {fileID: 8300000, guid: 1d7cd811ce3bb72409388b8b28bb5901, type: 3}
   volume: 1
   minPitch: 0.95
   maxPitch: 1.05

@@ -37,6 +37,7 @@ namespace Game.Systems.Lock
         private void OnMouseDown()
         {
             AnimatePress();
+            AudioController.Instance.PlaySFX(SoundName.Button3DClick);
             OnClicked?.Invoke();
         }
 

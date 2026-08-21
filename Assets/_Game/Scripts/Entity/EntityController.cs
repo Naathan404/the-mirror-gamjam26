@@ -117,6 +117,7 @@ namespace Game.Entity
             {
                 _timer = -1f;
                 CurrentState--;
+                AudioController.Instance.PlaySFX(SoundName.Entity_ChangeState);
                 GameEvents.RaiseEntityStateChanged(CurrentState);
 
                 if (CurrentState == 0)

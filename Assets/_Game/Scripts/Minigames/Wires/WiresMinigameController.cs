@@ -276,8 +276,6 @@ namespace Game.Minigames.Wires
                 _leftSockets[i].SetColor(leftOrders[i]);
                 _rightSockets[i].SetColor(rightOrders[i]);
 
-                // Hint đứng cùng hàng với socket trái thứ i -> hiển thị đúng
-                // màu ĐÍCH bắt buộc của màu socket trái đó (không phải chính màu đó).
                 if (i < _hintIndicators.Count)
                 {
                     ColorId requiredTarget = _requiredMatch[leftOrders[i]];
@@ -335,6 +333,7 @@ namespace Game.Minigames.Wires
                 var socket = RaycastSocket();
                 if (socket != null && socket.Side == WireSide.Left && !socket.IsConnected)
                 {
+                    AudioController.Instance.PlaySFX(SoundName.ButtonClick);
                     BeginDrag(socket);
                 }
             }
@@ -465,8 +464,6 @@ namespace Game.Minigames.Wires
                 var line = Instantiate(_linePrefab, _linesContainer);
                 line.positionCount = _curveSegments;
 
-                // Gradient màu nguồn -> màu đích (2 màu khác nhau) thay vì 1
-                // màu đồng nhất, thể hiện rõ đây là ghép theo luật.
                 line.startColor = _config.GetColorById(from.ColorId);
                 line.endColor = _config.GetColorById(to.ColorId);
 
@@ -474,6 +471,7 @@ namespace Game.Minigames.Wires
                 _activeLines[from] = line;
 
                 _connectedCount++;
+                AudioController.Instance.PlaySFX(SoundName.Wire_Success);
 
                 int count = Mathf.Min(WireCount, _config.ColorCount);
 
@@ -494,7 +492,7 @@ namespace Game.Minigames.Wires
                     _mistakeCount++;
                     CheckMistakeCountToReset();
                 }
-
+                AudioController.Instance.PlaySFX(SoundName.Wire_Fail);
                 return false;
             }
         }

@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cdebfff78275de4a8762d9a78b79130, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _config: {fileID: 11400000, guid: ad375e9fffe934f41acd82a4fce73941, type: 2}
+  _config: {fileID: 11400000, guid: 602771fe06af2904d8a4033adbf3a83b, type: 2}
   _side: 0
   ColorId: 0
   IsConnected: 0
