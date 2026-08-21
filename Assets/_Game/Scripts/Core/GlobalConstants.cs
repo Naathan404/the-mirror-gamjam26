@@ -89,6 +89,10 @@ namespace Game.Core
         Maroon,
         Olive,
         Gold,
-        Coral
+        Coral,
+        LightPurple,
+        LightPink,
+        BrownWood,
+        BrownPepper
     }
 }
