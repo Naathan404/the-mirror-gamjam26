@@ -114,6 +114,10 @@ namespace Game.Core
 
         // ================= WIN / LOSE =================
 
+        /// <summary>Mở cửa.</summary>
+        public static event Action OnDoorInteracted;
+        public static void RaiseDoorInteracted() => OnDoorInteracted?.Invoke();
+
         public static event Action OnGameWon;
         public static void RaiseGameWon() => OnGameWon?.Invoke();
 
@@ -126,6 +130,8 @@ namespace Game.Core
             OnViewChangeStarted = null;
             OnViewChangeFinished = null;
             OnPasscodeGenerated = null;
+            OnMinigameOpened = null;
+            OnMinigameClosed = null;
             OnEntityStateChanged = null;
             OnEntityDangerZoneEntered = null;
             OnJumpscareTriggered = null;
@@ -134,7 +140,11 @@ namespace Game.Core
             OnBatteryChargeCompleted = null;
             OnMinigameCompleted = null;
             OnMinigameProgressReset = null;
+            OnDifficultyIncreased = null;
+            OnMinigameFailed = null;
             OnLockUnlocked = null;
+            OnKeyCollected = null;
+            OnDoorInteracted = null;
             OnGameWon = null;
             OnGameLost = null;
         }

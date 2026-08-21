@@ -1,4 +1,4 @@
-
+﻿
 using Game.Core;
 using Game.Utils;
 
@@ -20,6 +20,7 @@ namespace Game.Managers
             GameEvents.OnMinigameCompleted += HandleMinigameCompleted;
             GameEvents.OnGameLost += HandleGameLost;
             GameEvents.OnKeyCollected += () => HasRoomKey = true;
+            GameEvents.OnDoorInteracted += TryWinGame;
         }
 
 #pragma warning disable CS0114 // Member hides inherited member; missing override keyword
@@ -28,6 +29,7 @@ namespace Game.Managers
         {
             GameEvents.OnMinigameCompleted -= HandleMinigameCompleted;
             GameEvents.OnGameLost -= HandleGameLost;
+            GameEvents.OnDoorInteracted -= TryWinGame;
         }
 
         #region GameStates
@@ -58,6 +60,21 @@ namespace Game.Managers
         {
             SetGameOver();
         }
+        private void TryWinGame()
+        {
+            if (CurrentState != GameState.Playing) return;
+
+            if (HasRoomKey)
+            {
+                CurrentState = GameState.GameWon; // Hoặc GameWon nếu Hưn có State này
+                // ĐÂY LÀ LÚC PHÁT LỆNH CHO UI CHẠY HIỆU ỨNG
+                GameEvents.RaiseGameWon();
+            }
+            else
+            {
+                // Thêm âm thanh "Cạch cạch" cửa bị khóa ở đây nếu muốn
+            }
+        }
         #endregion
     }
 
@@ -65,6 +82,7 @@ namespace Game.Managers
     {
         Playing,
         Pause,
-        GameOver
+        GameOver,
+        GameWon
     }
 }
