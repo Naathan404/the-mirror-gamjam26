@@ -66,7 +66,7 @@ namespace Game.Entity
         {
             UpdateTimer();
 #if UNITY_EDITOR
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(UnityEngine.KeyCode.Space))
             {
                 GameEvents.RaiseLightFlashed();
                 FilterController.Instance.FlashScreen(FilterController.Instance.FlashColor);

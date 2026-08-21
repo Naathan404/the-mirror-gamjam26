@@ -3,6 +3,8 @@ using Game.Core;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using KeyCode = Game.Core.KeyCode;
+using Mono.Cecil.Cil;
 
 namespace Game.Minigames
 {
@@ -15,6 +17,8 @@ namespace Game.Minigames
         [Header("Base Cấu hình")]
         public MinigameType minigameType;
         public Color minigameColor;
+        public KeyColor KColor;
+        public KeyShape Shape;
 
         [Header("Base Tham chiếu")]
         public GameObject visualRoot;
@@ -63,11 +67,15 @@ namespace Game.Minigames
         }
 
         // ================= XỬ LÝ VÒNG ĐỜI CHUNG =================
-        protected void HandlePasscodeGenerated(Dictionary<MinigameType, int> dict)
+        protected void HandlePasscodeGenerated(Dictionary<MinigameType, KeyCode> dict)
         {
-            if (dict.TryGetValue(minigameType, out int digit))
+            if (dict.TryGetValue(minigameType, out KeyCode code))
             {
-                secretDigit = digit;
+                secretDigit = code.Digit;
+                minigameColor = code.GetColor();
+                Shape = code.Shape;
+                KColor = code.KColor;
+
                 Debug.Log($"[{minigameType}] Mật mã được giao là: {secretDigit}");
             }
         }
@@ -137,7 +145,7 @@ namespace Game.Minigames
 
             // 3. Bắn event đóng game và nộp mã số
             Debug.Log($"[{minigameType}] Đã nhả giấy. Nộp mã {secretDigit}");
-            GameEvents.RaiseMinigameCompleted(minigameType, secretDigit);
+            GameEvents.RaiseMinigameCompleted(minigameType, new KeyCode(secretDigit, Shape, KColor));
             GameEvents.RaiseMinigameClosed(minigameType);
         }
 

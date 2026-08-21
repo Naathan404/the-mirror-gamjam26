@@ -32,11 +32,9 @@ namespace Game.Systems.Lock
 
         private void Start()
         {
-            // 1. TỰ ĐỘNG TÍNH BÁN KÍNH
             radius = (wheel.localScale.x + wheel.localScale.z) / 2f * 0.5f;
             initialWheelRotation = wheel.localRotation;
 
-            // 2. KHỞI TẠO CHỮ SỐ CHO 5 SLOT
             for (int i = 0; i < 5; i++)
             {
                 int targetRel = GetRelativeOffset(i, currentScrollIndex);

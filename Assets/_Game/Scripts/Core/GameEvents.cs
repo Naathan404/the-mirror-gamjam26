@@ -73,8 +73,8 @@ namespace Game.Core
         /// LockController là nguồn chân lý (source of truth) duy nhất cho đáp án —
         /// minigame KHÔNG tự random số của mình.
         /// </summary>
-        public static event Action<System.Collections.Generic.Dictionary<MinigameType, int>> OnPasscodeGenerated;
-        public static void RaisePasscodeGenerated(System.Collections.Generic.Dictionary<MinigameType, int> minigameDigitMap)
+        public static event Action<System.Collections.Generic.Dictionary<MinigameType, KeyCode>> OnPasscodeGenerated;
+        public static void RaisePasscodeGenerated(System.Collections.Generic.Dictionary<MinigameType, KeyCode> minigameDigitMap)
             => OnPasscodeGenerated?.Invoke(minigameDigitMap);
 
         /// <summary>Bắn khi một Object trong môi trường (vd: quyển sách) yêu cầu mở minigame.</summary>
@@ -87,8 +87,8 @@ namespace Game.Core
 
         /// <summary>Bắn khi 1 minigame hoàn thành, trả về (id minigame, chữ số nhận được).
         /// LockController lắng nghe để cộng số vào hộp mã.</summary>
-        public static event Action<MinigameType, int> OnMinigameCompleted;
-        public static void RaiseMinigameCompleted(MinigameType minigameType, int digit) => OnMinigameCompleted?.Invoke(minigameType, digit);
+        public static event Action<MinigameType, KeyCode> OnMinigameCompleted;
+        public static void RaiseMinigameCompleted(MinigameType minigameType, KeyCode code) => OnMinigameCompleted?.Invoke(minigameType, code);
 
         /// <summary>Bắn khi tiến trình 1 minigame bị reset (do giật đèn hoặc chuyển minigame khác).</summary>
         public static event Action<MinigameType> OnMinigameProgressReset;
