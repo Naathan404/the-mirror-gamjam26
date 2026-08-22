@@ -14,11 +14,10 @@ namespace Game.Systems.Lock
         public KeyCode KeyCode;
     }
 
-    public class PasscodeController : MonoBehaviour
+    public class PasscodeController : MonoSingleton<PasscodeController>
     {
         public int requiredDigits = 4;
 
-        // Dữ liệu gốc (Chạy logic)
         private Dictionary<MinigameType, KeyCode> minigameDigitMap = new();
         private Dictionary<MinigameType, KeyCode> collectedDigits = new();
 
@@ -71,6 +70,7 @@ namespace Game.Systems.Lock
 
         public void GenerateNewPasscode()
         {
+            minigameDigitMap.Clear();
             for (int i = 0; i < GameConstants.NUMBER_OF_MINIGAMES; i++)
             {
                 minigameDigitMap.Add(minigameTypes[i], new KeyCode(Random.Range(0, 10), keyShapes[i], keyColors[i]));
@@ -80,9 +80,14 @@ namespace Game.Systems.Lock
             // Cập nhật lên Inspector ngay sau khi tạo
             SyncDictionaryToLists();
 
-            GameEvents.RaisePasscodeGenerated(minigameDigitMap); // Lưu ý: Cần đổi kiểu dữ liệu Event này sang Dictionary<MinigameType, int> nhé
+            // Không bắn event nữa, vì các minigame sẽ có thể không nhận được khi chưa bật lên, thay bằng làm lấy số minigameDigitMap trực tiếp từ PasscodeController.Instance.GetCurrentPasscodeMap() trong các minigame
+            //GameEvents.RaisePasscodeGenerated(minigameDigitMap); // Lưu ý: Cần đổi kiểu dữ liệu Event này sang Dictionary<MinigameType, int> nhé
         }
 
+        public Dictionary<MinigameType, KeyCode> GetCurrentPasscodeMap()
+        {
+            return minigameDigitMap;
+        }
 
         private void HandleMinigameCompleted(MinigameType minigameType, KeyCode digit)
         {

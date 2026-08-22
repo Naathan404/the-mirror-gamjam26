@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using Game.Core;
+using Game.Systems.Lock;
 using UnityEngine;
 using KeyCode = Game.Core.KeyCode;
 
@@ -35,26 +36,40 @@ namespace Game.Views
 
         private void Start()
         {
-            GameEvents.OnPasscodeGenerated += HandlePasscodeGenerated;
+            //GameEvents.OnPasscodeGenerated += HandlePasscodeGenerated;
             GameEvents.OnLightFlashed += TriggerFlash;
 
             _lightRenderer.sprite = _lightNormalSprite;
             _backgroundRdr.sprite = _bgNormalSprite;
             _lightShatters.SetActive(false);
+
+            Invoke(nameof(SetupPasscodeHints), 0.15f);
         }
 
         private void OnDestroy()
         {
-            GameEvents.OnPasscodeGenerated -= HandlePasscodeGenerated;
+            //GameEvents.OnPasscodeGenerated -= HandlePasscodeGenerated;
             GameEvents.OnLightFlashed -= TriggerFlash;
         }
 
-        private void HandlePasscodeGenerated(Dictionary<MinigameType, KeyCode> dic)
+        private void SetupPasscodeHints()
         {
-            foreach(var kvp in dic)
+            if (PasscodeController.Instance == null)
+            {
+                Debug.LogWarning("[ViewBehind] Không tìm thấy PasscodeController để lấy gợi ý!");
+                return;
+            }
+
+            var dic = PasscodeController.Instance.GetCurrentPasscodeMap();
+            if (dic == null) return;
+
+            foreach (var kvp in dic)
             {
                 var sprite = GetSprite(kvp.Value.Shape);
-                sprite.color = GetColor(kvp.Value.KColor);
+                if (sprite != null)
+                {
+                    sprite.color = GetColor(kvp.Value.KColor);
+                }
             }
         }
 

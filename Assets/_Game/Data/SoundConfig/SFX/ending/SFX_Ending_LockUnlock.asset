@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e171e760773a4d488f7f6f6438e3dd4, type: 3}
+  m_Name: SFX_Ending_LockUnlock
+  m_EditorClassIdentifier: 
+  soundName: 17
+  audioClips:
+  - {fileID: 8300000, guid: 8481ac54daf4f4d47983aa1382332d45, type: 3}
+  - {fileID: 8300000, guid: 201248e11e357274a9782e04a43d775c, type: 3}
+  volume: 1
+  minPitch: 0.95
+  maxPitch: 1.05

@@ -12,46 +12,43 @@ namespace Game.Managers
     public class UIGameplayManager : MonoSingleton<UIGameplayManager>
     {
         [Header("Main Panels")]
-        [Header("Lose")]
+        [SerializeField] private GameObject _mirrorPanel;
+        [SerializeField] private GameObject _deskPanel;
+        [SerializeField] private GameObject _behindPanel;
+
+        [Header("Lose Panel")]
         [SerializeField] private GameObject _losePanel;
         [SerializeField] private CanvasGroup _loseCanvasGroup;
         [SerializeField] private float _loseAppearDuration = 1f;
         [SerializeField] private RectTransform _replayButton;
 
-        [Header("Gameplay Panels")]
-        [SerializeField] private GameObject _mirrorPanel;
-        [SerializeField] private GameObject _deskPanel;
-        [SerializeField] private GameObject _behindPanel;
-
         [Header("Rewards")]
         [SerializeField] private CanvasGroup _keyUIGroup;
         [SerializeField] private float _keyUIAppearDuration = 0.5f;
-        [Header("Flash Light Buttona")]
+
+        [Header("Flash Light Button")]
         [SerializeField] private Button _lightButton;
         [SerializeField] private Sprite _activateSprite;
         [SerializeField] private Sprite _deactivateSprite;
 
         private string[] _loseText = new string[]
         {
-            "Wake Up",
-            "Return",
-            "Again?",
-            "Open your eyes",
+            "Wake Up", 
+            "Return", 
+            "Again?", 
+            "Open your eyes", 
             "Come back"
         };
 
         #region Base
         private void Start()
         {
-            ActivateView(View.Mirror);
             GameEvents.OnViewChangeStarted += HideAllPanels;
             GameEvents.OnViewChangeFinished += ActivateView;
-
             GameEvents.OnJumpscareTriggered += HideAllPanels;
-
             GameEvents.OnGameLost += ShowLosePanel;
-
             GameEvents.OnKeyCollected += ShowKeyOnUI;
+            GameEvents.OnDoorInteracted += HideKeyOnUI;
             GameEvents.OnBatteryChargeCompleted += HandleBatteryChargeCompleted;
 
             HandleBatteryChargeCompleted();
@@ -65,6 +62,8 @@ namespace Game.Managers
                 _keyUIGroup.alpha = 0f;
                 _keyUIGroup.gameObject.SetActive(false);
             }
+
+            ActivateView(View.Mirror);
         }
 
 #pragma warning disable CS0114 // Member hides inherited member; missing override keyword
@@ -73,59 +72,43 @@ namespace Game.Managers
         {
             GameEvents.OnViewChangeStarted -= HideAllPanels;
             GameEvents.OnViewChangeFinished -= ActivateView;
-
-            GameEvents.OnJumpscareTriggered += HideAllPanels;
-
-            GameEvents.OnBatteryChargeCompleted -= HandleBatteryChargeCompleted;
-
+            GameEvents.OnJumpscareTriggered -= HideAllPanels;
             GameEvents.OnGameLost -= ShowLosePanel;
-
             GameEvents.OnKeyCollected -= ShowKeyOnUI;
+            GameEvents.OnDoorInteracted -= HideKeyOnUI;
+            GameEvents.OnBatteryChargeCompleted -= HandleBatteryChargeCompleted;
         }
         #endregion
 
         #region Panels
-        private void HideAllPanels(View _)
-        {
-            if (_mirrorPanel != null)
-                _mirrorPanel.gameObject.SetActive(false);
-            if (_deskPanel != null)
-                _deskPanel.gameObject.SetActive(false);
-            if (_behindPanel != null)
-                _behindPanel.gameObject.SetActive(false);
-        }
+        private void HideAllPanels(View _) => HideAllPanels();
 
-        private void HideAllPanels()
+        public void HideAllPanels()
         {
-            if (_mirrorPanel != null)
-                _mirrorPanel.gameObject.SetActive(false);
-            if (_deskPanel != null)
-                _deskPanel.gameObject.SetActive(false);
-            if (_behindPanel != null)
-                _behindPanel.gameObject.SetActive(false);
+            if (_mirrorPanel != null) _mirrorPanel.gameObject.SetActive(false);
+            if (_deskPanel != null) _deskPanel.gameObject.SetActive(false);
+            if (_behindPanel != null) _behindPanel.gameObject.SetActive(false);
         }
 
         private void ActivateView(View view)
         {
+            HideAllPanels();
             switch (view)
             {
                 case View.Mirror:
-                    HideAllPanels(view);
-                    _mirrorPanel.gameObject.SetActive(true);
-                    return;
+                    if (_mirrorPanel != null) _mirrorPanel.gameObject.SetActive(true);
+                    break;
                 case View.Desk:
-                    HideAllPanels(view);
-                    _deskPanel.gameObject.SetActive(true);
-                    return;
+                    if (_deskPanel != null) _deskPanel.gameObject.SetActive(true);
+                    break;
                 case View.Behind:
-                    HideAllPanels(view);
-                    _behindPanel.gameObject.SetActive(true);
-                    return;
+                    if (_behindPanel != null) _behindPanel.gameObject.SetActive(true);
+                    break;
             }
         }
         #endregion
 
-        #region Lose Panel
+        #region Lose Panel & Inventory
         private void ShowLosePanel()
         {
             HideAllPanels();
@@ -141,26 +124,25 @@ namespace Game.Managers
                     cvg.DOFade(1f, 1f);
                 });
         }
-        #endregion
 
-        // ==========================================
-        // [MỚI] HIỆU ỨNG HIỂN THỊ CHÌA KHÓA LÊN UI
-        // ==========================================
-        #region Inventory
         private void ShowKeyOnUI()
         {
             if (_keyUIGroup != null)
             {
                 _keyUIGroup.gameObject.SetActive(true);
-
-                // Reset scale về 0 để chuẩn bị phóng to
                 _keyUIGroup.transform.localScale = Vector3.zero;
-
-                // Fade in mượt mà
                 _keyUIGroup.DOFade(1f, _keyUIAppearDuration);
-
-                // Hiệu ứng phóng to và nảy nhẹ (OutBack) tạo cảm giác vui nhộn khi nhận đồ
                 _keyUIGroup.transform.DOScale(Vector3.one, _keyUIAppearDuration).SetEase(Ease.OutBack);
+            }
+        }
+
+        private void HideKeyOnUI()
+        {
+            if (GameManager.Instance.HasRoomKey && _keyUIGroup != null && _keyUIGroup.gameObject.activeSelf)
+            {
+                _keyUIGroup.DOFade(0f, 0.3f);
+                _keyUIGroup.transform.DOScale(Vector3.zero, 0.3f).SetEase(Ease.InBack)
+                    .OnComplete(() => _keyUIGroup.gameObject.SetActive(false));
             }
         }
         #endregion

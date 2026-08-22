@@ -1,10 +1,11 @@
-using UnityEngine;
+using DG.Tweening;
 using Game.Core;
+using Game.Systems.Lock;
+using Mono.Cecil.Cil;
 using System.Collections;
 using System.Collections.Generic;
-using DG.Tweening;
+using UnityEngine;
 using KeyCode = Game.Core.KeyCode;
-using Mono.Cecil.Cil;
 
 namespace Game.Minigames
 {
@@ -43,7 +44,7 @@ namespace Game.Minigames
         // ================= ĐĂNG KÝ EVENT =================
         protected virtual void Start()
         {
-            GameEvents.OnPasscodeGenerated += HandlePasscodeGenerated;
+            //GameEvents.OnPasscodeGenerated += HandlePasscodeGenerated;
             GameEvents.OnLightFlashed += HandleLightFlashed;
             GameEvents.OnMinigameOpened += HandleMinigameOpened;
             GameEvents.OnMinigameClosed += HandleMinigameClosed;
@@ -53,11 +54,12 @@ namespace Game.Minigames
             OnDifficultyIncrease(0);
 
             if (visualRoot != null) visualRoot.SetActive(false);
+            Invoke(nameof(FetchSecretCode), 0.15f);
         }
 
         protected virtual void OnDestroy()
         {
-            GameEvents.OnPasscodeGenerated -= HandlePasscodeGenerated;
+            //GameEvents.OnPasscodeGenerated -= HandlePasscodeGenerated;
             GameEvents.OnLightFlashed -= HandleLightFlashed;
             GameEvents.OnMinigameOpened -= HandleMinigameOpened;
             GameEvents.OnMinigameClosed -= HandleMinigameClosed;
@@ -67,16 +69,31 @@ namespace Game.Minigames
         }
 
         // ================= XỬ LÝ VÒNG ĐỜI CHUNG =================
-        protected void HandlePasscodeGenerated(Dictionary<MinigameType, KeyCode> dict)
+        private void FetchSecretCode()
         {
-            if (dict.TryGetValue(minigameType, out KeyCode code))
+            if (PasscodeController.Instance == null)
+            {
+                Debug.LogError($"[{minigameType}] LỖI NGHIÊM TRỌNG: Không tìm thấy PasscodeController!");
+                return;
+            }
+
+            var dict = PasscodeController.Instance.GetCurrentPasscodeMap();
+
+            if (dict != null && dict.TryGetValue(minigameType, out KeyCode code))
             {
                 secretDigit = code.Digit;
                 minigameColor = code.GetColor();
                 Shape = code.Shape;
                 KColor = code.KColor;
 
-                Debug.Log($"[{minigameType}] Mật mã được giao là: {secretDigit}");
+                Debug.Log($"[{minigameType}] Tự động kéo mã thành công: {secretDigit}");
+            }
+            else
+            {
+                Debug.Log($"[{minigameType}] Ván này không được bốc trúng. Tự động đi ngủ!");
+
+                // Vô hiệu hóa hoàn toàn GameObject này khỏi Scene để không bị lỗi tương tác
+                gameObject.SetActive(false);
             }
         }
 
@@ -183,14 +200,27 @@ namespace Game.Minigames
                 return;
             }
 
-            // Sinh giấy ở tâm vùng bàn
+            // Sinh giấy ở mặt bàn
             GameObject paper = Instantiate(digitPaperPrefab, deskSpawnArea.transform);
 
-            // Xóc tọa độ Z lên trên một chút để không bị kẹt dưới mặt bàn
-            paper.transform.localPosition = new Vector3(0f, 0f, -0.1f);
+            // ==========================================
+            // XỬ LÝ RANDOM TỌA ĐỘ TRONG VÙNG BOX COLLIDER
+            // ==========================================
+            // Lấy thông số tâm và kích thước của BoxCollider (Local Space)
+            Vector3 center = deskSpawnArea.center;
+            Vector3 size = deskSpawnArea.size;
+
+            // Tính tọa độ ngẫu nhiên (Nhân 0.8f để giấy rớt tụ vào trong một chút, không bị lẹm ra mép bàn)
+            float randomX = Random.Range(center.x - (size.x / 2f) * 0.2f, center.x + (size.x / 2f) * 0.2f);
+            float randomY = Random.Range(center.y - (size.y / 2f) * 0.2f, center.y + (size.y / 2f) * 0.2f);
+
+            // Gán vị trí ngẫu nhiên, giữ Z = -0.1f để giấy nổi lên mặt bàn
+            paper.transform.localPosition = new Vector3(randomX, randomY, -0.1f);
 
             // Lắc góc xoay ngẫu nhiên cho tờ giấy rơi tự nhiên
             paper.transform.localRotation = Quaternion.Euler(0f, 0f, Random.Range(-20f, 20f));
+
+            // ==========================================
 
             // Tìm script trên mảnh giấy và truyền con số mật mã vào
             if (paper.TryGetComponent(out DigitPaper paperScript))

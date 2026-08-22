@@ -116,6 +116,22 @@ namespace Game.Effect
             .SetEase(Ease.InCubic);
         }
 
+        public void PlayEyeOpenedVignetteEffect(float duration = 0.5f)
+        {
+            if (_vignette == null) return;
+            DOTween.Kill(_vignette);
+
+            _vignette.intensity.value = 1f;
+
+            DOTween.To(
+                () => _vignette.intensity.value,
+                x => _vignette.intensity.value = x,
+                _vignetteIntensity,
+                duration
+            )
+            .SetEase(Ease.OutCubic);
+        }
+
         /// <summary>
         /// Bật/Tắt chế độ tập trung bằng cách làm tối dày 4 góc màn hình
         /// </summary>
