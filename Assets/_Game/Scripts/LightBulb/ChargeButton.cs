@@ -23,8 +23,15 @@ public class ChargeButton : MonoBehaviour
     private void Start()
     {
         GameEvents.OnLightFlashed += HandleLightFlashed;
+        GameEvents.OnBatteryChargeCompleted += HandleBatteryChargeCompleted;
 
         _renderer.material = _greenMAT;
+    }
+
+    private void OnDestroy()
+    {
+        GameEvents.OnLightFlashed -= HandleLightFlashed;
+        GameEvents.OnBatteryChargeCompleted -= HandleBatteryChargeCompleted;
     }
 
     private void OnMouseDown()
@@ -65,6 +72,12 @@ public class ChargeButton : MonoBehaviour
     }
 
     private void HandleLightFlashed()
+    {
+        if (_renderer != null)
+            _renderer.material = _redMAT;
+    }
+
+    private void HandleBatteryChargeCompleted()
     {
         if (_renderer != null)
             _renderer.material = _greenMAT;
