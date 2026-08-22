@@ -26,9 +26,9 @@ namespace Game.Minigames.Wires
         [SerializeField] private float _hintExtraOffsetPercent = 0.08f;
 
         [Header("Layout")]
-        [Range(0f, 0.45f)]
+        [Range(0f, 1f)]
         [SerializeField] private float _horizontalPaddingPercent = 0.1f;
-        [Range(0f, 0.45f)]
+        [Range(0f, 1f)]
         [SerializeField] private float _verticalPaddingPercent = 0.12f;
         [SerializeField] private float _socketZOffset = -0.1f;
         [SerializeField] private List<GameObject> _mistakeWarnings;

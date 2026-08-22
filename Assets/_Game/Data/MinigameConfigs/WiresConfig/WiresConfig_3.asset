@@ -61,4 +61,4 @@ MonoBehaviour:
   - ColorId: 21
     Color: {r: 0.84905654, g: 0.5305847, b: 0.47029945, a: 1}
   _scaleThreshold: 14
-  _scaleFactor: 0.6
+  _scaleFactor: 0.75

@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e171e760773a4d488f7f6f6438e3dd4, type: 3}
+  m_Name: SFX_Shoot
+  m_EditorClassIdentifier: 
+  soundName: 0
+  audioClips:
+  - {fileID: 8300000, guid: 2358f2f80e5b7a74f970eb85dcfaf752, type: 3}
+  - {fileID: 8300000, guid: c7b286500b9515f4cbf37fe936605def, type: 3}
+  - {fileID: 8300000, guid: e6e52c54fb45d504c92cd8b182aaa8cb, type: 3}
+  - {fileID: 8300000, guid: 88db9f9aec495504aad31dfd720d4207, type: 3}
+  volume: 1
+  minPitch: 0.95
+  maxPitch: 1.05

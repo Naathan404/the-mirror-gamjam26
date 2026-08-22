@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25ca57dc42337ce44b043533ef79eb45, type: 3}
   m_Name: LaserConfig_2
   m_EditorClassIdentifier: 
-  gridSize: 12
-  bulbCount: 10
-  requiredMirrorCount: 11
-  decoyMirrorCount: 4
-  stoneCount: 18
+  gridSize: 18
+  bulbCount: 11
+  requiredMirrorCount: 16
+  decoyMirrorCount: 40
+  stoneCount: 20
   minStraightBetweenTurn: 3
   maxMistakes: 2
   fallbackCellSize: 0.6
