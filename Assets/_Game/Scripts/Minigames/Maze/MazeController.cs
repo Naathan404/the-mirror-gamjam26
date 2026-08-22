@@ -122,12 +122,12 @@ namespace Game.Minigames.Maze
             Vector2Int playerOldPos = currentPlayerInstance.CurrentGridPos;
             Vector2Int playerNextPos = playerOldPos;
             bool playerMoved = false;
-            AudioController.Instance.PlaySFX(SoundName.Maze_Moving);
             // 1. Tính toán vị trí tương lai của Player
             if (currentMazeData.IsPathOpen(playerOldPos, playerDir))
             {
                 playerNextPos = playerOldPos + playerOffset;
                 currentPlayerInstance.MoveTo(playerNextPos, mazeRenderer.GetWorldPosition(playerNextPos));
+                AudioController.Instance.PlaySFX(SoundName.Maze_Moving);
                 playerMoved = true;
             }
 

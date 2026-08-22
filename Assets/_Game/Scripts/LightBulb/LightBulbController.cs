@@ -58,7 +58,7 @@ public class LightBulbController : MonoBehaviour
         if (_lightFlashEffect != null)
         {
             FilterController.Instance.FlashScreen(FilterController.Instance.FlashColor);
-            _lightFlashEffect.PlayLightFlash();
+            //_lightFlashEffect.PlayLightFlash();
             Camera.main.transform.DOShakePosition(0.5f, 0.35f, 12, 45f);
         }
     }

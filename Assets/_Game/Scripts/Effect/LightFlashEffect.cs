@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using System;
 
 public class LightFlashEffect : MonoBehaviour
 {
@@ -22,7 +23,7 @@ public class LightFlashEffect : MonoBehaviour
         }
     }
 
-    public void PlayLightFlash()
+    public void PlayLightFlash(Action<bool> onStateChange = null)
     {
         if (_flashTween != null && _flashTween.IsActive())
         {
@@ -40,7 +41,9 @@ public class LightFlashEffect : MonoBehaviour
 
         for (int i = 0; i < durations.Length; i++)
         {
+            flashSequence.AppendCallback(() => onStateChange?.Invoke(true));
             flashSequence.Append(flashPanel.DOColor(flashColorB, durations[i]).SetEase(flashEase));
+            flashSequence.AppendCallback(() => onStateChange?.Invoke(false));
             flashSequence.Append(flashPanel.DOColor(flashColorA, durations[i]).SetEase(flashEase));
         }
 
@@ -48,6 +51,7 @@ public class LightFlashEffect : MonoBehaviour
         flashSequence.OnComplete(() =>
         {
             flashPanel.gameObject.SetActive(false);
+            onStateChange?.Invoke(false);
         });
 
         _flashTween = flashSequence;
