@@ -1967,6 +1967,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 510020012211854812, guid: ed999227ab7c78348af7ec577c6dbb86, type: 3}
+      propertyPath: _gameplaySceneName
+      value: _CoreScene
+      objectReference: {fileID: 0}
     - target: {fileID: 1570033588679683338, guid: ed999227ab7c78348af7ec577c6dbb86, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.4197457
@@ -2211,6 +2215,7 @@ MonoBehaviour:
   _punchAmount: 1.2
   _punchDuration: 0.2
   _isHighLight: 0
+  _isViewButton: 0
 --- !u!1001 &6795285253779019886
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2344,6 +2349,7 @@ MonoBehaviour:
   _punchAmount: 1.2
   _punchDuration: 0.2
   _isHighLight: 0
+  _isViewButton: 0
 --- !u!224 &7476538455661442290
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2713,6 +2719,7 @@ MonoBehaviour:
   _punchAmount: 1.2
   _punchDuration: 0.2
   _isHighLight: 0
+  _isViewButton: 0
 --- !u!1 &8862731938215905073
 GameObject:
   m_ObjectHideFlags: 0

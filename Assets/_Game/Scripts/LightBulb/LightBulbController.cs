@@ -25,7 +25,7 @@ public class LightBulbController : MonoBehaviour
     private bool _isCharging = false;
     private Coroutine _chargingRoutine;
 
-    public bool IsBatteryFull => _batteryChargingProcess >= _batteryLife;
+    public bool IsBatteryFull => _batteryChargingProcess >= _batteryLife - 0.001f;
 
     public event Action<float> OnBatteryProgressChanged;
 
