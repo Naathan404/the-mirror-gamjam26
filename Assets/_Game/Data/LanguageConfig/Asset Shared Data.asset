@@ -19,6 +19,10 @@ MonoBehaviour:
     m_Key: title_game
     m_Metadata:
       m_Items: []
+  - m_Id: 9547595857920
+    m_Key: title_setting
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items:
     - rid: 2427472599298867511
@@ -36,6 +40,10 @@ MonoBehaviour:
       data:
         m_Entries:
         - m_KeyId: 10704863232
+          m_TableCodes:
+          - en
+          - vi-VN
+        - m_KeyId: 9547595857920
           m_TableCodes:
           - en
           - vi-VN

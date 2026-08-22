@@ -18,7 +18,7 @@ MonoBehaviour:
   spacing: {x: 0, y: 0}
   paperPadding: 0.9
   allowedFlipTypes: 02000000
-  wordPool:
+  wordPoolEN:
   - SOUL
   - DEMON
   - DUAL
@@ -35,6 +35,23 @@ MonoBehaviour:
   - ILLUSION
   - TWIN
   - YOU
+  wordPoolVN:
+  - LINHHON
+  - ACQUY
+  - DUALITY
+  - GUONG
+  - CHET
+  - DINHMENH
+  - BONGTOI
+  - HUVO
+  - LOINGUYEN
+  - MAQUY
+  - AMANH
+  - HUYET
+  - SUTHAT
+  - AOANH
+  - SONGSINH
+  - NGUOI
   wordsToFindPerGame: 7
   clueSafeRadius: 7
   maxClueRotation: 29.8

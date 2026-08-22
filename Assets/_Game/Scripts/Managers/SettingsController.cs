@@ -1,8 +1,8 @@
+using Game.Effect;
+using Game.Managers;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
-using Game.Managers; // Gọi AudioController
 using UnityEngine.Localization.Settings;
+using UnityEngine.UI;
 
 namespace Game.UI
 {
@@ -13,41 +13,40 @@ namespace Game.UI
         [SerializeField] private Slider _bgmSlider;
         [SerializeField] private Slider _sfxSlider;
 
-        [Header("Language Settings")]
-        [SerializeField] private Button _languageButton;
-        [SerializeField] private TextMeshProUGUI _languageText;
+        [Header("Language Buttons")]
+        [SerializeField] private Button _btnEnglish;
+        [SerializeField] private UIButton _uiBtnEnglish; // Script hiệu ứng của nút EN
 
+        [Space(10)]
+        [SerializeField] private Button _btnVietnamese;
+        [SerializeField] private UIButton _uiBtnVietnamese; // Script hiệu ứng của nút VN
+
+        // 0 = English, 1 = Tiếng Việt (Khớp với mảng của Hưn)
         private int _currentLanguageId = 0;
-        private string[] _languages = {"English", "Tiếng Việt" };
 
         private void Start()
         {
-            // Trả lại giá trị 1f (tương đương 100% max volume của hệ thống 0->1)
             float masterVol = PlayerPrefs.GetFloat("MasterVol", 1f);
             float bgmVol = PlayerPrefs.GetFloat("BGMVol", 1f);
             float sfxVol = PlayerPrefs.GetFloat("SFXVol", 1f);
 
-            // Cập nhật giá trị lên UI
             if (_masterSlider != null) _masterSlider.value = masterVol;
             if (_bgmSlider != null) _bgmSlider.value = bgmVol;
             if (_sfxSlider != null) _sfxSlider.value = sfxVol;
 
-            // Tải ngôn ngữ đã lưu
+            // ĐĂNG KÝ SỰ KIỆN SLIDER
+            if (_masterSlider != null) _masterSlider.onValueChanged.AddListener(SetMasterVolume);
+            if (_bgmSlider != null) _bgmSlider.onValueChanged.AddListener(SetBGMVolume);
+            if (_sfxSlider != null) _sfxSlider.onValueChanged.AddListener(SetSFXVolume);
+
+            // ĐĂNG KÝ SỰ KIỆN 2 NÚT NGÔN NGỮ
+            if (_btnEnglish != null) _btnEnglish.onClick.AddListener(() => SetLanguage(0));
+            if (_btnVietnamese != null) _btnVietnamese.onClick.AddListener(() => SetLanguage(1));
+
+            // Tải ngôn ngữ đã lưu & Khởi tạo UI
             _currentLanguageId = PlayerPrefs.GetInt("Language", 0);
             UpdateLanguageUI();
-
-            // ĐĂNG KÝ SỰ KIỆN KHI KÉO SLIDER
-            if (_masterSlider != null)
-                _masterSlider.onValueChanged.AddListener(SetMasterVolume);
-
-            if (_bgmSlider != null)
-                _bgmSlider.onValueChanged.AddListener(SetBGMVolume);
-
-            if (_sfxSlider != null)
-                _sfxSlider.onValueChanged.AddListener(SetSFXVolume);
-
-            if (_languageButton != null)
-                _languageButton.onClick.AddListener(ToggleLanguage);
+            StartCoroutine(BlinkAndChangeLanguage(_currentLanguageId));
 
             ApplySavedVolumes();
         }
@@ -61,7 +60,7 @@ namespace Game.UI
         }
 
         // ==========================================
-        // XỬ LÝ ÂM THANH (Truyền giá trị 0.0 -> 1.0 cho AudioController)
+        // XỬ LÝ ÂM THANH
         // ==========================================
         private void SetMasterVolume(float value)
         {
@@ -91,36 +90,58 @@ namespace Game.UI
             }
         }
 
-        // ==========================================
-        // XỬ LÝ NGÔN NGỮ (Tích hợp Unity Localization)
-        // ==========================================
-        private void ToggleLanguage()
+        private void SetLanguage(int languageId)
         {
-            _currentLanguageId = (_currentLanguageId + 1) % _languages.Length;
-            PlayerPrefs.SetInt("Language", _currentLanguageId);
+            if (_currentLanguageId == languageId) return;
 
-            UpdateLanguageUI();
+            _currentLanguageId = languageId;
+            PlayerPrefs.SetInt("Language", _currentLanguageId);
+            PlayerPrefs.Save();
 
             if (AudioController.Instance != null)
                 AudioController.Instance.PlaySFX(SoundName.ButtonClick);
 
-            // [LỆNH MỚI]: Đổi ngôn ngữ của Unity Localization Package
-            StartCoroutine(ChangeLocale(_currentLanguageId));
+            StartCoroutine(BlinkAndChangeLanguage(_currentLanguageId));
         }
 
         private void UpdateLanguageUI()
         {
-            if (_languageText != null)
-            {
-                _languageText.text = _languages[_currentLanguageId];
-            }
+            bool isEnglish = (_currentLanguageId == 0);
+
+            // 1. Tắt chức năng click của nút đang được chọn (để tránh spam click)
+            if (_btnEnglish != null) _btnEnglish.interactable = !isEnglish;
+            if (_btnVietnamese != null) _btnVietnamese.interactable = isEnglish;
+
+            // 2. Kích hoạt hiệu ứng mờ/nhỏ cho nút đang được chọn
+            if (_uiBtnEnglish != null) _uiBtnEnglish.SetLockedState(isEnglish);
+            if (_uiBtnVietnamese != null) _uiBtnVietnamese.SetLockedState(!isEnglish);
         }
 
-        // Coroutine chờ đổi ngôn ngữ (Vì Unity Localization khởi tạo bất đồng bộ)
-        private System.Collections.IEnumerator ChangeLocale(int localeID)
+        private System.Collections.IEnumerator BlinkAndChangeLanguage(int localeID)
         {
+            float blinkDuration = 0.25f; 
+
+            // 1. NHẮM MẮT LẠI (Màn hình tối đi)
+            if (FilterController.Instance != null)
+            {
+                FilterController.Instance.PlayEyeClosedVignetteEffect(Color.black, blinkDuration);
+            }
+
+            yield return new WaitForSeconds(blinkDuration);
+
+            // 2. BẮT ĐẦU ĐỔI CHỮ (TRONG LÚC MÀN HÌNH ĐANG ĐEN)
+            UpdateLanguageUI();
+
             yield return LocalizationSettings.InitializationOperation;
             LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[localeID];
+
+            yield return new WaitForSeconds(0.5f);
+
+            // 3. MỞ MẮT RA (Chữ đã được đổi xong hoàn hảo)
+            if (FilterController.Instance != null)
+            {
+                FilterController.Instance.PlayEyeOpenedVignetteEffect(blinkDuration);
+            }
         }
     }
 }

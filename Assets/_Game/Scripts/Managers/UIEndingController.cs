@@ -23,13 +23,12 @@ namespace Game.UI
         [Header("Configs")]
         [SerializeField] private Game.Configs.EndingConfig _endingConfig;
 
-        private bool _isActionTriggered = false; // Ngăn chặn bấm 2 nút cùng lúc
+        private bool _isActionTriggered = false;
 
         private void Start()
         {
             GameEvents.OnGameWon += PlayLoopEnding;
 
-            // Setup dọn dẹp ban đầu
             if (_endingPanel != null)
             {
                 _endingPanel.SetActive(false);
@@ -57,7 +56,6 @@ namespace Game.UI
         {
             if (_endingConfig == null) return;
 
-            // Nhờ UIGameplayManager tắt các UI rác đi
             if (UIGameplayManager.Instance != null)
             {
                 UIGameplayManager.Instance.HideAllPanels();
@@ -85,7 +83,10 @@ namespace Game.UI
 
                 endSeq.AppendCallback(() => {
                     DOTween.Kill("TextGlitch");
-                    _endingText.text = line.text;
+
+                    // [SỬA Ở ĐÂY]: Lấy string đã được dịch theo ngôn ngữ hiện tại
+                    _endingText.text = line.localizedText.GetLocalizedString();
+
                     _endingText.color = Color.white;
                     _endingText.DOFade(1f, 1f);
                     _endingText.rectTransform.DOShakeAnchorPos(line.showDuration, new Vector2(3f, 3f), 20, 90f, false, true).SetId("TextGlitch");
@@ -111,11 +112,8 @@ namespace Game.UI
                     });
 
                     endSeq.AppendCallback(() => {
-
-                        // [SỬA 3]: Tiếng nổ Jumpscare
                         if (AudioController.Instance != null)
                         {
-                            // Hưn có thể thay đổi Enum này sau nếu đã thêm SoundName.Jumpscare vào
                             AudioController.Instance.PlaySFX(SoundName.Entity_ChangeState);
                         }
 
@@ -162,7 +160,9 @@ namespace Game.UI
 
             // 4. HIỆN 2 NÚT LỰA CHỌN
             endSeq.AppendCallback(() => {
-                _wakeUpAgainButton.GetComponentInChildren<TextMeshProUGUI>().text = _endingConfig.loopButtonText;
+
+                _wakeUpAgainButton.GetComponentInChildren<TextMeshProUGUI>().text = _endingConfig.localizedLoopButtonText.GetLocalizedString();
+
                 _wakeUpAgainButton.gameObject.SetActive(true);
                 _wakeUpAgainButton.GetComponent<CanvasGroup>().DOFade(1f, 1f);
 
@@ -174,17 +174,11 @@ namespace Game.UI
             });
         }
 
-        // ==========================================
-        // SỰ KIỆN KHI BẤM NÚT
-        // ==========================================
         public void OnClickReplay()
         {
             if (_isActionTriggered) return;
             _isActionTriggered = true;
-
-            // Phát tiếng bấm nút
             if (AudioController.Instance != null) AudioController.Instance.PlaySFX(SoundName.ButtonClick);
-
             SceneController.Instance.ReloadGameplayScene();
         }
 
@@ -192,10 +186,7 @@ namespace Game.UI
         {
             if (_isActionTriggered) return;
             _isActionTriggered = true;
-
-            // Phát tiếng bấm nút
             if (AudioController.Instance != null) AudioController.Instance.PlaySFX(SoundName.ButtonClick);
-
             SceneController.Instance.LoadMenuScene();
         }
     }

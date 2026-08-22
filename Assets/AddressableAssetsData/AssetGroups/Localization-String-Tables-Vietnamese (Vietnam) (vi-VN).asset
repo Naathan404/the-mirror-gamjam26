@@ -21,6 +21,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-vi-VN
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: aae5bbddf0ad565428ef925084e7105d
+    m_Address: Script_vi-VN
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-vi-VN
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: f3531a7cde550b8428c62d74097948c3, type: 2}
   m_SchemaSet:

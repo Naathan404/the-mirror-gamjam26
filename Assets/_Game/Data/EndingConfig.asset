@@ -13,29 +13,80 @@ MonoBehaviour:
   m_Name: EndingConfig
   m_EditorClassIdentifier: 
   endingLines:
-  - text: The door is open...
+  - localizedText:
+      m_TableReference:
+        m_TableCollectionName: GUID:c52f20b2e5342894b86d213bcc04af00
+      m_TableEntryReference:
+        m_KeyId: 111590457344
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
     soundName: 17
     delayBeforeShow: 1
     showDuration: 2
     triggerJumpscareAfter: 0
-  - text: "\u2026but why is there no way out?"
+  - localizedText:
+      m_TableReference:
+        m_TableCollectionName: GUID:c52f20b2e5342894b86d213bcc04af00
+      m_TableEntryReference:
+        m_KeyId: 331837554688
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
     soundName: 19
     delayBeforeShow: 0
     showDuration: 3
     triggerJumpscareAfter: 0
-  - text: "Because this cage\u2026"
+  - localizedText:
+      m_TableReference:
+        m_TableCollectionName: GUID:c52f20b2e5342894b86d213bcc04af00
+      m_TableEntryReference:
+        m_KeyId: 420664524800
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
     soundName: 22
     delayBeforeShow: 0
     showDuration: 4
     triggerJumpscareAfter: 0
-  - text: ...was built to hold only one thing
+  - localizedText:
+      m_TableReference:
+        m_TableCollectionName: GUID:c52f20b2e5342894b86d213bcc04af00
+      m_TableEntryReference:
+        m_KeyId: 493028851712
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
     soundName: 22
     delayBeforeShow: 0
     showDuration: 5
     triggerJumpscareAfter: 0
-  - text: YOU
+  - localizedText:
+      m_TableReference:
+        m_TableCollectionName: GUID:c52f20b2e5342894b86d213bcc04af00
+      m_TableEntryReference:
+        m_KeyId: 525417267200
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
     soundName: 22
     delayBeforeShow: 0
     showDuration: 1
     triggerJumpscareAfter: 1
-  loopButtonText: Wake up ... again
+  localizedLoopButtonText:
+    m_TableReference:
+      m_TableCollectionName: GUID:c52f20b2e5342894b86d213bcc04af00
+    m_TableEntryReference:
+      m_KeyId: 889147310080
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  references:
+    version: 2
+    RefIds: []

@@ -38,7 +38,13 @@ namespace Game.Minigames.WordSearch
                 currentFlip = config.allowedFlipTypes[UnityEngine.Random.Range(0, config.allowedFlipTypes.Count)];
             }
 
-            activeWords = config.wordPool.OrderBy(x => UnityEngine.Random.value).Take(config.wordsToFindPerGame).ToList();
+            int currentLanguageId = PlayerPrefs.GetInt("Language", 0);
+            Debug.Log($"[WORD SEARCH] Đang load ngôn ngữ số: {currentLanguageId}");
+
+            List<string> selectedWordPool = (currentLanguageId == 1) ? config.wordPoolVN : config.wordPoolEN;
+            Debug.Log($"[WORD SEARCH] Số lượng từ trong kho đang bốc: {selectedWordPool.Count}");
+
+            activeWords = selectedWordPool.OrderBy(x => UnityEngine.Random.value).Take(config.wordsToFindPerGame).ToList();
             wordsFoundCount = 0;
 
             // --- GỌI HÀM SINH GIẤY TỰ ĐỘNG ---
