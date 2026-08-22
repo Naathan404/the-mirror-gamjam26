@@ -2656,10 +2656,8 @@ MonoBehaviour:
   _shadowSprite: {fileID: 1984167243}
   _humanShadow: {fileID: -7225336743587210467, guid: 318de8b1d97c2ca43bf246adcc6214df, type: 3}
   _monsterShadow: {fileID: 2624918817160243788, guid: 98a04f2f9b4b4d44184ea33fd6b812d2, type: 3}
-  _whisperSound: 20
-  _glitchSound: 21
   _eyeCloseDuration: 1
-  _gameplaySceneName: HunScene 2
+  _gameplaySceneName: HunScene
 --- !u!1 &8667111283176629345
 GameObject:
   m_ObjectHideFlags: 0

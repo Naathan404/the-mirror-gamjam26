@@ -1,6 +1,7 @@
-using System.Collections.Generic;
 using Game.Core;
 using Game.Interactables; // Thêm thư viện này để truy cập MinigameTrigger
+using Game.Systems.Lock;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using KeyCode = Game.Core.KeyCode;
@@ -21,7 +22,7 @@ public class MinigameTogglesController : MonoBehaviour
         GameEvents.OnMinigameClosed += ShowAllToggles;
         GameEvents.OnMinigameCompleted += HandleMinigameCompleted;
 
-        GameEvents.OnPasscodeGenerated += HandlePasscodeGenerated;
+        //GameEvents.OnPasscodeGenerated += HandlePasscodeGenerated;
     }
 
     private void OnDisable()
@@ -30,7 +31,12 @@ public class MinigameTogglesController : MonoBehaviour
         GameEvents.OnMinigameClosed -= ShowAllToggles;
         GameEvents.OnMinigameCompleted -= HandleMinigameCompleted;
 
-        GameEvents.OnPasscodeGenerated -= HandlePasscodeGenerated;
+        //GameEvents.OnPasscodeGenerated -= HandlePasscodeGenerated;
+    }
+
+    private void Start()
+    {
+        Invoke(nameof(FetchPasscodeAndSetup), 0.15f);
     }
 
     private void HandleMinigameCompleted(MinigameType type, KeyCode code)
@@ -41,8 +47,13 @@ public class MinigameTogglesController : MonoBehaviour
         }
     }
 
-    private void HandlePasscodeGenerated(Dictionary<MinigameType, KeyCode> dic)
+    private void FetchPasscodeAndSetup()
     {
+        if (PasscodeController.Instance == null) return;
+
+        Dictionary<MinigameType, KeyCode> dic = PasscodeController.Instance.GetCurrentPasscodeMap();
+        if (dic == null) return;
+
         HideAllToggles(MinigameType.Maze);
         int i = 0;
         foreach(var kvp in dic)
@@ -53,7 +64,7 @@ public class MinigameTogglesController : MonoBehaviour
             foreach(var t in _toggles)
             {
                 if (t.targetMinigame == type)
-                {   
+                {
                     t.gameObject.SetActive(true);
                     t.transform.position = spawnPos;
                     _toggleActives.Add(t);

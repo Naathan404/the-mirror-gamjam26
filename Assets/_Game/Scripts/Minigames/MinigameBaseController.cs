@@ -90,7 +90,10 @@ namespace Game.Minigames
             }
             else
             {
-                Debug.LogError($"[{minigameType}] PasscodeController không chứa mã cho Minigame này!");
+                Debug.Log($"[{minigameType}] Ván này không được bốc trúng. Tự động đi ngủ!");
+
+                // Vô hiệu hóa hoàn toàn GameObject này khỏi Scene để không bị lỗi tương tác
+                gameObject.SetActive(false);
             }
         }
 
