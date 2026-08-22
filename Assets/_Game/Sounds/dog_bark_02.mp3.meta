@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/_Game/Sounds/door_creaking.mp3.meta
-guid: 351f64cb2e6d06c45a3828bdb5b3ad8b
-========
-guid: 3437dffd026a7e544a4aa0aac159521b
->>>>>>>> 456f9f553b25ed7ca55ca0d84722d087b6e6ad37:Assets/_Game/Sounds/maze_fail.mp3.meta
+guid: 28227580513165647b0ccc262a96eff4
 AudioImporter:
   externalObjects: {}
   serializedVersion: 8
