@@ -47,7 +47,8 @@ namespace Game.Systems.Lock
             MinigameType.Maze,
             MinigameType.CardMatch,
             MinigameType.Wires,
-            MinigameType.WordSearch
+            MinigameType.WordSearch,
+            MinigameType.Lazors
         };
 
         private void OnEnable()

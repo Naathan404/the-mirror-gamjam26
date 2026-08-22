@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Game.Core;
 using Game.Minigames.CardMatch;
+using Game.Minigames.Laser;
 using Game.Minigames.Maze;
 using Game.Minigames.WordSearch;
 using UnityEngine;
@@ -23,6 +24,9 @@ namespace Game.Minigames
         [Header("Words Search")]
         [SerializeField] private WordSearchConfig[] _wordsConfigs = new WordSearchConfig[GameConstants.NUMBER_OF_MINIGAMES];
 
+        [Header("Lazors")]
+        [SerializeField] private LaserConfigSO[] _lazorsConfigs = new LaserConfigSO[GameConstants.NUMBER_OF_MINIGAMES];
+
 #if UNITY_EDITOR
         [Header("Debug")]
         [SerializeField] private bool _enableDebug = false;
@@ -38,6 +42,7 @@ namespace Game.Minigames
                 var t when t == typeof(CardMatchConfig) => _cardsConfigs,
                 var t when t == typeof(WiresConfig) => _wiresConfigs,
                 var t when t == typeof(WordSearchConfig) => _wordsConfigs,
+                var t when t == typeof(LaserConfigSO) => _lazorsConfigs,
                 _ => null
             };
 

@@ -105,7 +105,21 @@ namespace Game.Minigames
 
         protected void HandleMinigameOpened(MinigameType type)
         {
-            if (type != minigameType || secretDigit == -1) return;
+            if (type != minigameType)
+            {
+                return;
+            }
+
+            if (visualRoot == null)
+            {
+                Debug.LogError($"[{minigameType}] Cannot open minigame because visual root is not assigned.");
+                return;
+            }
+
+            if (secretDigit == -1)
+            {
+                Debug.LogWarning($"[{minigameType}] Opening minigame before passcode data is assigned. Check PasscodeController if this minigame should reward a digit.");
+            }
 
             isCompleting = false;
             visualRoot.SetActive(true);
@@ -154,6 +168,13 @@ namespace Game.Minigames
             // Đợi hiệu ứng giật xong (cộng thêm 0.1s cho chắc)
             yield return new WaitForSeconds(0.6f);
 
+            if (!HasAssignedPasscode())
+            {
+                Debug.LogWarning($"[{minigameType}] Completed without passcode data. Closing minigame without rewarding a digit.");
+                GameEvents.RaiseMinigameClosed(minigameType);
+                yield break;
+            }
+
             // 2. Sinh ra mảnh giấy chứa con số
             SpawnDigitPaper();
 
@@ -161,6 +182,11 @@ namespace Game.Minigames
             Debug.Log($"[{minigameType}] Đã nhả giấy. Nộp mã {secretDigit}");
             GameEvents.RaiseMinigameCompleted(minigameType, new KeyCode(secretDigit, Shape, KColor));
             GameEvents.RaiseMinigameClosed(minigameType);
+        }
+
+        private bool HasAssignedPasscode()
+        {
+            return secretDigit >= 0;
         }
 
         private void SpawnDigitPaper()
