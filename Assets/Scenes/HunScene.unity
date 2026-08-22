@@ -1250,6 +1250,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0618e6e42640de344844711a75b9a486, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!225 &2103481404 stripped
+CanvasGroup:
+  m_CorrespondingSourceObject: {fileID: 8946788397786932703, guid: 464d475a7f0834e4383d5ea276f9650c, type: 3}
+  m_PrefabInstance: {fileID: 2217836872205212241}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2119373019 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 698435439847646883, guid: 464d475a7f0834e4383d5ea276f9650c, type: 3}
@@ -1579,7 +1584,7 @@ PrefabInstance:
     - target: {fileID: 423535024099347413, guid: 464d475a7f0834e4383d5ea276f9650c, type: 3}
       propertyPath: _keyUIGroup
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2103481404}
     - target: {fileID: 423535024099347413, guid: 464d475a7f0834e4383d5ea276f9650c, type: 3}
       propertyPath: _lightButton
       value: 
