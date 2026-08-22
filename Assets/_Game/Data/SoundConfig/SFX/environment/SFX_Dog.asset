@@ -10,12 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2e171e760773a4d488f7f6f6438e3dd4, type: 3}
-  m_Name: SFX_Light_Flashed
+  m_Name: SFX_Dog
   m_EditorClassIdentifier: 
-  soundName: 1
+  soundName: 0
   audioClips:
-  - {fileID: 8300000, guid: 6ad620b1e49f4ab4792765a61645e393, type: 3}
-  - {fileID: 8300000, guid: 0ce9d98c0423d2949aea6dd072f7a1b5, type: 3}
+  - {fileID: 8300000, guid: 42b7be053bdef7e43959dfc97846b894, type: 3}
+  - {fileID: 8300000, guid: 28227580513165647b0ccc262a96eff4, type: 3}
+  - {fileID: 8300000, guid: b57d814ab6b64bd48b990c510ddb5447, type: 3}
+  - {fileID: 8300000, guid: bd2d9dacbac45474b87284b900a5821c, type: 3}
+  - {fileID: 8300000, guid: 2b3f5d42c981efb43986198df602b1ba, type: 3}
   volume: 1
   minPitch: 0.95
   maxPitch: 1.05

@@ -10,12 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2e171e760773a4d488f7f6f6438e3dd4, type: 3}
-  m_Name: SFX_Light_Flashed
+  m_Name: SFX_MinigameWin
   m_EditorClassIdentifier: 
-  soundName: 1
+  soundName: 0
   audioClips:
-  - {fileID: 8300000, guid: 6ad620b1e49f4ab4792765a61645e393, type: 3}
-  - {fileID: 8300000, guid: 0ce9d98c0423d2949aea6dd072f7a1b5, type: 3}
+  - {fileID: 8300000, guid: 440df74708795a8489ed40276b4d5463, type: 3}
   volume: 1
   minPitch: 0.95
   maxPitch: 1.05

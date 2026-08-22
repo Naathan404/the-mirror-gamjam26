@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2e171e760773a4d488f7f6f6438e3dd4, type: 3}
-  m_Name: SFX_Light_Flashed
+  m_Name: SFX_ObjectFall
   m_EditorClassIdentifier: 
-  soundName: 1
+  soundName: 0
   audioClips:
-  - {fileID: 8300000, guid: 6ad620b1e49f4ab4792765a61645e393, type: 3}
-  - {fileID: 8300000, guid: 0ce9d98c0423d2949aea6dd072f7a1b5, type: 3}
+  - {fileID: 8300000, guid: 6c5cf1c3070a8a04a92cd2ce435ad09f, type: 3}
+  - {fileID: 8300000, guid: dedd542cb3a685c419acd7466cd9c427, type: 3}
   volume: 1
   minPitch: 0.95
   maxPitch: 1.05
