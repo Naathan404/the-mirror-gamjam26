@@ -15,6 +15,6 @@ MonoBehaviour:
   soundName: 9
   audioClips:
   - {fileID: 8300000, guid: b8294e5fac232814eaa05ce96d956596, type: 3}
-  volume: 0.5
+  volume: 0.3
   minPitch: 0.95
   maxPitch: 1.05

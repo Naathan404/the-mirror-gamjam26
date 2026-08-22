@@ -14,8 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundName: 12
   audioClips:
-  - {fileID: 8300000, guid: adf05a6415fd5f54bb5a4c413a4dee1b, type: 3}
-  - {fileID: 8300000, guid: 1d7cd811ce3bb72409388b8b28bb5901, type: 3}
+  - {fileID: 8300000, guid: 0b307a73e46ecbc4cb07cd9c98c028e4, type: 3}
   volume: 1
   minPitch: 0.95
   maxPitch: 1.05
