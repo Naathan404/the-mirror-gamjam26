@@ -16,5 +16,5 @@ MonoBehaviour:
   audioClips:
   - {fileID: 8300000, guid: 6531b15f52279d24cafa424481e41dad, type: 3}
   volume: 1
-  minPitch: 0.2
-  maxPitch: 1.59
+  minPitch: 0.5
+  maxPitch: 1.4
