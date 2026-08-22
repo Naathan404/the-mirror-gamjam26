@@ -14,18 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rows: 3
   columns: 4
-  cardBackSprite: {fileID: -4571828015118065507, guid: e2931fa48a5acf1448eadb56a19aba46, type: 3}
+  cardBackSprite: {fileID: -8627803510776909774, guid: c9eac3c4c22875640beff66c6b7e085d, type: 3}
   cardFaceSprites:
-  - {fileID: -7245866468247524007, guid: 59a91ae92cd1af54e9dc25d7b29d1f6a, type: 3}
-  - {fileID: -9144104523872837752, guid: bd361d35370d4e74d842de6e3365659b, type: 3}
-  - {fileID: 2870011328658071473, guid: 79ea818a4e0649142a63abc3d5095da7, type: 3}
-  - {fileID: -6812169302124012648, guid: 5f8ef8b0412167b479d71d0413f9d772, type: 3}
-  - {fileID: 6599397702625562431, guid: 96cb655108a0cf341a9e20e60ec2e461, type: 3}
-  - {fileID: -3585221295692981419, guid: d5bfbca634335a14d8f1e9561c540acb, type: 3}
-  - {fileID: 4389085010939136938, guid: a7cc5a77a7691444e964e1308b2d0601, type: 3}
-  - {fileID: 2433783391455003196, guid: 26cd67e81f92c54428afcb4a2090cc2b, type: 3}
-  - {fileID: -2036430572945357876, guid: 02733ab1afdf374499c95701f4fb637c, type: 3}
-  - {fileID: 6103351784708059954, guid: 03820765fa577604f94257c87c51ce8d, type: 3}
+  - {fileID: 4162875479951319663, guid: c9eac3c4c22875640beff66c6b7e085d, type: 3}
+  - {fileID: -4457850898058260020, guid: c9eac3c4c22875640beff66c6b7e085d, type: 3}
+  - {fileID: 3609959554996883812, guid: c9eac3c4c22875640beff66c6b7e085d, type: 3}
+  - {fileID: 693384124834221472, guid: c9eac3c4c22875640beff66c6b7e085d, type: 3}
+  - {fileID: 7254593484104784328, guid: c9eac3c4c22875640beff66c6b7e085d, type: 3}
+  - {fileID: 3515724163430638945, guid: c9eac3c4c22875640beff66c6b7e085d, type: 3}
+  - {fileID: -178499864975547042, guid: c9eac3c4c22875640beff66c6b7e085d, type: 3}
+  - {fileID: -815812442243144733, guid: c9eac3c4c22875640beff66c6b7e085d, type: 3}
+  - {fileID: 8946199758543506004, guid: c9eac3c4c22875640beff66c6b7e085d, type: 3}
+  - {fileID: -5389640312921232770, guid: c9eac3c4c22875640beff66c6b7e085d, type: 3}
   previewTime: 1
   delayBeforeFlipBack: 0.05
   flipAnimationDuration: 0.3

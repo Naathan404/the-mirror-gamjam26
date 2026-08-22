@@ -40,6 +40,9 @@ namespace Game.Minigames.Laser
         [SerializeField] private Color _mistakeColor;
         [SerializeField] private float _mistakeFlashDuration;
 
+        [Header("Generate")]
+        [SerializeField] private int _temp = 200;
+
         private LaserCell[,] _cells;
         private Vector2Int _gunPos;
         private int _bulbTotalCount;
@@ -87,6 +90,13 @@ namespace Game.Minigames.Laser
 
             if (Input.GetMouseButtonDown(0))
                 HandleClick();
+
+#if UNITY_EDITOR
+            if (Input.GetKeyDown(UnityEngine.KeyCode.G))
+            {
+                GeneratePuzzle();
+            }
+#endif
         }
         #endregion
 
@@ -146,55 +156,67 @@ namespace Game.Minigames.Laser
 
             float cellScale = _prefabReferenceCellSize > 0f ? cellSize * _cellFillPercent / _prefabReferenceCellSize : _cellFillPercent;
 
-            // Random walk sinh đường đi hợp lệ 
+            // Random walk sinh đường đi hợp lệ, kèm validate bằng cách mô phỏng bắn thử với cấu hình
+            // "đã giải đúng" - nếu mô phỏng không sáng hết đèn (do path tự cắt chính nó hay bug khác)
+            // thì huỷ toàn bộ (path + mirror + bulb) và random lại từ đầu, KHÔNG chỉ random lại path suông.
             List<Vector2Int> path = null;
-            List<LaserDirection> pathDirs = null; // hướng đi TỪ path[i] -> path[i+1]
+            List<LaserDirection> pathDirs = null;
+            LaserDirection solvedGunDir = default;
+            var pathMirrorOrientation = new Dictionary<Vector2Int, MirrorOrientation>();
+            var bulbCells = new HashSet<Vector2Int>();
+            bool generationSucceeded = false;
             int genAttempts = 0;
 
-            while (genAttempts < 50)
+            while (genAttempts < _temp)
             {
                 genAttempts++;
-                if (TryGenerateSolvablePath(n, out path, out pathDirs))
+
+                if (!TryGenerateSolvablePath(n, out path, out pathDirs))
+                    continue;
+
+                solvedGunDir = pathDirs[0];
+                pathMirrorOrientation.Clear();
+                bulbCells.Clear();
+
+                for (int i = 1; i < path.Count - 1; i++)
+                {
+                    LaserDirection incoming = pathDirs[i - 1];
+                    LaserDirection outgoing = pathDirs[i];
+
+                    if (incoming != outgoing)
+                    {
+                        var orientation = LaserDirectionUtil.FindOrientationFor(incoming, outgoing);
+                        pathMirrorOrientation[path[i]] = orientation ?? MirrorOrientation.Slash;
+                    }
+                }
+
+                var straightCandidates = new List<Vector2Int>();
+                for (int i = 1; i < path.Count; i++)
+                {
+                    if (!pathMirrorOrientation.ContainsKey(path[i]))
+                        straightCandidates.Add(path[i]);
+                }
+                Shuffle(straightCandidates);
+                int bulbCandidateCount = Mathf.Min(_config.bulbCount, straightCandidates.Count);
+                for (int i = 0; i < bulbCandidateCount; i++)
+                    bulbCells.Add(straightCandidates[i]);
+
+                // Bước validate then chốt: mô phỏng bắn thử với gun + mirror ở ĐÚNG hướng đã giải,
+                // xác nhận tia thực sự sáng hết đèn trước khi ra khỏi lưới / kẹt vòng lặp.
+                if (bulbCells.Count > 0 && ValidateSolution(path, solvedGunDir, pathMirrorOrientation, bulbCells, n))
+                {
+                    generationSucceeded = true;
                     break;
+                }
             }
 
-            if (path == null)
+            if (!generationSucceeded)
             {
-                Debug.LogError("[LaserPuzzle] Không thể sinh đường đi hợp lệ sau nhiều lần thử, kiểm tra lại config (n quá nhỏ so với bulbCount/mirrorCount).");
+                Debug.LogError("[LaserPuzzle] Không thể sinh level giải được sau nhiều lần thử, kiểm tra lại config (n quá nhỏ so với bulbCount/mirrorCount).");
                 return;
             }
 
             _gunPos = path[0];
-
-            // Xác định type + hướng gốc đã giải đúng cho từng ô trên đường đi
-            var solvedGunDir = pathDirs[0];
-            var pathMirrorOrientation = new Dictionary<Vector2Int, MirrorOrientation>();
-            var bulbCells = new HashSet<Vector2Int>();
-
-            for (int i = 1; i < path.Count - 1; i++)
-            {
-                LaserDirection incoming = pathDirs[i - 1];
-                LaserDirection outgoing = pathDirs[i];
-
-                if (incoming != outgoing)
-                {
-                    var orientation = LaserDirectionUtil.FindOrientationFor(incoming, outgoing);
-                    pathMirrorOrientation[path[i]] = orientation ?? MirrorOrientation.Slash;
-                }
-            }
-
-            // Chọn ngẫu nhiên các ô đi thẳng làm bulb
-            var straightCandidates = new List<Vector2Int>();
-            for (int i = 1; i < path.Count; i++)
-            {
-                if (!pathMirrorOrientation.ContainsKey(path[i]))
-                    straightCandidates.Add(path[i]);
-            }
-            Shuffle(straightCandidates);
-            int bulbCount = Mathf.Min(_config.bulbCount, straightCandidates.Count);
-            for (int i = 0; i < bulbCount; i++)
-                bulbCells.Add(straightCandidates[i]);
-
             _bulbTotalCount = bulbCells.Count;
 
             // Tập hợp ô KHÔNG nằm trên đường đi để đặt đá + gương decoy
@@ -306,6 +328,11 @@ namespace Game.Minigames.Laser
 
             int stepsSinceLastTurn = 0;
 
+            // Theo dõi các ô ĐÃ đi qua để đảm bảo đường đi không tự cắt chính nó.
+            // Nếu path tự cắt (đi lại đúng 1 ô cũ), yêu cầu hướng của lần ghé đầu sẽ bị lần
+            // ghé sau ghi đè -> gương đó không thể đáp ứng cả 2 yêu cầu -> level không giải được.
+            var visitedCells = new HashSet<Vector2Int> { gunPos };
+
             int maxSteps = n * n * 2;
             int steps = 0;
 
@@ -319,6 +346,13 @@ namespace Game.Minigames.Laser
                     dirs.Add(dir);
                     break;
                 }
+
+                if (visitedCells.Contains(next))
+                {
+                    // Sắp tự cắt chính nó -> huỷ lần thử này, để bên ngoài random lại từ đầu
+                    return false;
+                }
+                visitedCells.Add(next);
 
                 path.Add(next);
                 dirs.Add(dir);
@@ -365,6 +399,14 @@ namespace Game.Minigames.Laser
                             dirs.Add(dir);
                             break;
                         }
+
+                        if (visitedCells.Contains(exitNext))
+                        {
+                            // Tự cắt chính nó ngay cả ở đoạn thẳng cuối -> huỷ lần thử này
+                            return false;
+                        }
+                        visitedCells.Add(exitNext);
+
                         path.Add(exitNext);
                         dirs.Add(dir);
                         current = exitNext;
@@ -385,6 +427,46 @@ namespace Game.Minigames.Laser
                 int j = UnityEngine.Random.Range(0, i + 1);
                 (list[i], list[j]) = (list[j], list[i]);
             }
+        }
+
+        // Mô phỏng bắn tia với gun + mirror ở ĐÚNG hướng đã tính là lời giải, xác nhận tia thực sự
+        // sáng hết toàn bộ bulbCells trước khi ra khỏi lưới hoặc kẹt vòng lặp. Đây là lưới an toàn
+        // cuối cùng: dù logic sinh path ở trên có bug gì (tự cắt, tính sai orientation, v.v...),
+        // puzzle vẫn không bao giờ được chấp nhận nếu không thực sự giải được.
+        private bool ValidateSolution(List<Vector2Int> path, LaserDirection solvedGunDir,
+            Dictionary<Vector2Int, MirrorOrientation> pathMirrorOrientation, HashSet<Vector2Int> bulbCells, int n)
+        {
+            var visited = new HashSet<(int, int, LaserDirection)>();
+            Vector2Int current = path[0];
+            LaserDirection dir = solvedGunDir;
+            var litBulbs = new HashSet<Vector2Int>();
+            int safety = n * n * 4;
+
+            while (safety-- > 0)
+            {
+                Vector2Int next = current + LaserDirectionUtil.ToVector(dir);
+
+                if (next.x < 0 || next.x >= n || next.y < 0 || next.y >= n)
+                    return false; // ra biên trước khi sáng hết đèn -> không hợp lệ
+
+                if (!visited.Add((next.x, next.y, dir)))
+                    return false; // kẹt vòng lặp giữa các gương -> không hợp lệ
+
+                current = next;
+
+                if (bulbCells.Contains(current))
+                {
+                    litBulbs.Add(current);
+                    if (litBulbs.Count >= bulbCells.Count)
+                        return true; // sáng hết đèn -> hợp lệ, dừng ngay tại đây
+                }
+
+                if (pathMirrorOrientation.TryGetValue(current, out var orientation))
+                    dir = LaserDirectionUtil.Reflect(orientation, dir);
+                // không phải mirror/bulb -> đi thẳng, không đổi hướng
+            }
+
+            return false; // hết safety mà vẫn chưa xong -> coi như không hợp lệ
         }
 
         #endregion
