@@ -2,171 +2,331 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Game.Core;
+using DG.Tweening;
+using Game.Managers;
+using Game.Effect;
+using KeyCode = Game.Core.KeyCode;
+using Game.Utils;
 
 namespace Game.Systems.Lock
 {
+
     public class KeyboxController : MonoBehaviour
     {
-        [Header("Tham chiếu Cơ khí")]
+        public class ShapeDigit
+        {
+            public KeyShape Shape;
+            public int Digit;    
+        }
+
+        [Header("Debug")]
+        [SerializeField] private bool _enableDebugOpenBox = false;
+
+        [Header("Button Refs")]
         public NumberWheel[] digitWheels = new NumberWheel[4];
         public KeyboxButton submitButton;
 
-        [Header("Hiệu ứng Keybox (Game Feel)")]
-        [Tooltip("Object chứa toàn bộ hình ảnh hộp khóa (thường là chính nó)")]
+        [Header("Animation")]
+        [Tooltip("Object chứa toàn bộ hình ảnh hộp khóa")]
         public Transform boxTransform;
-        public float joltScale = 1.05f; // Phóng to 5% khi giật
-        public float joltSpeed = 20f;
-        public float scrambleTime = 0.2f; // Tốc độ xoay loạn xạ khi nhập sai
+        public float scrambleTime = 1f; // Thời gian quay số loạn xạ sau khi đóng
 
-        private int[] targetPasscode = new int[4];
+        [Header("Key Drawer")]
+        public Transform drawerTransform;
+        public float drawerOpenTargetX = 3f;
+        public float drawerMoveDuration = 0.8f;
+
+        [Header("KeyCode")]
+        [SerializeField] private List<SpriteRenderer> _allKeyShapes = new List<SpriteRenderer>(4);
+        [SerializeField] private Sprite _squareSprite;
+        [SerializeField] private Sprite _crossSprite;
+        [SerializeField] private Sprite _cirleSprite;
+        [SerializeField] private Sprite _triangleSprite;
+
+        public Collider roomKeyCollider;
+
+        private List<KeyCode> targetPasscode = new List<KeyCode>(4);
         private bool isUnlocked = false;
-        private bool isProcessing = false; // Cờ khóa hệ thống khi đang chạy hiệu ứng
-
-        private Vector3 originalScale;
-        private Coroutine joltCoroutine;
+        private bool isProcessing = false;
 
         private void Start()
         {
             if (boxTransform == null) boxTransform = transform;
-            originalScale = boxTransform.localScale;
+
+            if (drawerTransform != null)
+            {
+                Vector3 pos = drawerTransform.localPosition;
+                drawerTransform.localPosition = new Vector3(0f, pos.y, pos.z);
+            }
+
+            // Chìa khóa vẫn hiện hình (đi theo ngăn kéo), nhưng KHÔNG THỂ click
+            if (roomKeyCollider != null) roomKeyCollider.enabled = false;
+
+#if UNITY_EDITOR
+            string passcode = "| ";
+
+            foreach(var c in targetPasscode)
+            {
+                passcode += c.Digit + " | ";
+            }
+
+            Debug.Log($"PASSWORD: <color=red> {passcode} </color>");
+#endif
         }
 
         private void OnEnable()
         {
             GameEvents.OnPasscodeGenerated += SetupTargetPasscode;
+            GameEvents.OnKeyCollected += HandleKeyCollected; // Nghe sự kiện mất chìa khóa
+
             if (submitButton != null) submitButton.OnClicked += TryOpenBox;
         }
 
         private void OnDisable()
         {
             GameEvents.OnPasscodeGenerated -= SetupTargetPasscode;
+            GameEvents.OnKeyCollected -= HandleKeyCollected;
+
             if (submitButton != null) submitButton.OnClicked -= TryOpenBox;
         }
 
-        private void SetupTargetPasscode(Dictionary<MinigameType, int> minigameDigitMap)
+        private void SetupTargetPasscode(Dictionary<MinigameType, KeyCode> minigameDigitMap)
         {
-            if (minigameDigitMap.TryGetValue(MinigameType.Maze, out int d0)) targetPasscode[0] = d0;
-            if (minigameDigitMap.TryGetValue(MinigameType.CardMatch, out int d1)) targetPasscode[1] = d1;
-            if (minigameDigitMap.TryGetValue(MinigameType.Wires, out int d2)) targetPasscode[2] = d2;
-            if (minigameDigitMap.TryGetValue(MinigameType.WordSearch, out int d3)) targetPasscode[3] = d3;
+            if (minigameDigitMap == null)
+            {
+                Debug.LogError("[KeyboxController] Passcode setup failed because minigame digit map is null.");
+                return;
+            }
 
-            Debug.Log($"[Keybox] Đã nhận mã bí mật: {targetPasscode[0]}{targetPasscode[1]}{targetPasscode[2]}{targetPasscode[3]}");
+            targetPasscode.Clear();
+
+            AddPasscodeDigit(minigameDigitMap, MinigameType.Maze);
+            AddPasscodeDigit(minigameDigitMap, MinigameType.CardMatch);
+            AddPasscodeDigit(minigameDigitMap, MinigameType.Wires);
+            AddPasscodeDigit(minigameDigitMap, MinigameType.WordSearch);
+
+            if (targetPasscode.Count < GameConstants.NUMBER_OF_MINIGAMES)
+            {
+                Debug.LogError($"[KeyboxController] Passcode setup failed. Expected {GameConstants.NUMBER_OF_MINIGAMES} digits but received {targetPasscode.Count}.");
+                return;
+            }
+
+            targetPasscode = ShuffleHelper.Shuffle(targetPasscode);
+            UpdateKeyShapeSprites();
+        }
+
+        private void AddPasscodeDigit(Dictionary<MinigameType, KeyCode> minigameDigitMap, MinigameType minigameType)
+        {
+            if (minigameDigitMap.TryGetValue(minigameType, out KeyCode keyCode))
+            {
+                targetPasscode.Add(keyCode);
+            }
+        }
+
+        private void UpdateKeyShapeSprites()
+        {
+            if (_allKeyShapes == null)
+            {
+                Debug.LogError("[KeyboxController] Key shape sprite renderers are not assigned.");
+                return;
+            }
+
+            int count = Mathf.Min(targetPasscode.Count, _allKeyShapes.Count);
+
+            for (int i = 0; i < count; i++)
+            {
+                if (_allKeyShapes[i] == null)
+                {
+                    continue;
+                }
+
+                _allKeyShapes[i].sprite = GetShapeSprite(targetPasscode[i].Shape);
+            }
+        }
+
+        private Sprite GetShapeSprite(KeyShape shape)
+        {
+            if (shape == KeyShape.Square)
+            {
+                return _squareSprite;
+            }
+
+            if (shape == KeyShape.Cross)
+            {
+                return _crossSprite;
+            }
+
+            if (shape == KeyShape.Circle)
+            {
+                return _cirleSprite;
+            }
+
+            if (shape == KeyShape.Triangle)
+            {
+                return _triangleSprite;
+            }
+
+            return null;
         }
 
         private void TryOpenBox()
         {
-            if (isUnlocked || isProcessing) return;
-
-            bool isCorrect = true;
-            for (int i = 0; i < 4; i++)
+            if (isUnlocked || isProcessing)
             {
-                if (digitWheels[i] != null && digitWheels[i].CurrentValue != targetPasscode[i])
+                return;
+            }
+
+            if (targetPasscode.Count < GameConstants.NUMBER_OF_MINIGAMES)
+            {
+                Debug.LogError($"[KeyboxController] Cannot open box because passcode is incomplete. Expected {GameConstants.NUMBER_OF_MINIGAMES} digits but has {targetPasscode.Count}.");
+                return;
+            }
+
+
+            if(!_enableDebugOpenBox)
+            {
+                if (GameManager.Instance.MinigamePassed < GameConstants.NUMBER_OF_MINIGAMES)
                 {
-                    isCorrect = false;
-                    break;
+                    Debug.Log("Chưa giải đủ Minigame");
+                    StartCoroutine(ScrambleOnFailRoutine());
+                    FilterController.Instance.FlashScreen(Color.white, 0.25f);
+                    return;
+                }
+            }
+
+            int digitCount = Mathf.Min(GameConstants.NUMBER_OF_MINIGAMES, digitWheels.Length);
+            bool isCorrect = true;
+            for (int i = 0; i < digitCount; i++)
+            {
+                if (digitWheels[i] != null && digitWheels[i].CurrentValue != targetPasscode[i].Digit)
+                {
+                    isCorrect = false; break;
                 }
             }
 
             if (isCorrect)
             {
-                Debug.Log("[Keybox] 🎉 MẬT MÃ CHÍNH XÁC! Hộp mở ra!");
                 isUnlocked = true;
-
-                // Giật nhẹ hộp khóa báo hiệu thành công
-                TriggerJoltEffect();
-
-                // Ẩn toàn bộ nút bấm / Khóa tương tác
-                SetInteractable(false);
-
-                // TODO: Bổ sung code thả chìa khóa rớt ra tại đây (nếu có)
-
-                GameEvents.RaiseLockUnlocked();
+                SetInteractable(false); // Khóa không cho bấm số nữa
+                StartCoroutine(OpenDrawerRoutine());
             }
             else
             {
-                Debug.LogWarning("[Keybox] ❌ Sai mã! Đang reset bảng số...");
+                FilterController.Instance.FlashScreen(Color.white, 0.25f);
                 StartCoroutine(ScrambleOnFailRoutine());
             }
         }
 
         // ==========================================
-        // HIỆU ỨNG 1: GIẬT KEYBOX (PUNCH SCALE)
+        // CHUỖI HIỆU ỨNG MỞ HỘP
         // ==========================================
-        private void TriggerJoltEffect()
-        {
-            if (joltCoroutine != null) StopCoroutine(joltCoroutine);
-            joltCoroutine = StartCoroutine(JoltRoutine());
-        }
-
-        private IEnumerator JoltRoutine()
-        {
-            Vector3 targetScale = originalScale * joltScale;
-
-            // Phóng to cực nhanh (Tạo lực đập)
-            while (Vector3.Distance(boxTransform.localScale, targetScale) > 0.001f)
-            {
-                boxTransform.localScale = Vector3.Lerp(boxTransform.localScale, targetScale, Time.deltaTime * joltSpeed * 2f);
-                yield return null;
-            }
-
-            // Thu nhỏ về nguyên bản từ từ (Tạo độ đàn hồi)
-            while (Vector3.Distance(boxTransform.localScale, originalScale) > 0.001f)
-            {
-                boxTransform.localScale = Vector3.Lerp(boxTransform.localScale, originalScale, Time.deltaTime * joltSpeed);
-                yield return null;
-            }
-
-            boxTransform.localScale = originalScale;
-        }
-
-        // ==========================================
-        // HIỆU ỨNG 2: QUAY SỐ LOẠN XẠ KHI NHẬP SAI (SCRAMBLE)
-        // ==========================================
-        private IEnumerator ScrambleOnFailRoutine()
+        private IEnumerator OpenDrawerRoutine()
         {
             isProcessing = true;
 
-            // Tắt toàn bộ Collider để người chơi không bấm hay lăn chuột phá bĩnh lúc máy đang xoay
-            SetInteractable(false);
+            // 1. Lắc nhẹ hộp (y hệt minigame)
+            boxTransform.DOShakePosition(0.4f, new Vector3(0.1f, 0.1f, 0f), 20, 90f, false, true);
+            yield return new WaitForSeconds(0.5f); // Đợi lắc xong
 
-            TriggerJoltEffect(); // Rung giật báo sai mã
+            // 2. Đẩy ngăn kéo ra mượt mà bằng DOTween
+            if (drawerTransform != null)
+            {
+                drawerTransform.DOLocalMoveX(drawerOpenTargetX, drawerMoveDuration).SetEase(Ease.OutCubic);
+                yield return new WaitForSeconds(drawerMoveDuration);
+            }
 
-            float duration = scrambleTime; // Thời gian xoay loạn xạ
+            // 3. Mở khóa Collider để người chơi có thể bấm nhặt chìa
+            if (roomKeyCollider != null) roomKeyCollider.enabled = true;
+
+            isProcessing = false;
+        }
+
+        // ==========================================
+        // CHUỖI HIỆU ỨNG ĐÓNG HỘP KHI MẤT CHÌA
+        // ==========================================
+        private void HandleKeyCollected()
+        {
+            // Chỉ chạy hiệu ứng đóng nếu hộp này đã được mở
+            if (isUnlocked && drawerTransform != null && drawerTransform.localPosition.x > 0.1f)
+            {
+                StartCoroutine(CloseAndScrambleRoutine());
+            }
+        }
+
+        private IEnumerator CloseAndScrambleRoutine()
+        {
+            isProcessing = true;
+
+            // 1. Lắc nhẹ hộp lần nữa
+            boxTransform.DOShakePosition(0.4f, new Vector3(0.05f, 0.05f, 0f), 20, 90f, false, true);
+            yield return new WaitForSeconds(0.5f);
+
+            // 2. Kéo ngăn kéo vào lại X = 0
+            if (drawerTransform != null)
+            {
+                drawerTransform.DOLocalMoveX(0f, drawerMoveDuration).SetEase(Ease.InCubic);
+                yield return new WaitForSeconds(drawerMoveDuration);
+            }
+
+            // 3. Chạy vòng lặp xoay số loạn xạ
             float elapsed = 0f;
-
-            // Vòng lặp xoay số tít thò lò
-            while (elapsed < duration)
+            while (elapsed < scrambleTime)
             {
                 for (int i = 0; i < 4; i++)
                 {
                     if (digitWheels[i] != null)
                     {
-                        // 50% quay lên, 50% quay xuống
                         if (Random.value > 0.5f) digitWheels[i].SpinUp();
                         else digitWheels[i].SpinDown();
                     }
                 }
-
-                // Tốc độ xoay loạn (0.05 giây đổi số 1 lần -> Rất nhanh!)
                 yield return new WaitForSeconds(0.05f);
                 elapsed += 0.05f;
             }
 
-            // Mở lại các Collider để người chơi nhập mã mới
+            // Xong việc, hộp vĩnh viễn khóa lại (isUnlocked = true, interactable = false)
+        }
+
+        // ==========================================
+        // HIỆU ỨNG SAI MÃ (SCRAMBLE)
+        // ==========================================
+        private IEnumerator ScrambleOnFailRoutine()
+        {
+            isProcessing = true;
+            SetInteractable(false);
+
+            // Lắc hộp báo lỗi
+            boxTransform.DOShakePosition(0.4f, new Vector3(0.1f, 0f, 0.1f), 20, 90f, false, true);
+
+            float elapsed = 0f;
+            while (elapsed < scrambleTime)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    if (digitWheels[i] != null)
+                    {
+                        if (Random.value > 0.5f) digitWheels[i].SpinUp();
+                        else digitWheels[i].SpinDown();
+                    }
+                }
+                yield return new WaitForSeconds(0.05f);
+                elapsed += 0.05f;
+            }
+
             SetInteractable(true);
             isProcessing = false;
         }
 
-        // ==========================================
-        // HÀM HỖ TRỢ: KHÓA/MỞ TƯƠNG TÁC
-        // ==========================================
         private void SetInteractable(bool state)
         {
-            // Quét và Bật/Tắt toàn bộ Collider nằm bên trong Keybox
             Collider[] colliders = GetComponentsInChildren<Collider>();
             foreach (var col in colliders)
             {
-                col.enabled = state;
+                // Tránh tắt nhầm Collider của chìa khóa lúc đang quét
+                if (col != roomKeyCollider)
+                {
+                    col.enabled = state;
+                }
             }
         }
     }

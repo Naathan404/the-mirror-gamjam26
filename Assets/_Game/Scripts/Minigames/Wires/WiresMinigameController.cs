@@ -69,6 +69,8 @@ namespace Game.Minigames.Wires
         private readonly List<WireSocket> _rightSockets = new();
         private readonly List<WireSocket> _hintIndicators = new();
         private readonly Dictionary<ColorId, ColorId> _requiredMatch = new();
+        private readonly List<ColorId> _forcedHiddenColors = new();
+        private readonly List<ColorId> _leftColorOrder = new();
         #endregion
 
         #region Event
@@ -78,6 +80,7 @@ namespace Game.Minigames.Wires
             ResetVisualsAndState();
             AssignRandomColors();
             SetVisibleWireSockets(true);
+            ApplyForcedDeductionHints();
             HideMistakeWarningPanel();
         }
 
@@ -262,22 +265,56 @@ namespace Game.Minigames.Wires
                 allColors.RemoveAt(r);
             }
 
+            int forcedDeductionCount = Mathf.Clamp(_config.ForcedDeductionCount, 0, 2);
+
             _requiredMatch.Clear();
-            foreach (var kvp in GenerateRequiredMatchMap(pickedColors))
+            _forcedHiddenColors.Clear();
+
+            if (forcedDeductionCount == 2 && pickedColors.Count >= 4)
             {
-                _requiredMatch[kvp.Key] = kvp.Value;
+                var pairCandidates = Shuffle(pickedColors);
+                ColorId a = pairCandidates[0];
+                ColorId b = pairCandidates[1];
+
+                _requiredMatch[a] = b;
+                _requiredMatch[b] = a;
+                _forcedHiddenColors.Add(a);
+                _forcedHiddenColors.Add(b);
+
+                var remaining = pickedColors.FindAll(c => !c.Equals(a) && !c.Equals(b));
+                foreach (var kvp in GenerateRequiredMatchMap(remaining))
+                {
+                    _requiredMatch[kvp.Key] = kvp.Value;
+                }
+            }
+            else
+            {
+                foreach (var kvp in GenerateRequiredMatchMap(pickedColors))
+                {
+                    _requiredMatch[kvp.Key] = kvp.Value;
+                }
+
+                if (forcedDeductionCount == 1 && pickedColors.Count >= 2)
+                {
+                    // k=1 luôn AN TOÀN với bất kỳ màu nào, không cần cấu trúc
+                    // đặc biệt gì - vì chỉ còn đúng 1 màu nguồn + 1 màu đích
+                    // trống, bị ép ghép với nhau, và không thể là tự-nối-
+                    // chính-nó do map gốc vốn đã là derangement toàn cục.
+                    _forcedHiddenColors.Add(pickedColors[Random.Range(0, pickedColors.Count)]);
+                }
             }
 
             List<ColorId> leftOrders = Shuffle(pickedColors);
             List<ColorId> rightOrders = Shuffle(pickedColors);
 
+            _leftColorOrder.Clear();
+
             for (int i = 0; i < count; i++)
             {
                 _leftSockets[i].SetColor(leftOrders[i]);
                 _rightSockets[i].SetColor(rightOrders[i]);
+                _leftColorOrder.Add(leftOrders[i]);
 
-                // Hint đứng cùng hàng với socket trái thứ i -> hiển thị đúng
-                // màu ĐÍCH bắt buộc của màu socket trái đó (không phải chính màu đó).
                 if (i < _hintIndicators.Count)
                 {
                     ColorId requiredTarget = _requiredMatch[leftOrders[i]];
@@ -335,6 +372,7 @@ namespace Game.Minigames.Wires
                 var socket = RaycastSocket();
                 if (socket != null && socket.Side == WireSide.Left && !socket.IsConnected)
                 {
+                    AudioController.Instance.PlaySFX(SoundName.ButtonClick);
                     BeginDrag(socket);
                 }
             }
@@ -448,9 +486,6 @@ namespace Game.Minigames.Wires
         #region Connect
         private bool TryConnect(WireSocket from, WireSocket to)
         {
-            // Đổi từ so cùng màu (from.ColorId == to.ColorId) sang tra theo
-            // luật: mỗi màu nguồn có 1 màu đích bắt buộc riêng, không còn là
-            // chính nó nữa (xem GenerateRequiredMatchMap + hint indicator).
             bool isCorrect = _requiredMatch.TryGetValue(from.ColorId, out ColorId requiredTarget)
                 && requiredTarget == to.ColorId;
 
@@ -465,8 +500,6 @@ namespace Game.Minigames.Wires
                 var line = Instantiate(_linePrefab, _linesContainer);
                 line.positionCount = _curveSegments;
 
-                // Gradient màu nguồn -> màu đích (2 màu khác nhau) thay vì 1
-                // màu đồng nhất, thể hiện rõ đây là ghép theo luật.
                 line.startColor = _config.GetColorById(from.ColorId);
                 line.endColor = _config.GetColorById(to.ColorId);
 
@@ -474,6 +507,7 @@ namespace Game.Minigames.Wires
                 _activeLines[from] = line;
 
                 _connectedCount++;
+                AudioController.Instance.PlaySFX(SoundName.Wire_Success);
 
                 int count = Mathf.Min(WireCount, _config.ColorCount);
 
@@ -494,7 +528,7 @@ namespace Game.Minigames.Wires
                     _mistakeCount++;
                     CheckMistakeCountToReset();
                 }
-
+                AudioController.Instance.PlaySFX(SoundName.Wire_Fail);
                 return false;
             }
         }
@@ -569,7 +603,28 @@ namespace Game.Minigames.Wires
                 ResetVisualsAndState();
                 AssignRandomColors();
                 // SetVisibleWireSockets(true);
+                ApplyForcedDeductionHints();
                 HideMistakeWarningPanel();
+            }
+        }
+
+        private void ApplyForcedDeductionHints()
+        {
+            if (_hintIndicators.Count == 0) return;
+
+            foreach (var hint in _hintIndicators)
+            {
+                hint.gameObject.SetActive(true);
+            }
+
+            if (_forcedHiddenColors.Count == 0) return;
+
+            for (int i = 0; i < _leftColorOrder.Count && i < _hintIndicators.Count; i++)
+            {
+                if (_forcedHiddenColors.Contains(_leftColorOrder[i]))
+                {
+                    _hintIndicators[i].gameObject.SetActive(false);
+                }
             }
         }
         

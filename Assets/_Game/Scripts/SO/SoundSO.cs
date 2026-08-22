@@ -17,7 +17,9 @@ public enum SoundName
     Maze_Fail,
     Word_Success,
     Word_Fail,
-    Pick_Clue
+    Pick_Clue,
+    Button3DClick,
+    Entity_ChangeState
 }
 
 [CreateAssetMenu(fileName = "NewSoundData", menuName = "Audio/Sound Data")]

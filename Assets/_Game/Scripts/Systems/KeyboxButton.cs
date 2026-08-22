@@ -1,56 +1,74 @@
-using System; // Bổ sung thư viện này để dùng Action
-using System.Collections;
+using System;
 using UnityEngine;
+using DG.Tweening;
 
 namespace Game.Systems.Lock
 {
     [RequireComponent(typeof(Collider))]
     public class KeyboxButton : MonoBehaviour
     {
-        [Header("Hiệu ứng Vật lý")]
         public Transform buttonMesh;
         public Vector3 pushAxis = Vector3.back;
         public float pressDepth = 0.03f;
-        public float pressSpeed = 15f;
+        public float pressDuration = 0.1f;
 
-        // SỰ KIỆN DUY NHẤT: Bắn ra khi nút bị click
+        [Header("Materials")]
+        [SerializeField] private MeshRenderer buttonRenderer;
+        [SerializeField] private Material _redMAT;
+        [SerializeField] private Material _yellowMAT;
+
         public event Action OnClicked;
 
         private Vector3 originalLocalPos;
-        private Coroutine pressCoroutine;
         private Transform targetTransform;
+        private Sequence pressTween;
 
         private void Start()
         {
             targetTransform = buttonMesh != null ? buttonMesh : transform;
             originalLocalPos = targetTransform.localPosition;
+
+            if (buttonRenderer == null)
+            {
+                buttonRenderer = targetTransform.GetComponent<MeshRenderer>();
+            }
         }
 
         private void OnMouseDown()
         {
-            if (pressCoroutine != null) StopCoroutine(pressCoroutine);
-            pressCoroutine = StartCoroutine(PressAnimationRoutine());
-
-            // Bất kỳ ai đang đăng ký lắng nghe sự kiện này đều sẽ được thông báo
+            AnimatePress();
+            AudioController.Instance.PlaySFX(SoundName.Button3DClick);
             OnClicked?.Invoke();
         }
 
-        private IEnumerator PressAnimationRoutine()
+        private void AnimatePress()
         {
+            pressTween?.Kill();
+
             Vector3 pressedPos = originalLocalPos + pushAxis.normalized * pressDepth;
 
-            while (Vector3.Distance(targetTransform.localPosition, pressedPos) > 0.001f)
+
+            if (buttonRenderer != null && _yellowMAT != null)
             {
-                targetTransform.localPosition = Vector3.Lerp(targetTransform.localPosition, pressedPos, Time.deltaTime * pressSpeed * 2f);
-                yield return null;
+                buttonRenderer.material = _yellowMAT;
             }
 
-            while (Vector3.Distance(targetTransform.localPosition, originalLocalPos) > 0.001f)
-            {
-                targetTransform.localPosition = Vector3.Lerp(targetTransform.localPosition, originalLocalPos, Time.deltaTime * pressSpeed);
-                yield return null;
-            }
-            targetTransform.localPosition = originalLocalPos;
+            pressTween = DOTween.Sequence();
+
+            pressTween.Append(targetTransform.DOLocalMove(pressedPos, pressDuration).SetEase(Ease.OutQuad))
+                      .Append(targetTransform.DOLocalMove(originalLocalPos, pressDuration).SetEase(Ease.InQuad))
+                      .OnComplete(() =>
+                      {
+                          if (buttonRenderer != null && _redMAT != null)
+                          {
+                              buttonRenderer.material = _redMAT;
+                          }
+                      });
+        }
+
+        private void OnDestroy()
+        {
+            pressTween?.Kill();
         }
     }
 }

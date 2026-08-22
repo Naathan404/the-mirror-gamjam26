@@ -23,14 +23,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0cb87d681faffec48ad46afea2327f17, type: 2}
   - {fileID: 11400000, guid: 334767d1dfb13c743849e42d83c2236b, type: 2}
   _wiresConfigs:
-  - {fileID: 11400000, guid: 66458569d795dbf4a90abc3c3aab6ca2, type: 2}
-  - {fileID: 11400000, guid: 85da42366a57c1a4db4194cd470bd33f, type: 2}
-  - {fileID: 11400000, guid: 430d4b27131937f41b002970a733c731, type: 2}
+  - {fileID: 11400000, guid: 466286b0d66d42245a1c019d5deffbc6, type: 2}
+  - {fileID: 11400000, guid: c8ca98d0b1def8949a3dec19decfd362, type: 2}
+  - {fileID: 11400000, guid: 2194ad00e955a904ba935c0d06202623, type: 2}
   - {fileID: 11400000, guid: 0b521f2852ffd6e419da4eb2801506a6, type: 2}
   _wordsConfigs:
   - {fileID: 11400000, guid: ff99fc0a0446832498ab8a9ebad16265, type: 2}
   - {fileID: 11400000, guid: 5ca7b36c25cbadd49af7b51c13a5a8e5, type: 2}
   - {fileID: 11400000, guid: d423fbd613396f241b39083d5d0c7c9f, type: 2}
   - {fileID: 11400000, guid: 781006a323fc85342b21e8953bf399f8, type: 2}
-  _enableDebug: 1
-  _debugDifficultLevel: 3
+  _enableDebug: 0
+  _debugDifficultLevel: 0

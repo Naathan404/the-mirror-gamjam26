@@ -47,8 +47,16 @@ namespace Game.Minigames.CardMatch
             }
         }
 
-        public void FlipUp() => StartCoroutine(FlipRoutine(true));
-        public void FlipDown() => StartCoroutine(FlipRoutine(false));
+        public void FlipUp()
+        {
+            AudioController.Instance.PlaySFX(SoundName.Card_Flip_Up);
+            StartCoroutine(FlipRoutine(true));
+        }
+        public void FlipDown()
+        {
+            AudioController.Instance.PlaySFX(SoundName.Card_Flip_Down);
+            StartCoroutine(FlipRoutine(false));
+        }
 
         private IEnumerator FlipRoutine(bool toFaceUp)
         {

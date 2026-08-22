@@ -33,7 +33,7 @@ namespace Game.Entity
 #if UNITY_EDITOR
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.J))
+            if (Input.GetKeyDown(UnityEngine.KeyCode.J))
                 GameEvents.RaiseJumpscareTriggered();
         }
 #endif

@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEngine;
 using Game.Core;
 using Game.Managers;
+using Game.Effect;
+using DG.Tweening;
 
 public class LightBulbController : MonoBehaviour
 {
@@ -11,22 +13,27 @@ public class LightBulbController : MonoBehaviour
     [SerializeField] private int _batteryCount = 0;
     [Tooltip("Thời gian pin cần sạc để có thể sử dụng đèn")]
     [SerializeField] private float _batteryLife = 20f;
+    [SerializeField] private float _batteryLifeAddition = 1f;
 
     [Header("Effects")]
     [SerializeField] private LightFlashEffect _lightFlashEffect;
+
+    [Header("Visual")]
 
 
     [SerializeField] private float _batteryChargingProcess;
     private bool _isCharging = false;
     private Coroutine _chargingRoutine;
 
+    public bool IsBatteryFull => _batteryChargingProcess >= _batteryLife;
+
     public event Action<float> OnBatteryProgressChanged;
 
     private void Start()
     {
-        _batteryCount = 0;
-        _batteryChargingProcess = 0f;
-        OnBatteryProgressChanged?.Invoke(0f);
+        _batteryCount = 1;
+        _batteryChargingProcess = _batteryLife;
+        OnBatteryProgressChanged?.Invoke(_batteryChargingProcess);
 
         GameEvents.OnLightFlashed += TurnOnLight;
         GameEvents.OnBatteryChargeStarted += StartChargeBattery;
@@ -44,10 +51,15 @@ public class LightBulbController : MonoBehaviour
             return;
 
         _batteryCount--;
+        _batteryChargingProcess = 0;
+        _batteryLife += _batteryLifeAddition;
+        OnBatteryProgressChanged?.Invoke(_batteryChargingProcess);
 
         if (_lightFlashEffect != null)
         {
-            _lightFlashEffect.PlayLightFlash();
+            FilterController.Instance.FlashScreen(FilterController.Instance.FlashColor);
+            //_lightFlashEffect.PlayLightFlash();
+            Camera.main.transform.DOShakePosition(0.5f, 0.35f, 12, 45f);
         }
     }
 

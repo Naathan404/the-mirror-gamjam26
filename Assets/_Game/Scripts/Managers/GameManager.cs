@@ -7,8 +7,11 @@ namespace Game.Managers
     public sealed class GameManager : MonoSingleton<GameManager>
     {
         public GameState CurrentState { get; private set; } = GameState.Playing;
-        
+        public bool HasRoomKey { get; private set; } = false;
+
         private int _minigamePassed = 0;
+
+        public int MinigamePassed => _minigamePassed;
 
         private void Start()
         {
@@ -16,6 +19,7 @@ namespace Game.Managers
 
             GameEvents.OnMinigameCompleted += HandleMinigameCompleted;
             GameEvents.OnGameLost += HandleGameLost;
+            GameEvents.OnKeyCollected += () => HasRoomKey = true;
         }
 
 #pragma warning disable CS0114 // Member hides inherited member; missing override keyword
@@ -44,7 +48,7 @@ namespace Game.Managers
         #endregion
 
         #region eVENTS
-        private void HandleMinigameCompleted(MinigameType _, int ___)
+        private void HandleMinigameCompleted(MinigameType _, KeyCode ___)
         {
             _minigamePassed++;
             GameEvents.RaiseDifficultyIncreased(_minigamePassed);

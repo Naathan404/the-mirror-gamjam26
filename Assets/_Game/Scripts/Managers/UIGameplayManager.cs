@@ -5,6 +5,7 @@ using Game.Effect;
 using Game.Utils;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Game.Managers
 {
@@ -22,6 +23,14 @@ namespace Game.Managers
         [SerializeField] private GameObject _deskPanel;
         [SerializeField] private GameObject _behindPanel;
 
+        [Header("Rewards")]
+        [SerializeField] private CanvasGroup _keyUIGroup;
+        [SerializeField] private float _keyUIAppearDuration = 0.5f;
+        [Header("Flash Light Buttona")]
+        [SerializeField] private Button _lightButton;
+        [SerializeField] private Sprite _activateSprite;
+        [SerializeField] private Sprite _deactivateSprite;
+
         private string[] _loseText = new string[]
         {
             "Wake Up",
@@ -32,31 +41,30 @@ namespace Game.Managers
         };
 
         #region Base
-        // private void Star()
-        // {
-        //     GameEvents.OnViewChangeStarted += HideAllPanels;
-        //     GameEvents.OnViewChangeFinished += ActivateView;
-        // }
-        
-        // private void OnDisable()
-        // {
-        //     GameEvents.OnViewChangeStarted -= HideAllPanels;
-        //     GameEvents.OnViewChangeFinished -= ActivateView;
-        // }
-
         private void Start()
         {
             ActivateView(View.Mirror);
             GameEvents.OnViewChangeStarted += HideAllPanels;
             GameEvents.OnViewChangeFinished += ActivateView;
-            
+
             GameEvents.OnJumpscareTriggered += HideAllPanels;
 
             GameEvents.OnGameLost += ShowLosePanel;
 
+            GameEvents.OnKeyCollected += ShowKeyOnUI;
+            GameEvents.OnBatteryChargeCompleted += HandleBatteryChargeCompleted;
+
+            HandleBatteryChargeCompleted();
+
             _losePanel.gameObject.SetActive(false);
             _replayButton.gameObject.SetActive(false);
             _loseCanvasGroup.alpha = 0f;
+
+            if (_keyUIGroup != null)
+            {
+                _keyUIGroup.alpha = 0f;
+                _keyUIGroup.gameObject.SetActive(false);
+            }
         }
 
 #pragma warning disable CS0114 // Member hides inherited member; missing override keyword
@@ -68,10 +76,13 @@ namespace Game.Managers
 
             GameEvents.OnJumpscareTriggered += HideAllPanels;
 
+            GameEvents.OnBatteryChargeCompleted -= HandleBatteryChargeCompleted;
+
             GameEvents.OnGameLost -= ShowLosePanel;
+
+            GameEvents.OnKeyCollected -= ShowKeyOnUI;
         }
         #endregion
-
 
         #region Panels
         private void HideAllPanels(View _)
@@ -96,7 +107,7 @@ namespace Game.Managers
 
         private void ActivateView(View view)
         {
-            switch(view)
+            switch (view)
             {
                 case View.Mirror:
                     HideAllPanels(view);
@@ -132,17 +143,47 @@ namespace Game.Managers
         }
         #endregion
 
+        // ==========================================
+        // [MỚI] HIỆU ỨNG HIỂN THỊ CHÌA KHÓA LÊN UI
+        // ==========================================
+        #region Inventory
+        private void ShowKeyOnUI()
+        {
+            if (_keyUIGroup != null)
+            {
+                _keyUIGroup.gameObject.SetActive(true);
+
+                // Reset scale về 0 để chuẩn bị phóng to
+                _keyUIGroup.transform.localScale = Vector3.zero;
+
+                // Fade in mượt mà
+                _keyUIGroup.DOFade(1f, _keyUIAppearDuration);
+
+                // Hiệu ứng phóng to và nảy nhẹ (OutBack) tạo cảm giác vui nhộn khi nhận đồ
+                _keyUIGroup.transform.DOScale(Vector3.one, _keyUIAppearDuration).SetEase(Ease.OutBack);
+            }
+        }
+        #endregion
+
         #region Button Events
         public void LightFlash()
         {
             GameEvents.RaiseLightFlashed();
+            _lightButton.interactable = false;
+            _lightButton.GetComponent<Image>().sprite = _deactivateSprite;
+        }
+
+        private void HandleBatteryChargeCompleted()
+        {
+            _lightButton.interactable = true;
+            _lightButton.GetComponent<Image>().sprite = _activateSprite;
         }
 
         public void Replay()
         {
+            AudioController.Instance.PlaySFX(SoundName.ButtonClick);
             SceneController.Instance.ReloadGameplayScene();
         }
         #endregion
     }
-    
 }

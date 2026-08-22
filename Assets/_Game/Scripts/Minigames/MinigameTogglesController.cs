@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Game.Core;
 using Game.Interactables; // Thêm thư viện này để truy cập MinigameTrigger
 using UnityEngine;
+using KeyCode = Game.Core.KeyCode;
 
 public class MinigameTogglesController : MonoBehaviour
 {
@@ -24,7 +25,7 @@ public class MinigameTogglesController : MonoBehaviour
         GameEvents.OnMinigameCompleted -= HandleMinigameCompleted;
     }
 
-    private void HandleMinigameCompleted(MinigameType type, int digit)
+    private void HandleMinigameCompleted(MinigameType type, KeyCode code)
     {
         if (!_completedGames.Contains(type))
         {

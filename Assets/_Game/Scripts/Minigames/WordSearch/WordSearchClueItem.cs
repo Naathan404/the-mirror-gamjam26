@@ -62,6 +62,7 @@ namespace Game.Minigames.WordSearch
         {
             isDragging = true;
 
+            AudioController.Instance.PlaySFX(SoundName.Pick_Clue);
             if (snapBackCoroutine != null)
             {
                 StopCoroutine(snapBackCoroutine);

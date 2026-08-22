@@ -10,9 +10,14 @@ namespace Game.Minigames.Maze
     public class WiresConfig : ScriptableObject
     {
         [Header("Wire Settings")]
-        [Range(4, 18)]
+        [Range(4, 25)]
         [SerializeField] private int _wireCount;
+
         [SerializeField] private int _hiddenCount;
+
+        [Tooltip("Số hint indicator bị ẩn để suy luận bằng loại trừ. từ 3 trở lên, (derangement D(k)) đã >= 2, => nhiều hơn 1 đáp án đúng")]
+        [Range(0, 2)]
+        [SerializeField] private int _forcedDeductionCount;
 
         [Header("Wire Color Settings")]
         [SerializeField] private List<WireColor> _wireColors;
@@ -26,6 +31,7 @@ namespace Game.Minigames.Maze
 
         public int WireCount => _wireCount;
         public int HiddenCount => _hiddenCount;
+        public int ForcedDeductionCount => _forcedDeductionCount;
         public int ColorCount => _wireColors.Count;
 
         #region Helpers
