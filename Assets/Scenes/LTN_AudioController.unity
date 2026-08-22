@@ -815,6 +815,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 698435439847646883, guid: 464d475a7f0834e4383d5ea276f9650c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 698435439847646883, guid: 464d475a7f0834e4383d5ea276f9650c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 698435439847646883, guid: 464d475a7f0834e4383d5ea276f9650c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 698435439847646883, guid: 464d475a7f0834e4383d5ea276f9650c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 698435439847646883, guid: 464d475a7f0834e4383d5ea276f9650c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: TurnOnLight
+      objectReference: {fileID: 0}
+    - target: {fileID: 698435439847646883, guid: 464d475a7f0834e4383d5ea276f9650c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: LightBulbController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 698435439847646883, guid: 464d475a7f0834e4383d5ea276f9650c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 2871843807468921088, guid: 464d475a7f0834e4383d5ea276f9650c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
