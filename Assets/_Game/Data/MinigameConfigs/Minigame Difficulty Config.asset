@@ -32,5 +32,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5ca7b36c25cbadd49af7b51c13a5a8e5, type: 2}
   - {fileID: 11400000, guid: d423fbd613396f241b39083d5d0c7c9f, type: 2}
   - {fileID: 11400000, guid: 781006a323fc85342b21e8953bf399f8, type: 2}
-  _enableDebug: 0
-  _debugDifficultLevel: 0
+  _lazorsConfigs:
+  - {fileID: 11400000, guid: a4d4f7c8b7606d64ba4a92cc447e8321, type: 2}
+  - {fileID: 11400000, guid: e3e2260665875ce458618aed9c9241fc, type: 2}
+  - {fileID: 11400000, guid: deb4e457e4a6b904a9e9ee75b5a0ae3f, type: 2}
+  - {fileID: 11400000, guid: 6f3a8d15b81703f478d72eeb43a4836b, type: 2}
+  _enableDebug: 1
+  _debugDifficultLevel: 1

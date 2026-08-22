@@ -67,7 +67,8 @@ namespace Game.Core
         Maze,
         CardMatch,
         Wires,
-        WordSearch
+        WordSearch,
+        Lazors
     }
 
     public enum ColorId
