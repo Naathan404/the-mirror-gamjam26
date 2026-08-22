@@ -1558,7 +1558,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2412752427754657302
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2788,6 +2788,7 @@ GameObject:
   - component: {fileID: 7102392843061007693}
   - component: {fileID: 3955692285327660607}
   - component: {fileID: 8670573091883985436}
+  - component: {fileID: 104435643064956670}
   m_Layer: 5
   m_Name: '[---Game Canvas---]'
   m_TagString: Untagged
@@ -2832,25 +2833,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7f45e422089c5f458730a3c4653a5d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _mirrorPanel: {fileID: 568706361906350368}
+  _deskPanel: {fileID: 5212286591502315302}
+  _behindPanel: {fileID: 5545764412795756441}
   _losePanel: {fileID: 7559392874718782660}
   _loseCanvasGroup: {fileID: 3650222676488754409}
   _loseAppearDuration: 3
   _replayButton: {fileID: 2129870084337179018}
-  _mirrorPanel: {fileID: 568706361906350368}
-  _deskPanel: {fileID: 5212286591502315302}
-  _behindPanel: {fileID: 5545764412795756441}
   _keyUIGroup: {fileID: 8099034120245515026}
   _keyUIAppearDuration: 0.5
   _lightButton: {fileID: 698435439847646883}
   _activateSprite: {fileID: 9222361113018672819, guid: 2372ebad8ca8f124fb10980079e3d3c0, type: 3}
   _deactivateSprite: {fileID: 1947543248193725394, guid: 88b9a8082aa8cae4799a3055865db64e, type: 3}
-  _endingPanel: {fileID: 1382343563448230991}
-  _endingCanvasGroup: {fileID: 4054718957665813945}
-  _endingText: {fileID: 8606365187259831590}
-  _wakeUpAgainButton: {fileID: 1125539799470984173}
-  _jumpscareFlashImage: {fileID: 2277947946712804819}
-  _endingConfig: {fileID: 11400000, guid: 1839bba2610aaf84ea10f6c4e196a1e8, type: 2}
-  _audioSource: {fileID: 8670573091883985436}
 --- !u!223 &9824840272247915
 Canvas:
   m_ObjectHideFlags: 0
@@ -3011,6 +3005,25 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &104435643064956670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8867233321391540636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8a04b7418550304fa116271015419b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _endingPanel: {fileID: 1382343563448230991}
+  _endingCanvasGroup: {fileID: 4054718957665813945}
+  _endingText: {fileID: 8606365187259831590}
+  _wakeUpAgainButton: {fileID: 1125539799470984173}
+  _jumpscareFlashImage: {fileID: 2277947946712804819}
+  _endingConfig: {fileID: 11400000, guid: 1839bba2610aaf84ea10f6c4e196a1e8, type: 2}
+  _audioSource: {fileID: 8670573091883985436}
 --- !u!1 &8988058923504932305
 GameObject:
   m_ObjectHideFlags: 0

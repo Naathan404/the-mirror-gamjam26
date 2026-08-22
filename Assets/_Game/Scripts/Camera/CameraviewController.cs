@@ -1,8 +1,6 @@
 using System;
 using Game.Core;
 using Game.Managers;
-using Mono.Cecil;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Game.Cameras
@@ -22,7 +20,7 @@ namespace Game.Cameras
         [SerializeField] private AnimationCurve _easeCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
         // khóa input lúc chuyển view 
         [SerializeField] private bool _lookInputDurationTransition = true;
-        
+
         /// <summary>View hiện tại người chơi đang đứng ở đó (sau khi transition xong).</summary>
         public View CurrentView { get; private set; } = View.Mirror;
         /// <summary>True nếu camera đang trong quá trình xoay.</summary>
@@ -43,24 +41,24 @@ namespace Game.Cameras
 
         private void Start()
         {
-            // Bắt đầu game ở view Gương.
             if (_mirrorTarget != null)
             {
                 _cameraTransform.rotation = _mirrorTarget.rotation;
             }
             CurrentView = View.Mirror;
+            GameEvents.RaiseViewChangeFinished(CurrentView);
         }
 
         private void Update()
         {
             if (!IsTransitioning) return;
-    
+
             _transitionTimer += Time.deltaTime;
             float t = Mathf.Clamp01(_transitionTimer / _transitionDuration);
             float easedT = _easeCurve.Evaluate(t);
-    
+
             _cameraTransform.rotation = Quaternion.Slerp(_startRotation, _targetRotation, easedT);
-    
+
             if (t >= 1f)
             {
                 IsTransitioning = false;
@@ -88,6 +86,7 @@ namespace Game.Cameras
 
             RequestSwitch(view, target);
         }
+
         private void RequestSwitch(View view, Transform target)
         {
             if (target == null)
@@ -112,4 +111,3 @@ namespace Game.Cameras
         #endregion
     }
 }
-

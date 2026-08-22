@@ -1,10 +1,11 @@
-using UnityEngine;
+using DG.Tweening;
 using Game.Core;
+using Game.Systems.Lock;
+using Mono.Cecil.Cil;
 using System.Collections;
 using System.Collections.Generic;
-using DG.Tweening;
+using UnityEngine;
 using KeyCode = Game.Core.KeyCode;
-using Mono.Cecil.Cil;
 
 namespace Game.Minigames
 {
@@ -43,7 +44,7 @@ namespace Game.Minigames
         // ================= ĐĂNG KÝ EVENT =================
         protected virtual void Start()
         {
-            GameEvents.OnPasscodeGenerated += HandlePasscodeGenerated;
+            //GameEvents.OnPasscodeGenerated += HandlePasscodeGenerated;
             GameEvents.OnLightFlashed += HandleLightFlashed;
             GameEvents.OnMinigameOpened += HandleMinigameOpened;
             GameEvents.OnMinigameClosed += HandleMinigameClosed;
@@ -53,11 +54,12 @@ namespace Game.Minigames
             OnDifficultyIncrease(0);
 
             if (visualRoot != null) visualRoot.SetActive(false);
+            Invoke(nameof(FetchSecretCode), 0.15f);
         }
 
         protected virtual void OnDestroy()
         {
-            GameEvents.OnPasscodeGenerated -= HandlePasscodeGenerated;
+            //GameEvents.OnPasscodeGenerated -= HandlePasscodeGenerated;
             GameEvents.OnLightFlashed -= HandleLightFlashed;
             GameEvents.OnMinigameOpened -= HandleMinigameOpened;
             GameEvents.OnMinigameClosed -= HandleMinigameClosed;
@@ -67,16 +69,28 @@ namespace Game.Minigames
         }
 
         // ================= XỬ LÝ VÒNG ĐỜI CHUNG =================
-        protected void HandlePasscodeGenerated(Dictionary<MinigameType, KeyCode> dict)
+        private void FetchSecretCode()
         {
-            if (dict.TryGetValue(minigameType, out KeyCode code))
+            if (PasscodeController.Instance == null)
+            {
+                Debug.LogError($"[{minigameType}] LỖI NGHIÊM TRỌNG: Không tìm thấy PasscodeController!");
+                return;
+            }
+
+            var dict = PasscodeController.Instance.GetCurrentPasscodeMap();
+
+            if (dict != null && dict.TryGetValue(minigameType, out KeyCode code))
             {
                 secretDigit = code.Digit;
                 minigameColor = code.GetColor();
                 Shape = code.Shape;
                 KColor = code.KColor;
 
-                Debug.Log($"[{minigameType}] Mật mã được giao là: {secretDigit}");
+                Debug.Log($"[{minigameType}] Tự động kéo mã thành công: {secretDigit}");
+            }
+            else
+            {
+                Debug.LogError($"[{minigameType}] PasscodeController không chứa mã cho Minigame này!");
             }
         }
 

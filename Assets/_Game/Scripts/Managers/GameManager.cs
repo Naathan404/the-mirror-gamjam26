@@ -16,10 +16,12 @@ namespace Game.Managers
         private void Start()
         {
             CurrentState = GameState.Playing;
+            HasRoomKey = false;
+            _minigamePassed = 0;
 
             GameEvents.OnMinigameCompleted += HandleMinigameCompleted;
             GameEvents.OnGameLost += HandleGameLost;
-            GameEvents.OnKeyCollected += () => HasRoomKey = true;
+            GameEvents.OnKeyCollected += HandleKeyCollected;
             GameEvents.OnDoorInteracted += TryWinGame;
         }
 
@@ -29,6 +31,7 @@ namespace Game.Managers
         {
             GameEvents.OnMinigameCompleted -= HandleMinigameCompleted;
             GameEvents.OnGameLost -= HandleGameLost;
+            GameEvents.OnKeyCollected -= HandleKeyCollected;
             GameEvents.OnDoorInteracted -= TryWinGame;
         }
 
@@ -54,6 +57,10 @@ namespace Game.Managers
         {
             _minigamePassed++;
             GameEvents.RaiseDifficultyIncreased(_minigamePassed);
+        }
+        private void HandleKeyCollected()
+        {
+            HasRoomKey = true;
         }
 
         private void HandleGameLost()

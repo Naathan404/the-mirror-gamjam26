@@ -62,21 +62,12 @@ namespace Game.Systems.Lock
             // Chìa khóa vẫn hiện hình (đi theo ngăn kéo), nhưng KHÔNG THỂ click
             if (roomKeyCollider != null) roomKeyCollider.enabled = false;
 
-#if UNITY_EDITOR
-            string passcode = "| ";
-
-            foreach(var c in targetPasscode)
-            {
-                passcode += c.Digit + " | ";
-            }
-
-            Debug.Log($"PASSWORD: <color=red> {passcode} </color>");
-#endif
+            Invoke(nameof(FetchPasscode), 0.1f);
         }
 
         private void OnEnable()
         {
-            GameEvents.OnPasscodeGenerated += SetupTargetPasscode;
+            //GameEvents.OnPasscodeGenerated += SetupTargetPasscode;
             GameEvents.OnKeyCollected += HandleKeyCollected; // Nghe sự kiện mất chìa khóa
 
             if (submitButton != null) submitButton.OnClicked += TryOpenBox;
@@ -84,10 +75,22 @@ namespace Game.Systems.Lock
 
         private void OnDisable()
         {
-            GameEvents.OnPasscodeGenerated -= SetupTargetPasscode;
+            //GameEvents.OnPasscodeGenerated -= SetupTargetPasscode;
             GameEvents.OnKeyCollected -= HandleKeyCollected;
 
             if (submitButton != null) submitButton.OnClicked -= TryOpenBox;
+        }
+
+        private void FetchPasscode()
+        {
+            if (PasscodeController.Instance != null)
+            {
+                SetupTargetPasscode(PasscodeController.Instance.GetCurrentPasscodeMap());
+            }
+            else
+            {
+                Debug.LogError("[KeyboxController] Không tìm thấy PasscodeController trong Scene!");
+            }
         }
 
         private void SetupTargetPasscode(Dictionary<MinigameType, KeyCode> minigameDigitMap)
@@ -113,6 +116,16 @@ namespace Game.Systems.Lock
 
             targetPasscode = ShuffleHelper.Shuffle(targetPasscode);
             UpdateKeyShapeSprites();
+#if UNITY_EDITOR
+            string passcode = "| ";
+
+            foreach (var c in targetPasscode)
+            {
+                passcode += c.Digit + " | ";
+            }
+
+            Debug.Log($"PASSWORD: <color=red> {passcode} </color>");
+#endif
         }
 
         private void AddPasscodeDigit(Dictionary<MinigameType, KeyCode> minigameDigitMap, MinigameType minigameType)
@@ -246,6 +259,7 @@ namespace Game.Systems.Lock
         // ==========================================
         private void HandleKeyCollected()
         {
+            if (roomKeyCollider != null) roomKeyCollider.gameObject.SetActive(false);
             // Chỉ chạy hiệu ứng đóng nếu hộp này đã được mở
             if (isUnlocked && drawerTransform != null && drawerTransform.localPosition.x > 0.1f)
             {

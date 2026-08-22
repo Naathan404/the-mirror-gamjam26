@@ -73,9 +73,9 @@ namespace Game.Core
         /// LockController là nguồn chân lý (source of truth) duy nhất cho đáp án —
         /// minigame KHÔNG tự random số của mình.
         /// </summary>
-        public static event Action<System.Collections.Generic.Dictionary<MinigameType, KeyCode>> OnPasscodeGenerated;
-        public static void RaisePasscodeGenerated(System.Collections.Generic.Dictionary<MinigameType, KeyCode> minigameDigitMap)
-            => OnPasscodeGenerated?.Invoke(minigameDigitMap);
+        //public static event Action<System.Collections.Generic.Dictionary<MinigameType, KeyCode>> OnPasscodeGenerated;
+        //public static void RaisePasscodeGenerated(System.Collections.Generic.Dictionary<MinigameType, KeyCode> minigameDigitMap)
+        //    => OnPasscodeGenerated?.Invoke(minigameDigitMap);
 
         /// <summary>Bắn khi một Object trong môi trường (vd: quyển sách) yêu cầu mở minigame.</summary>
         public static event Action<MinigameType> OnMinigameOpened;
@@ -125,11 +125,17 @@ namespace Game.Core
         public static void RaiseGameLost() => OnGameLost?.Invoke();
 
 
+        // ================= GAME FLOW =================
+        /// <summary>Bắn khi hệ thống cần load lại scene (Replay từ Mirror hoặc Menu).</summary>
+        public static event Action<bool> OnSceneReloadRequested; // true = Replay ở Mirror, false = Replay ở Menu
+        public static void RaiseSceneReloadRequested(bool startAtMirror) => OnSceneReloadRequested?.Invoke(startAtMirror);
+
+
         public static void ClearAllListeners()
         {
             OnViewChangeStarted = null;
             OnViewChangeFinished = null;
-            OnPasscodeGenerated = null;
+            //OnPasscodeGenerated = null;
             OnMinigameOpened = null;
             OnMinigameClosed = null;
             OnEntityStateChanged = null;
@@ -147,6 +153,8 @@ namespace Game.Core
             OnDoorInteracted = null;
             OnGameWon = null;
             OnGameLost = null;
+
+            OnSceneReloadRequested = null;
         }
     }
 }
