@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: WiresConfig_1
   m_EditorClassIdentifier: 
   _wireCount: 16
-  _hiddenCount: 8
+  _hiddenCount: 4
+  _forcedDeductionCount: 2
   _wireColors:
   - ColorId: 0
     Color: {r: 1, g: 0, b: 0, a: 1}

@@ -163,6 +163,7 @@ namespace Game.Managers
 
         public void Replay()
         {
+            AudioController.Instance.PlaySFX(SoundName.ButtonClick);
             SceneController.Instance.ReloadGameplayScene();
         }
         #endregion

@@ -33,6 +33,7 @@ public class ChargeButton : MonoBehaviour
         _isMoving = true;
 
         Vector3 pos = transform.position;
+        AudioController.Instance.PlaySFX(SoundName.Button3DClick);
 
         if ( _lightController.IsBatteryFull)
         {

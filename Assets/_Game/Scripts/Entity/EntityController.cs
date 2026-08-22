@@ -119,6 +119,11 @@ namespace Game.Entity
                 CurrentState--;
                 GameEvents.RaiseEntityStateChanged(CurrentState);
 
+                if (_currentView == View.Mirror)
+                {
+                    AudioController.Instance.PlaySFX(SoundName.Entity_ChangeState);
+                }
+
                 if (CurrentState == 0)
                 {
                     if (_currentView == View.Mirror)

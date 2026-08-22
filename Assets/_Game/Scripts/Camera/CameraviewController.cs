@@ -68,9 +68,21 @@ namespace Game.Cameras
         #endregion
 
         #region Buttons
-        public void SwitchToMirror() => RequestSwitch(View.Mirror, _mirrorTarget);
-        public void SwitchToDesk() => RequestSwitch(View.Desk, _deskTarget);
-        public void SwitchToBehind() => RequestSwitch(View.Behind, _behindTarget);
+        public void SwitchToMirror()
+        {
+            AudioController.Instance.PlaySFX(SoundName.ButtonClick);
+            RequestSwitch(View.Mirror, _mirrorTarget);
+        }
+        public void SwitchToDesk()
+        {
+            AudioController.Instance.PlaySFX(SoundName.ButtonClick);
+            RequestSwitch(View.Desk, _deskTarget);
+        }
+        public void SwitchToBehind()
+        {
+            AudioController.Instance.PlaySFX(SoundName.ButtonClick);
+            RequestSwitch(View.Behind, _behindTarget);
+        }
         #endregion
 
         #region Switch Views

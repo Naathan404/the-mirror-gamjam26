@@ -185,6 +185,7 @@ namespace Game.Minigames.CardMatch
 
             if (firstCard.CardID == secondCard.CardID)
             {
+                AudioController.Instance.PlaySFX(SoundName.Card_Matched);
                 firstCard.SetMatched();
                 secondCard.SetMatched();
                 pairsMatched++;

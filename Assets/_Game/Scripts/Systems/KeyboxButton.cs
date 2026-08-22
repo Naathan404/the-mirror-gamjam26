@@ -12,6 +12,8 @@ namespace Game.Systems.Lock
         public float pressDepth = 0.03f;
         public float pressDuration = 0.1f;
 
+        [SerializeField] private bool _isCheckButton = false;
+
         [Header("Materials")]
         [SerializeField] private MeshRenderer buttonRenderer;
         [SerializeField] private Material _redMAT;
@@ -37,6 +39,10 @@ namespace Game.Systems.Lock
         private void OnMouseDown()
         {
             AnimatePress();
+            if (_isCheckButton)
+                AudioController.Instance.PlaySFX(SoundName.Button3DClick);
+            else
+                AudioController.Instance.PlaySFX(SoundName.ButtonClick);
             OnClicked?.Invoke();
         }
 
