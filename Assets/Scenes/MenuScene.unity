@@ -2606,7 +2606,7 @@ MonoBehaviour:
   _monsterFlashDuration: 0.15
   _cameraPanDuration: 1.5
   _eyeCloseDuration: 1
-  _gameplaySceneName: HunScene
+  _gameplaySceneName: HunScene 2
 --- !u!1 &8667111283176629345
 GameObject:
   m_ObjectHideFlags: 0
