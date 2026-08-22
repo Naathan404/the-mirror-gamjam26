@@ -19,7 +19,14 @@ public enum SoundName
     Word_Fail,
     Pick_Clue,
     Button3DClick,
-    Entity_ChangeState
+    Entity_ChangeState,
+
+    Ending_LockUnlock,
+    Ending_Walking,
+    Ending_Background,
+    Menu_Whisper,
+    Menu_Glitch,
+    None
 }
 
 [CreateAssetMenu(fileName = "NewSoundData", menuName = "Audio/Sound Data")]

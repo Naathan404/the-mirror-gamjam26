@@ -10,7 +10,7 @@ namespace Game.Configs
         public string text;
 
         [Tooltip("Âm thanh phát ra cùng lúc hiện câu thoại (Ví dụ: Tiếng mở cửa, kính vỡ...)")]
-        public AudioClip sfx;
+        public SoundName soundName = SoundName.None;
 
         [Tooltip("Thời gian CHỜ trước khi câu thoại này hiện ra")]
         public float delayBeforeShow = 1.5f;

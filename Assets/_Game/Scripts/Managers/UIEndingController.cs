@@ -20,9 +20,8 @@ namespace Game.UI
         [SerializeField] private RectTransform _wakeUpAgainButton; // Nút chơi lại
         [SerializeField] private RectTransform _returnToMenuButton; // Nút về Menu
 
-        [Header("Configs & Audio")]
+        [Header("Configs")]
         [SerializeField] private Game.Configs.EndingConfig _endingConfig;
-        [SerializeField] private AudioSource _audioSource;
 
         private bool _isActionTriggered = false; // Ngăn chặn bấm 2 nút cùng lúc
 
@@ -92,8 +91,10 @@ namespace Game.UI
                     _endingText.rectTransform.DOShakeAnchorPos(line.showDuration, new Vector2(3f, 3f), 20, 90f, false, true).SetId("TextGlitch");
                     _endingText.DOFade(0.6f, 0.15f).SetLoops(-1, LoopType.Yoyo).SetId("TextGlitch");
 
-                    if (line.sfx != null && _audioSource != null)
-                        _audioSource.PlayOneShot(line.sfx);
+                    if (line.soundName != SoundName.None && AudioController.Instance != null)
+                    {
+                        AudioController.Instance.PlaySFX(line.soundName);
+                    }
                 });
 
                 endSeq.AppendInterval(line.showDuration);
@@ -110,6 +111,14 @@ namespace Game.UI
                     });
 
                     endSeq.AppendCallback(() => {
+
+                        // [SỬA 3]: Tiếng nổ Jumpscare
+                        if (AudioController.Instance != null)
+                        {
+                            // Hưn có thể thay đổi Enum này sau nếu đã thêm SoundName.Jumpscare vào
+                            AudioController.Instance.PlaySFX(SoundName.Entity_ChangeState);
+                        }
+
                         _jumpscareFlashImage.gameObject.SetActive(true);
                         RectTransform monsterRect = _jumpscareFlashImage.rectTransform;
                         monsterRect.localScale = Vector3.one;
@@ -153,12 +162,10 @@ namespace Game.UI
 
             // 4. HIỆN 2 NÚT LỰA CHỌN
             endSeq.AppendCallback(() => {
-                // Setup nút Replay
                 _wakeUpAgainButton.GetComponentInChildren<TextMeshProUGUI>().text = _endingConfig.loopButtonText;
                 _wakeUpAgainButton.gameObject.SetActive(true);
                 _wakeUpAgainButton.GetComponent<CanvasGroup>().DOFade(1f, 1f);
 
-                // Setup nút Menu
                 if (_returnToMenuButton != null)
                 {
                     _returnToMenuButton.gameObject.SetActive(true);
@@ -175,7 +182,10 @@ namespace Game.UI
             if (_isActionTriggered) return;
             _isActionTriggered = true;
 
-            TransitionAndLoad(() => SceneController.Instance.ReloadGameplayScene());
+            // Phát tiếng bấm nút
+            if (AudioController.Instance != null) AudioController.Instance.PlaySFX(SoundName.ButtonClick);
+
+            SceneController.Instance.ReloadGameplayScene();
         }
 
         public void OnClickReturnToMenu()
@@ -183,26 +193,10 @@ namespace Game.UI
             if (_isActionTriggered) return;
             _isActionTriggered = true;
 
-            TransitionAndLoad(() => SceneController.Instance.LoadMenuScene());
-        }
+            // Phát tiếng bấm nút
+            if (AudioController.Instance != null) AudioController.Instance.PlaySFX(SoundName.ButtonClick);
 
-        private void TransitionAndLoad(System.Action loadSceneAction)
-        {
-            // Tắt UI của 2 nút đi để cảm giác ngột ngạt hơn
-            _wakeUpAgainButton.GetComponent<CanvasGroup>().DOFade(0f, 0.5f);
-            if (_returnToMenuButton != null)
-                _returnToMenuButton.GetComponent<CanvasGroup>().DOFade(0f, 0.5f);
-
-            // Nhắm mắt lại từ từ rồi load Scene
-            if (FilterController.Instance != null)
-            {
-                FilterController.Instance.PlayEyeClosedVignetteEffect(Color.black, 1.5f);
-                DOVirtual.DelayedCall(1.6f, () => loadSceneAction?.Invoke());
-            }
-            else
-            {
-                loadSceneAction?.Invoke();
-            }
+            SceneController.Instance.LoadMenuScene();
         }
     }
 }

@@ -44,3 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3354240aed8b29e49911ae2bc8d62b7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _gameplaySceneName: HunScene 2
+  _menuSceneName: MenuScene
+  _defaultTransitionTime: 1.5
