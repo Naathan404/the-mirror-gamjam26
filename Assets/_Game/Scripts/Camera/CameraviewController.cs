@@ -70,17 +70,17 @@ namespace Game.Cameras
         #region Buttons
         public void SwitchToMirror()
         {
-            AudioController.Instance.PlaySFX(SoundName.ButtonClick);
+            //AudioController.Instance.PlaySFX(SoundName.ButtonClick);
             RequestSwitch(View.Mirror, _mirrorTarget);
         }
         public void SwitchToDesk()
         {
-            AudioController.Instance.PlaySFX(SoundName.ButtonClick);
+            //AudioController.Instance.PlaySFX(SoundName.ButtonClick);
             RequestSwitch(View.Desk, _deskTarget);
         }
         public void SwitchToBehind()
         {
-            AudioController.Instance.PlaySFX(SoundName.ButtonClick);
+            //AudioController.Instance.PlaySFX(SoundName.ButtonClick);
             RequestSwitch(View.Behind, _behindTarget);
         }
         #endregion
@@ -111,6 +111,7 @@ namespace Game.Cameras
 
             if (!IsTransitioning && CurrentView == view) return;
 
+            AudioController.Instance.PlaySFX(SoundName.View_Change);
             _startRotation = _cameraTransform.rotation;
             _targetRotation = target.rotation;
             _transitionTimer = 0f;

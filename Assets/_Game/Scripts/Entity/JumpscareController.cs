@@ -49,6 +49,8 @@ namespace Game.Entity
             _jumpscareSpriteRenderer.gameObject.SetActive(true);
             _jumpScareBackground.gameObject.SetActive(true);
 
+            AudioController.Instance.PlaySFX(SoundName.Entity_Jumpscare);
+
             FlickerController.Instance.FlickerFor(FlickerPattern.Strobe, 1f);
 
             UnityEngine.Camera.main.transform.DOShakePosition(0.5f, 1f, 25, 90f);

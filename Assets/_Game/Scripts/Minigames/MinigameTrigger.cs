@@ -14,7 +14,7 @@ namespace Game.Interactables
         {
             Debug.Log($"[Interact] Người chơi vừa click vào {gameObject.name}. Đang gọi mở {targetMinigame}...");
             
-            AudioController.Instance.PlaySFX(SoundName.ButtonClick);
+            AudioController.Instance.PlaySFX(SoundName.Minigame_Open);
             GameEvents.RaiseMinigameOpened(targetMinigame);
         }
     }

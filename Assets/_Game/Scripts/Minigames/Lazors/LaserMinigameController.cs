@@ -109,6 +109,7 @@ namespace Game.Minigames.Laser
                 Physics.Raycast(ray, out RaycastHit fireHit, 100f) &&
                 fireHit.collider == _fireButtonCollider)
             {
+                AudioController.Instance.PlaySFX(SoundName.Lazors_Gun);
                 StartCoroutine(FireLaserRoutine());
                 return;
             }
@@ -116,7 +117,10 @@ namespace Game.Minigames.Laser
             if (Physics.Raycast(ray, out RaycastHit hit, 100f, _cellLayerMask))
             {
                 if (hit.collider.TryGetComponent(out LaserCell cell))
+                {
+                    AudioController.Instance.PlaySFX(SoundName.Lazors_Rotate);
                     cell.TryRotate();
+                }
             }
         }
         #endregion
@@ -466,7 +470,7 @@ namespace Game.Minigames.Laser
                 // không phải mirror/bulb -> đi thẳng, không đổi hướng
             }
 
-            return false; // hết safety mà vẫn chưa xong -> coi như không hợp lệ
+            return false;
         }
 
         #endregion
@@ -516,11 +520,13 @@ namespace Game.Minigames.Laser
 
                 if (cell.cellType == LaserCellType.Stone)
                 {
+                    
                     failed = true;
                     break;
                 }
                 else if (cell.cellType == LaserCellType.Bulb && !cell.IsLightUp)
                 {
+                    
                     litCount++;
                     cell.IsLightUp = true;
                     if (litCount >= _bulbTotalCount && _bulbTotalCount > 0)
@@ -545,6 +551,7 @@ namespace Game.Minigames.Laser
             }
             else if (failed)
             {
+                AudioController.Instance.PlaySFX(SoundName.Laser_Block);
                 FilterController.Instance.FlashScreen(Color.gray, 0.3f);
                 Camera.main.transform.DOShakePosition(0.3f, 0.5f, 5, 45f);
                 RegisterMistake();
@@ -572,7 +579,11 @@ namespace Game.Minigames.Laser
                 _laserLine.SetPosition(i, cell.transform.position);
 
                 if (cell.cellType == LaserCellType.Bulb)
+                {
+                    AudioController.Instance.PlaySFX(SoundName.Laser_Light);
                     cell.SetLit(true);
+                }
+                    
 
                 yield return new WaitForSeconds(delay);
             }
