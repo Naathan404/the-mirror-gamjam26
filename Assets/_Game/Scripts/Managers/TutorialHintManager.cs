@@ -77,6 +77,8 @@ public class TutorialHintManager : MonoBehaviour
         GameEvents.OnViewChangeFinished += HandleViewChange;
         GameEvents.OnLightFlashed += HandleLightFlashed;
         GameEvents.OnBatteryChargeCompleted += HandleBatteryChargeCompleted;
+        GameEvents.OnMinigameOpened += HideAllHints;
+        GameEvents.OnMinigameClosed += ShowAllHints;
         GenerateHintsOnDesk();
     }
 
@@ -85,6 +87,8 @@ public class TutorialHintManager : MonoBehaviour
         GameEvents.OnViewChangeFinished -= HandleViewChange;
         GameEvents.OnLightFlashed -= HandleLightFlashed;
         GameEvents.OnBatteryChargeCompleted -= HandleBatteryChargeCompleted;
+        GameEvents.OnMinigameOpened -= HideAllHints;
+        GameEvents.OnMinigameClosed -= ShowAllHints;
     }
 
     private void HandleViewChange(View targetView)
@@ -102,6 +106,7 @@ public class TutorialHintManager : MonoBehaviour
         ClearAllHints();
 
         bool isTutorialEnabled = PlayerPrefs.GetInt("TutorialEnabled", 1) == 1;
+        if (!isTutorialEnabled || currentState == TutorialState.Completed) return;
 
         List<HintData> hintsToDisplay = new List<HintData>();
 
@@ -172,6 +177,22 @@ public class TutorialHintManager : MonoBehaviour
         foreach (var slot in deskTextSlots)
         {
             if (slot != null) slot.text = "";
+        }
+    }
+
+    private void HideAllHints(MinigameType _)
+    {
+        foreach (var slot in deskTextSlots)
+        {
+            if (slot != null) slot.gameObject.SetActive(false);
+        }
+    }
+
+    private void ShowAllHints(MinigameType _)
+    {
+        foreach (var slot in deskTextSlots)
+        {
+            if (slot != null) slot.gameObject.SetActive(true);
         }
     }
 
