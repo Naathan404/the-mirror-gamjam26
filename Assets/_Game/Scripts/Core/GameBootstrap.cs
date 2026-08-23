@@ -7,6 +7,9 @@ namespace Game.Core
 {
     public sealed class GameBootstrap : MonoBehaviour
     {
+        [SerializeField] private SoundName _soundName = SoundName.BGM_Gameplay_1;
+        [SerializeField] private bool _playBgmOnAwake = false;
+
         private void Awake()
         {
             GameEvents.ClearAllListeners();
@@ -22,6 +25,11 @@ namespace Game.Core
                 AudioController.Instance.SetMasterVolume(PlayerPrefs.GetFloat("MasterVol", 1f));
                 AudioController.Instance.SetBGMVolume(PlayerPrefs.GetFloat("BGMVol", 1f));
                 AudioController.Instance.SetSFXVolume(PlayerPrefs.GetFloat("SFXVol", 1f));
+
+                if (_playBgmOnAwake)
+                {
+                    AudioController.Instance.PlayBGM(_soundName);
+                }
             }
         }
 

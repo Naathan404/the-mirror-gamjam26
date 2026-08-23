@@ -31,15 +31,19 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 573286858752
-    m_Localized: Background music
+    m_Localized: Music
     m_Metadata:
       m_Items: []
   - m_Id: 633735168000
-    m_Localized: Sound effect
+    m_Localized: SFX
     m_Metadata:
       m_Items: []
   - m_Id: 1199416754176
     m_Localized: Language
+    m_Metadata:
+      m_Items: []
+  - m_Id: 207210632114176
+    m_Localized: Fire
     m_Metadata:
       m_Items: []
   references:

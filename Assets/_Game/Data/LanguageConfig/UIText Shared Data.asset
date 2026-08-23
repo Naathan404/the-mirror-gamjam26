@@ -39,6 +39,10 @@ MonoBehaviour:
     m_Key: lang
     m_Metadata:
       m_Items: []
+  - m_Id: 207210632114176
+    m_Key: lazors
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
