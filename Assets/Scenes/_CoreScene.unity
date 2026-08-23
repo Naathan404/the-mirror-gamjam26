@@ -8746,7 +8746,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2867164751808352424, guid: aad9a75a0a469dc4fa552e6321ed0e1b, type: 3}
       propertyPath: _maxTimerTime
-      value: 50
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 2867164751808352424, guid: aad9a75a0a469dc4fa552e6321ed0e1b, type: 3}
       propertyPath: _flashAccelCap
@@ -8790,7 +8790,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2867164751808352424, guid: aad9a75a0a469dc4fa552e6321ed0e1b, type: 3}
       propertyPath: _timeScaleViews.Array.data[2].TimeScale
-      value: 1.65
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 3655258733686364375, guid: aad9a75a0a469dc4fa552e6321ed0e1b, type: 3}
       propertyPath: m_Name

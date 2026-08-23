@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/SplashScene.unity
+    guid: bdc6cc42b96ed3c49a9c86eb8787dbe7
+  - enabled: 1
     path: Assets/Scenes/MenuScene.unity
     guid: ba09100bfb6636b438370338aa6c3f67
   - enabled: 1
@@ -16,7 +19,7 @@ EditorBuildSettings:
     guid: c874f516b0e5c4848a587e997248b21e
   - enabled: 0
     path: Assets/Scenes/HunScene.unity
-    guid: f95c19c60b33dbe44987ee38f05c5f3e
+    guid: bd60380fec880844390a4bb3d310c7d2
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: b0400e60077464347993f0bf7fd797bf, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
