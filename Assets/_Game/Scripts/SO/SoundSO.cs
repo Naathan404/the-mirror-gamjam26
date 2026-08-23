@@ -26,6 +26,22 @@ public enum SoundName
     Ending_Background,
     Menu_Whisper,
     Menu_Glitch,
+
+    Entity_Jumpscare,
+
+    Lock_Combination,
+
+    Minigame_Fail,
+    Minigame_Open,
+    Minigame_Win,
+
+    View_Change,
+
+    Lazors_Rotate,
+    Lazors_Gun,
+    Laser_Light,
+    Laser_Block,
+
     None
 }
 

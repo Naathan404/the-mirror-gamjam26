@@ -36,6 +36,15 @@ namespace Game.Managers
         [SerializeField] private Sprite _activateSprite;
         [SerializeField] private Sprite _deactivateSprite;
 
+        private string[] _loseText = new string[]
+        {
+            "Wake Up", 
+            "Return?", 
+            "Again?", 
+            "Open your eyes", 
+            "Come back?"
+        };
+
         #region Base
         private void Start()
         {
@@ -125,7 +134,7 @@ namespace Game.Managers
 
                     cvg.alpha = 0f;
                     _replayButton.gameObject.SetActive(true);
-                    cvg.DOFade(1f, 1f);
+                    cvg.DOFade(1f, 3f);
                 });
         }
 

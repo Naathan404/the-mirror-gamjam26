@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using DG.Tweening;
 using System;
+using Game.Effect;
 
 public class LightFlashEffect : MonoBehaviour
 {
@@ -31,7 +32,9 @@ public class LightFlashEffect : MonoBehaviour
         }
 
         if (flashPanel == null) return;
-
+        
+        AudioController.Instance.PlaySFX(SoundName.LightFlash);
+        FilterController.Instance.FlashVignette(Color.white, 1f, 1f);
         flashPanel.gameObject.SetActive(true);
         flashPanel.color = flashColorA;
 

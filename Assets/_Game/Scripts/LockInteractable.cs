@@ -71,6 +71,7 @@ namespace Game.Interactables
             }
             else
             {
+                AudioController.Instance.PlaySFX(SoundName.Lock_Combination);
                 transform.DOKill();
                 int r = Random.Range(-1, 1);
                 r = r != 0 ? r : 1;

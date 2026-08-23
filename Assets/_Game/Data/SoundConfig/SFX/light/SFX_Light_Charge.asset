@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: SFX_Light_Charge
   m_EditorClassIdentifier: 
   soundName: 2
-  audioClips: []
+  audioClips:
+  - {fileID: 8300000, guid: 6ad620b1e49f4ab4792765a61645e393, type: 3}
+  - {fileID: 8300000, guid: 0ce9d98c0423d2949aea6dd072f7a1b5, type: 3}
   volume: 1
   minPitch: 0.95
   maxPitch: 1.05
