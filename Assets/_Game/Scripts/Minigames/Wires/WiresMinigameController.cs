@@ -3,6 +3,7 @@ using DG.Tweening;
 using Game.Core;
 using Game.Effect;
 using Game.Minigames.Maze;
+using Game.Utils;
 using UnityEngine;
 
 namespace Game.Minigames.Wires
@@ -272,7 +273,7 @@ namespace Game.Minigames.Wires
 
             if (forcedDeductionCount == 2 && pickedColors.Count >= 4)
             {
-                var pairCandidates = Shuffle(pickedColors);
+                var pairCandidates = ShuffleHelper.Shuffle(pickedColors);
                 ColorId a = pairCandidates[0];
                 ColorId b = pairCandidates[1];
 
@@ -304,8 +305,8 @@ namespace Game.Minigames.Wires
                 }
             }
 
-            List<ColorId> leftOrders = Shuffle(pickedColors);
-            List<ColorId> rightOrders = Shuffle(pickedColors);
+            List<ColorId> leftOrders = ShuffleHelper.Shuffle(pickedColors);
+            List<ColorId> rightOrders = ShuffleHelper.Shuffle(pickedColors);
 
             _leftColorOrder.Clear();
 
@@ -350,17 +351,6 @@ namespace Game.Minigames.Wires
             }
 
             return map;
-        }
-
-        private List<T> Shuffle<T>(IEnumerable<T> source)
-        {
-            var list = new List<T>(source);
-            for (int i = list.Count - 1; i > 0; i--)
-            {
-                int j = Random.Range(0, i + 1);
-                (list[i], list[j]) = (list[j], list[i]);
-            }
-            return list;
         }
         #endregion
 

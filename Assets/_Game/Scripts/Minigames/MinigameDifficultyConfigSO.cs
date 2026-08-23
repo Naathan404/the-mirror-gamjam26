@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using Game.Core;
 using Game.Minigames.CardMatch;
 using Game.Minigames.Laser;
 using Game.Minigames.Maze;
+using Game.Minigames.Waveform;
 using Game.Minigames.WordSearch;
 using UnityEngine;
 
@@ -27,6 +29,9 @@ namespace Game.Minigames
         [Header("Lazors")]
         [SerializeField] private LaserConfigSO[] _lazorsConfigs = new LaserConfigSO[GameConstants.NUMBER_OF_MINIGAMES];
 
+        [Header("Waveforms")]
+        [SerializeField] private WaveformConfigSO[] _waveFormConfigs = new WaveformConfigSO[GameConstants.NUMBER_OF_MINIGAMES];
+
 #if UNITY_EDITOR
         [Header("Debug")]
         [SerializeField] private bool _enableDebug = false;
@@ -43,6 +48,7 @@ namespace Game.Minigames
                 var t when t == typeof(WiresConfig) => _wiresConfigs,
                 var t when t == typeof(WordSearchConfig) => _wordsConfigs,
                 var t when t == typeof(LaserConfigSO) => _lazorsConfigs,
+                var t when t == typeof(WaveformConfigSO) => _waveFormConfigs,
                 _ => null
             };
 
