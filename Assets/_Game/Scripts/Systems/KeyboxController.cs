@@ -108,6 +108,7 @@ namespace Game.Systems.Lock
             AddPasscodeDigit(minigameDigitMap, MinigameType.Wires);
             AddPasscodeDigit(minigameDigitMap, MinigameType.WordSearch);
             AddPasscodeDigit(minigameDigitMap, MinigameType.Lazors);
+            AddPasscodeDigit(minigameDigitMap, MinigameType.Waveform);
 
             if (targetPasscode.Count < GameConstants.NUMBER_OF_MINIGAMES)
             {

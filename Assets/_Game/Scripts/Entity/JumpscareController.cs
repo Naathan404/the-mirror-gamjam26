@@ -46,8 +46,10 @@ namespace Game.Entity
 
         private IEnumerator PlayJumpscare()
         {
+            yield return new WaitForSeconds(0.5f);
             _jumpscareSpriteRenderer.gameObject.SetActive(true);
             _jumpScareBackground.gameObject.SetActive(true);
+
 
             AudioController.Instance.PlaySFX(SoundName.Entity_Jumpscare);
 

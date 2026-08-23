@@ -50,6 +50,9 @@ public enum SoundName
     Key_Collect,
     Key_Unlock,
 
+    Waveform_Fail,
+    Waveform_Rotate,
+
     None
 }
 
