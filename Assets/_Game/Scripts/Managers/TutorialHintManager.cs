@@ -3,14 +3,14 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.Localization;
 using Game.Core;    
-using Game.Cameras; 
+using Game.Cameras;
 
 public enum TutorialState
 {
-    Phase1_NeedToFlash,
-    Phase2_NeedToCharge,
-    Phase3_NeedToSolve,
-    Completed
+    Phase1_NeedToFlash = 0,
+    Phase2_NeedToCharge = 1,
+    Phase3_NeedToSolve = 2,
+    Completed = 3
 }
 
 [System.Serializable]
@@ -69,7 +69,9 @@ public class TutorialHintManager : MonoBehaviour
     #region Unity Lifecycle & Events
     private void Awake()
     {
-       ClearAllHints();
+        int savedPhase = PlayerPrefs.GetInt("TutorialPhase", 0);
+        currentState = (TutorialState)savedPhase;
+        ClearAllHints();
     }
 
     private void Start()
@@ -119,6 +121,7 @@ public class TutorialHintManager : MonoBehaviour
             AddHintToList(chargerHints, hintsToDisplay);
         }
 
+        // Phase 3 hoặc random lúc Phase 1, 2
         float chance = GetMinigameChance(currentState);
         if (Random.Range(0f, 100f) < chance)
         {
@@ -145,6 +148,9 @@ public class TutorialHintManager : MonoBehaviour
         currentState = TutorialState.Completed;
 
         PlayerPrefs.SetInt("TutorialEnabled", 0);
+
+        // [CẬP NHẬT]: Đánh dấu là đã hoàn thành luôn
+        PlayerPrefs.SetInt("TutorialPhase", (int)TutorialState.Completed);
         PlayerPrefs.Save();
 
         ClearAllHints();
@@ -157,7 +163,11 @@ public class TutorialHintManager : MonoBehaviour
         if (currentState == TutorialState.Phase1_NeedToFlash)
         {
             currentState = TutorialState.Phase2_NeedToCharge;
-            Debug.Log("[Tutorial] Đã qua Phase 1, chuyển sang Phase 2 (Nhắc Sạc Pin)");
+
+            PlayerPrefs.SetInt("TutorialPhase", (int)currentState);
+            PlayerPrefs.Save();
+
+            Debug.Log("[Tutorial] Đã qua Phase 1, lưu Phase 2 vào máy");
         }
     }
 
@@ -166,7 +176,11 @@ public class TutorialHintManager : MonoBehaviour
         if (currentState == TutorialState.Phase2_NeedToCharge)
         {
             currentState = TutorialState.Phase3_NeedToSolve;
-            Debug.Log("[Tutorial] Đã qua Phase 2, chuyển sang Phase 3 (Chỉ nhắc Minigame)");
+
+            PlayerPrefs.SetInt("TutorialPhase", (int)currentState);
+            PlayerPrefs.Save();
+
+            Debug.Log("[Tutorial] Đã qua Phase 2, lưu Phase 3 vào máy");
         }
     }
     #endregion

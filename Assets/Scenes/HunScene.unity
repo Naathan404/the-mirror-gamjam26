@@ -8201,6 +8201,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 100515293574192309, guid: f4ee2f735c977be47b1d8e4bafb043b4, type: 3}
+      propertyPath: phase3Config.minigameHintChance
+      value: 70
+      objectReference: {fileID: 0}
     - target: {fileID: 5606621176245049655, guid: f4ee2f735c977be47b1d8e4bafb043b4, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.8445215
