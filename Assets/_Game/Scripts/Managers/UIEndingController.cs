@@ -117,6 +117,7 @@ namespace Game.UI
                             AudioController.Instance.PlaySFX(SoundName.Entity_ChangeState);
                         }
 
+                        AudioController.Instance.PlaySFX(SoundName.Entity_Jumpscare);
                         _jumpscareFlashImage.gameObject.SetActive(true);
                         RectTransform monsterRect = _jumpscareFlashImage.rectTransform;
                         monsterRect.localScale = Vector3.one;

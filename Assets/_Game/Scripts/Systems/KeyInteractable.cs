@@ -25,6 +25,7 @@ namespace Game.Interactables
             if (isCollected) return;
             isCollected = true;
 
+            AudioController.Instance.PlaySFX(SoundName.Key_Collect);
             // Khóa không cho bấm đúp
             GetComponent<Collider>().enabled = false;
 
