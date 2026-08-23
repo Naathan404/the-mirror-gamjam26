@@ -15,6 +15,18 @@ MonoBehaviour:
   m_GroupName: Localization-Assets-English (en)
   m_GUID: 620268293e8707c42afc1d24b0070dfa
   m_SerializeEntries:
+  - m_GUID: 0c79c86a0b584c44094354bfc7f65b57
+    m_Address: tutor_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: aca9fad300de42a468d9a744395385a6
+    m_Address: title_tutor_vi
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d4924c5a8e4ba174c8e7b49ab5a7d6e7
     m_Address: title_game_en
     m_ReadOnly: 1

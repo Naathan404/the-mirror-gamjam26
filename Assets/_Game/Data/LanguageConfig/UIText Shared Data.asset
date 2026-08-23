@@ -43,6 +43,10 @@ MonoBehaviour:
     m_Key: tut
     m_Metadata:
       m_Items: []
+  - m_Id: 216072604041216
+    m_Key: tut_menu
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
