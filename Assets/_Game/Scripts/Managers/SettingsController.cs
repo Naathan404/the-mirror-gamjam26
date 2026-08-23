@@ -20,6 +20,8 @@ namespace Game.UI
         [Space(10)]
         [SerializeField] private Button _btnVietnamese;
         [SerializeField] private UIButton _uiBtnVietnamese; // Script hiệu ứng của nút VN
+        [Header("Gameplay Settings")]
+        [SerializeField] private Toggle _tutorialToggle;
 
         private int _currentLanguageId = 0;
 
@@ -36,6 +38,12 @@ namespace Game.UI
 
             _currentLanguageId = PlayerPrefs.GetInt("Language", 0);
             UpdateLanguageUI();
+
+            if (_tutorialToggle != null)
+            {
+                // Nếu ổ cứng lưu là 1 thì On, 0 thì Off
+                _tutorialToggle.isOn = PlayerPrefs.GetInt("TutorialEnabled", 1) == 1;
+            }
         }
 
         private void Start()
@@ -46,6 +54,9 @@ namespace Game.UI
 
             if (_btnEnglish != null) _btnEnglish.onClick.AddListener(() => SetLanguage(0));
             if (_btnVietnamese != null) _btnVietnamese.onClick.AddListener(() => SetLanguage(1));
+
+            if (_tutorialToggle != null)
+                _tutorialToggle.onValueChanged.AddListener(SetTutorialState);
         }
 
         public void CloseSettings()
@@ -124,6 +135,16 @@ namespace Game.UI
             {
                 FilterController.Instance.PlayEyeOpenedVignetteEffect(blinkDuration);
             }
+        }
+
+        private void SetTutorialState(bool isOn)
+        {
+            // Lưu xuống hệ thống: 1 là Bật, 0 là Tắt
+            PlayerPrefs.SetInt("TutorialEnabled", isOn ? 1 : 0);
+            PlayerPrefs.Save();
+
+            if (AudioController.Instance != null)
+                AudioController.Instance.PlaySFX(SoundName.ButtonClick);
         }
     }
 }

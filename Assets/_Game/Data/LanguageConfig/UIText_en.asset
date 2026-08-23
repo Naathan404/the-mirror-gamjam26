@@ -42,6 +42,10 @@ MonoBehaviour:
     m_Localized: Language
     m_Metadata:
       m_Items: []
+  - m_Id: 201440627736576
+    m_Localized: Tutorial Hint
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

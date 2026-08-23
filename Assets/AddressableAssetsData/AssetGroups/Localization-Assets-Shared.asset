@@ -15,6 +15,11 @@ MonoBehaviour:
   m_GroupName: Localization-Assets-Shared
   m_GUID: 56feebcffaedbd044aca4ecc1e1e07f3
   m_SerializeEntries:
+  - m_GUID: 64c68c4648b023e4887d0975c44ba371
+    m_Address: Assets/_Game/Data/LanguageConfig/Hint Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 73dbb30b40692fe4abffa1f10a8d53ed
     m_Address: Assets/_Game/Data/TextConfigs/Asset Shared Data.asset
     m_ReadOnly: 1

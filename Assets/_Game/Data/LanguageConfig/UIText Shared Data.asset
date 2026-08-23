@@ -39,6 +39,10 @@ MonoBehaviour:
     m_Key: lang
     m_Metadata:
       m_Items: []
+  - m_Id: 201440627736576
+    m_Key: tut
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
