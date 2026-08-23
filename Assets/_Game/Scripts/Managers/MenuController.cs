@@ -32,6 +32,7 @@ namespace Game.Menu
 
         private void Start()
         {
+            _settingsPanel?.SetActive(false);
             SetShadow(false, 0.4f); // Khởi đầu là bóng người, mờ 0.4
         }
 
@@ -126,6 +127,26 @@ namespace Game.Menu
             if (_isStarting || _settingsPanel == null) return;
             if (AudioController.Instance != null) AudioController.Instance.PlaySFX(SoundName.ButtonClick);
             _settingsPanel.SetActive(!_settingsPanel.activeSelf);
+            if (_menuCanvasGroup != null)
+            {
+                _menuCanvasGroup.alpha = 0f;
+                _menuCanvasGroup.interactable = false;
+                _menuCanvasGroup.blocksRaycasts = false;
+            }
+        }
+
+        public void OnCloseSettings()
+        {
+            if (_isStarting || _settingsPanel == null) return;
+
+            _settingsPanel.SetActive(false);
+
+            if (_menuCanvasGroup != null)
+            {
+                _menuCanvasGroup.alpha = 1f;
+                _menuCanvasGroup.interactable = true;
+                _menuCanvasGroup.blocksRaycasts = true;
+            }
         }
 
         public void OnClickQuit()

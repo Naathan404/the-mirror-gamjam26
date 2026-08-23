@@ -691,7 +691,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1000, y: 500}
+  m_SizeDelta: {x: 1200, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3831074352716969378
 CanvasRenderer:
@@ -881,6 +881,7 @@ GameObject:
   - component: {fileID: 2467339325855008065}
   - component: {fileID: 6463248364481084248}
   - component: {fileID: 1674698819091612250}
+  - component: {fileID: 1184070517806157334}
   m_Layer: 5
   m_Name: MirrorViewButton
   m_TagString: Untagged
@@ -1019,6 +1020,18 @@ MonoBehaviour:
   _punchDuration: 0.2
   _isHighLight: 0
   _isViewButton: 1
+--- !u!225 &1184070517806157334
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2159217858694958798}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &2281543200206092285
 GameObject:
   m_ObjectHideFlags: 0
@@ -2201,6 +2214,7 @@ GameObject:
   - component: {fileID: 7649236010301201772}
   - component: {fileID: 4927381620869435118}
   - component: {fileID: 8437976744797217939}
+  - component: {fileID: 3853700410608868970}
   m_Layer: 5
   m_Name: DeskViewButton
   m_TagString: Untagged
@@ -2339,6 +2353,18 @@ MonoBehaviour:
   _punchDuration: 0.2
   _isHighLight: 0
   _isViewButton: 1
+--- !u!225 &3853700410608868970
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5986589251725787530}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &6067104751391815935
 GameObject:
   m_ObjectHideFlags: 0
@@ -2350,6 +2376,7 @@ GameObject:
   - component: {fileID: 176254722898307688}
   - component: {fileID: 6185791864968093289}
   - component: {fileID: 9149162313622534907}
+  - component: {fileID: 6396174878238732375}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -2476,6 +2503,46 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &6396174878238732375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6067104751391815935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56eb0353ae6e5124bb35b17aff880f16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_StringReference:
+    m_TableReference:
+      m_TableCollectionName: GUID:c52f20b2e5342894b86d213bcc04af00
+    m_TableEntryReference:
+      m_KeyId: 1084278915072
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  m_FormatArguments: []
+  m_UpdateString:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 9149162313622534907}
+        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+        m_MethodName: set_text
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
+  references:
+    version: 2
+    RefIds: []
 --- !u!1 &7220615021116287637
 GameObject:
   m_ObjectHideFlags: 0
@@ -2717,6 +2784,7 @@ GameObject:
   - component: {fileID: 5419948993957219101}
   - component: {fileID: 6929747922024945875}
   - component: {fileID: 3385889247152761277}
+  - component: {fileID: 8225871874625737172}
   m_Layer: 5
   m_Name: BehindViewButton
   m_TagString: Untagged
@@ -2854,6 +2922,18 @@ MonoBehaviour:
   _punchDuration: 0.2
   _isHighLight: 0
   _isViewButton: 1
+--- !u!225 &8225871874625737172
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7795957816378124947}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &7905353564415845858
 GameObject:
   m_ObjectHideFlags: 0
@@ -2942,6 +3022,7 @@ GameObject:
   - component: {fileID: 1252314217524589987}
   - component: {fileID: 2871843807468921088}
   - component: {fileID: 7010283056908714596}
+  - component: {fileID: 7225361068091106652}
   m_Layer: 5
   m_Name: MirrorViewButton
   m_TagString: Untagged
@@ -3080,6 +3161,18 @@ MonoBehaviour:
   _punchDuration: 0.2
   _isHighLight: 0
   _isViewButton: 1
+--- !u!225 &7225361068091106652
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8477148172380271931}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &8867233321391540636
 GameObject:
   m_ObjectHideFlags: 0
@@ -3146,11 +3239,55 @@ MonoBehaviour:
   _loseCanvasGroup: {fileID: 3650222676488754409}
   _loseAppearDuration: 3
   _replayButton: {fileID: 2129870084337179018}
+  _loseTexts:
+  - m_TableReference:
+      m_TableCollectionName: GUID:c52f20b2e5342894b86d213bcc04af00
+    m_TableEntryReference:
+      m_KeyId: 3986850529280
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  - m_TableReference:
+      m_TableCollectionName: GUID:c52f20b2e5342894b86d213bcc04af00
+    m_TableEntryReference:
+      m_KeyId: 4078949056512
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  - m_TableReference:
+      m_TableCollectionName: GUID:c52f20b2e5342894b86d213bcc04af00
+    m_TableEntryReference:
+      m_KeyId: 4117930917888
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  - m_TableReference:
+      m_TableCollectionName: GUID:c52f20b2e5342894b86d213bcc04af00
+    m_TableEntryReference:
+      m_KeyId: 4131814064128
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  - m_TableReference:
+      m_TableCollectionName: GUID:c52f20b2e5342894b86d213bcc04af00
+    m_TableEntryReference:
+      m_KeyId: 4146255052800
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   _keyUIGroup: {fileID: 8946788397786932703}
   _keyUIAppearDuration: 0.5
   _lightButton: {fileID: 698435439847646883}
   _activateSprite: {fileID: -5485327256500454033, guid: e46b005df0aa675478ddbbd1eac9587c, type: 3}
   _deactivateSprite: {fileID: -6929585902386205631, guid: b9faa1c8ffcb73c4e8553bbadfd9a153, type: 3}
+  references:
+    version: 2
+    RefIds: []
 --- !u!223 &9824840272247915
 Canvas:
   m_ObjectHideFlags: 0
@@ -3343,6 +3480,7 @@ GameObject:
   - component: {fileID: 1901412597528309963}
   - component: {fileID: 698435439847646883}
   - component: {fileID: 120748388099600914}
+  - component: {fileID: 5057376469950390477}
   m_Layer: 5
   m_Name: LightFlashButton
   m_TagString: Untagged
@@ -3479,6 +3617,18 @@ MonoBehaviour:
   _punchDuration: 0.2
   _isHighLight: 0
   _isViewButton: 0
+--- !u!225 &5057376469950390477
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9128569197187941132}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &9204361822595892414
 GameObject:
   m_ObjectHideFlags: 0

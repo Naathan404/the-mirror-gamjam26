@@ -6,6 +6,7 @@ using Game.Utils;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Localization; // [THÊM] Thư viện Localization
 
 namespace Game.Managers
 {
@@ -21,6 +22,10 @@ namespace Game.Managers
         [SerializeField] private CanvasGroup _loseCanvasGroup;
         [SerializeField] private float _loseAppearDuration = 1f;
         [SerializeField] private RectTransform _replayButton;
+
+        [Header("Lose Text Config")]
+        [Tooltip("Danh sách các câu ngẫu nhiên khi thua. Nhấn + để thêm, rồi chọn Table/Key tương ứng.")]
+        [SerializeField] private LocalizedString[] _loseTexts;
 
         [Header("Rewards")]
         [SerializeField] private CanvasGroup _keyUIGroup;
@@ -65,7 +70,6 @@ namespace Game.Managers
 
             ActivateView(View.Mirror);
         }
-
 #pragma warning disable CS0114 // Member hides inherited member; missing override keyword
         private void OnDestroy()
 #pragma warning restore CS0114 // Member hides inherited member; missing override keyword
@@ -118,7 +122,16 @@ namespace Game.Managers
                 .OnComplete(() =>
                 {
                     _replayButton.TryGetComponent<CanvasGroup>(out var cvg);
-                    _replayButton.GetComponentInChildren<TextMeshProUGUI>().text = _loseText[Random.Range(0, _loseText.Length)];
+
+                    string randomText = "";
+                    if (_loseTexts != null && _loseTexts.Length > 0)
+                    {
+                        int randomIndex = Random.Range(0, _loseTexts.Length);
+                        randomText = _loseTexts[randomIndex].GetLocalizedString();
+                    }
+
+                    _replayButton.GetComponentInChildren<TextMeshProUGUI>().text = randomText;
+
                     cvg.alpha = 0f;
                     _replayButton.gameObject.SetActive(true);
                     cvg.DOFade(1f, 3f);

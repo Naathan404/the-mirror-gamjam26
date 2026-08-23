@@ -1,14 +1,17 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Localization;
 
 namespace Game.Configs
 {
     [System.Serializable]
     public class EndingLine
     {
-        [TextArea(2, 3)]
-        public string text;
+        [Header("Nội dung thoại")]
+        [Tooltip("Chọn Table và Key cho câu thoại này")]
+        public LocalizedString localizedText;
 
+        [Header("Cấu hình hiệu ứng")]
         [Tooltip("Âm thanh phát ra cùng lúc hiện câu thoại (Ví dụ: Tiếng mở cửa, kính vỡ...)")]
         public SoundName soundName = SoundName.None;
 
@@ -28,7 +31,7 @@ namespace Game.Configs
         [Header("Kịch bản WIN (The Loop)")]
         public List<EndingLine> endingLines; // Danh sách vô hạn các câu thoại
 
-        [Header("UI Text")]
-        public string loopButtonText = "Tỉnh dậy... một lần nữa";
+        [Header("UI Text (Nút chơi lại)")]
+        public LocalizedString localizedLoopButtonText; // Thay cho string cũ
     }
 }

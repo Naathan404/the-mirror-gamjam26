@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Script_vi-VN
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: vi-VN
+  m_SharedData: {fileID: 11400000, guid: c52f20b2e5342894b86d213bcc04af00, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 111590457344
+    m_Localized: "C\xE1nh c\u1EEDa \u0111\xE3 m\u1EDF..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 331837554688
+    m_Localized: "...nh\u01B0ng sao l\u1EA1i kh\xF4ng c\xF3 l\u1ED1i tho\xE1t?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 420664524800
+    m_Localized: "B\u1EDFi v\xEC c\u0103n ph\xF2ng n\xE0y..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 493028851712
+    m_Localized: "...\u0111\u01B0\u1EE3c t\u1EA1o ra ch\u1EC9 \u0111\u1EC3 giam M\u1ED8T
+      th\u1EE9 duy nh\u1EA5t"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 525417267200
+    m_Localized: "NG\u01AF\u01A0I"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 889147310080
+    m_Localized: "Th\u1EE9c T\u1EC8NH l\u1EA7n n\u1EEFa"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1084278915072
+    m_Localized: "hay T\u1EEB B\u1ECF?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3986850529280
+    m_Localized: "Th\u1EE9c t\u1EC9nh"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4078949056512
+    m_Localized: "Tr\u1EDF l\u1EA1i"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4117930917888
+    m_Localized: "L\u1EA7n n\u1EEFa?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4131814064128
+    m_Localized: "M\u1EDF m\u1EAFt ra"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4146255052800
+    m_Localized: "Quay v\u1EC1"
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

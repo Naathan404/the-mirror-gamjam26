@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Localization-Assets-Vietnamese (Vietnam) (vi-VN)
+  m_EditorClassIdentifier: 
+  m_GroupName: Localization-Assets-Vietnamese (Vietnam) (vi-VN)
+  m_GUID: 7afc9e17fec6103458bd82efe7b3e481
+  m_SerializeEntries:
+  - m_GUID: 25963e78b2613c446a258c1b6884af15
+    m_Address: title_setting_vi
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-vi-VN
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7c2338990b701144dad0d065e6941b1b
+    m_Address: title_game_vi
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-vi-VN
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 1
+  m_Settings: {fileID: 11400000, guid: f3531a7cde550b8428c62d74097948c3, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 76f5af77b1431824ea5a4d6c87b7c7a1, type: 2}
+    - {fileID: 11400000, guid: e702a806a9a62f647ab4b9481683fe64, type: 2}
