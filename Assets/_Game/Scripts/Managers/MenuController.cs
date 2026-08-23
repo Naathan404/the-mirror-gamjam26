@@ -24,9 +24,6 @@ namespace Game.Menu
         [Tooltip("Thời gian hiệu ứng nhắm mắt kéo xuống")]
         [SerializeField] private float _eyeCloseDuration = 1f;
 
-        [Header("Scene Settings")]
-        [SerializeField] private string _gameplaySceneName = "GameplayScene";
-
         private bool _isStarting = false;
         private Sequence _glitchSequence;
 
