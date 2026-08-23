@@ -132,6 +132,8 @@ namespace Game.Minigames.Waveform
         {
             if (_dials == null || _dials.Length != _config.WaveComponentCount * 2)
                 SpawnDials();
+            else
+                RebindDialListeners();
 
             _target = WaveformGenerator.Generate(_config);
             _player = new SineComponent[_config.WaveComponentCount];

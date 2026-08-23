@@ -118,7 +118,6 @@ namespace Game.Minigames.Laser
             {
                 if (hit.collider.TryGetComponent(out LaserCell cell))
                 {
-                    AudioController.Instance.PlaySFX(SoundName.Lazors_Rotate);
                     cell.TryRotate();
                 }
             }
