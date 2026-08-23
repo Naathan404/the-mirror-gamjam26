@@ -67,11 +67,12 @@ namespace Game.Minigames.Laser
                     ? MirrorOrientation.Backslash
                     : MirrorOrientation.Slash;
 
+            AudioController.Instance.PlaySFX(SoundName.Lazors_Rotate);
             _isRotating = true;
             transform.DOLocalRotate(new Vector3(0, 0, GetVisualAngle()), 0.15f)
                 .SetEase(Ease.OutBack)
                 .OnComplete(() => _isRotating = false);
-
+            
             OnCellRotated?.Invoke(this);
         }
         #endregion
