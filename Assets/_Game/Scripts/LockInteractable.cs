@@ -61,18 +61,17 @@ namespace Game.Interactables
             // (Nếu chưa có chìa, GameManager có thể phát âm thanh "Cạch" báo lỗi khóa)
             GameEvents.RaiseDoorInteracted();
 
-            
-
             // Nếu đã có chìa, thu nhỏ lại ngay lập tức và cấm hover tiếp
             if (GameManager.Instance.HasRoomKey)
             {
+                AudioController.Instance.PlaySFX(SoundName.Key_Unlock);
                 transform.DOScale(new Vector2(0f, transform.localScale.y), _hoverDuration).OnComplete(() => gameObject.SetActive(false));
-                
             }
             else
             {
                 AudioController.Instance.PlaySFX(SoundName.Lock_Combination);
                 transform.DOKill();
+                transform.rotation = Quaternion.identity;
                 int r = Random.Range(-1, 1);
                 r = r != 0 ? r : 1;
                 transform.DOPunchRotation(new Vector3(0f, 0, r * 15f), 0.2f);

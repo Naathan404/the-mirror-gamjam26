@@ -42,6 +42,14 @@ public enum SoundName
     Laser_Light,
     Laser_Block,
 
+
+    BGM_Gameplay_1,
+    BGM_Gameplay_2,
+    BGM_Gameplay_3,
+
+    Key_Collect,
+    Key_Unlock,
+
     None
 }
 
