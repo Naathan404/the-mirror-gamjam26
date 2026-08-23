@@ -53,6 +53,12 @@ public enum SoundName
     Waveform_Fail,
     Waveform_Rotate,
 
+    Ambient_DogBark,
+    Ambient_Rat,
+    Ambient_FallObject,
+    Ambient_Door,
+    Ambient_Glitch,
+
     None
 }
 

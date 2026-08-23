@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e171e760773a4d488f7f6f6438e3dd4, type: 3}
   m_Name: SFX_Door
   m_EditorClassIdentifier: 
-  soundName: 0
+  soundName: 42
   audioClips:
   - {fileID: 8300000, guid: 351f64cb2e6d06c45a3828bdb5b3ad8b, type: 3}
   - {fileID: 8300000, guid: 17fca1d94ec09854897beef5cd76e18c, type: 3}

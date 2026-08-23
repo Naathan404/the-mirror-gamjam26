@@ -16,6 +16,7 @@ namespace Game.Managers
         [SerializeField] private GameObject _mirrorPanel;
         [SerializeField] private GameObject _deskPanel;
         [SerializeField] private GameObject _behindPanel;
+        [SerializeField] private GameObject _inventoryPanel;
 
         [Header("Lose Panel")]
         [SerializeField] private GameObject _losePanel;
@@ -51,6 +52,7 @@ namespace Game.Managers
             GameEvents.OnViewChangeStarted += HideAllPanels;
             GameEvents.OnViewChangeFinished += ActivateView;
             GameEvents.OnJumpscareTriggered += HideAllPanels;
+            GameEvents.OnJumpscareTriggered += HideInventoryPanel;
             GameEvents.OnGameLost += ShowLosePanel;
             GameEvents.OnKeyCollected += ShowKeyOnUI;
             GameEvents.OnDoorInteracted += HideKeyOnUI;
@@ -77,6 +79,7 @@ namespace Game.Managers
             GameEvents.OnViewChangeStarted -= HideAllPanels;
             GameEvents.OnViewChangeFinished -= ActivateView;
             GameEvents.OnJumpscareTriggered -= HideAllPanels;
+            GameEvents.OnJumpscareTriggered -= HideInventoryPanel;
             GameEvents.OnGameLost -= ShowLosePanel;
             GameEvents.OnKeyCollected -= ShowKeyOnUI;
             GameEvents.OnDoorInteracted -= HideKeyOnUI;
@@ -92,6 +95,11 @@ namespace Game.Managers
             if (_mirrorPanel != null) _mirrorPanel.gameObject.SetActive(false);
             if (_deskPanel != null) _deskPanel.gameObject.SetActive(false);
             if (_behindPanel != null) _behindPanel.gameObject.SetActive(false);
+        }
+
+        private void HideInventoryPanel()
+        {
+            if (_inventoryPanel != null) _inventoryPanel.gameObject.SetActive(false);
         }
 
         private void ActivateView(View view)

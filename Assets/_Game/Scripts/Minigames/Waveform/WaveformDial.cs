@@ -1,4 +1,5 @@
 using DG.Tweening;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Game.Minigames.Waveform
@@ -24,6 +25,7 @@ namespace Game.Minigames.Waveform
         {
             _config = config;
             _currentValue = initValue;
+            UpdateKnobVisual();
         }
 
         public void SetIndex(int waveIndex, ParamType type)
