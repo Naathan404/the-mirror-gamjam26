@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using Game.Effect;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Game.Minigames.Maze
 {
@@ -17,12 +18,26 @@ namespace Game.Minigames.Maze
 
         [Tooltip("Prefab của thực thể (Có thể dùng lại MazePlayer nhưng đổi màu đen/đỏ)")]
         public MazePlayer entityPrefab;
+        [Header("Nút điều khiển UI")]
+        public Button btnUp;
+        public Button btnDown;
+        public Button btnLeft;
+        public Button btnRight;
 
         private MazeData currentMazeData;
         private MazePlayer currentPlayerInstance;
         private List<MazePlayer> activeEntities = new List<MazePlayer>();
 
         private bool isShaking = false; // Khóa input khi đang bị rung lắc do thua
+
+        protected override void Start()
+        {
+            base.Start();
+            if (btnUp != null) btnUp.onClick.AddListener(ExecuteMoveUp);
+            if (btnDown != null) btnDown.onClick.AddListener(ExecuteMoveDown);
+            if (btnLeft != null) btnLeft.onClick.AddListener(ExecuteMoveLeft);
+            if (btnRight != null) btnRight.onClick.AddListener(ExecuteMoveRight);
+        }
 
         // 1. CHẠY KHI GAME MỞ LÊN (HOẶC RESET BẢN ĐỒ MỚI)
         protected override void OnGameStart()
@@ -104,19 +119,23 @@ namespace Game.Minigames.Maze
         // 4. LOGIC RIÊNG: ĐIỀU KHIỂN & KIỂM TRA VA CHẠM
         private void Update()
         {
-            if (!isPlaying || !isFocused || currentPlayerInstance == null || isShaking)
-                return;
+            if (!CanReceiveInput()) return;
 
-            // Chặn input nếu Player hoặc BẤT KỲ Thực thể nào đang di chuyển
-            if (currentPlayerInstance.IsMoving) return;
-            foreach (var ent in activeEntities) if (ent.IsMoving) return;
-
-            if (Input.GetKeyDown(KeyCode.W)) TryMove(PathDirection.Up, new Vector2Int(0, 1));
-            else if (Input.GetKeyDown(KeyCode.S)) TryMove(PathDirection.Down, new Vector2Int(0, -1));
-            else if (Input.GetKeyDown(KeyCode.A)) TryMove(PathDirection.Left, new Vector2Int(-1, 0));
-            else if (Input.GetKeyDown(KeyCode.D)) TryMove(PathDirection.Right, new Vector2Int(1, 0));
+            if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) ExecuteMoveUp();
+            else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) ExecuteMoveDown();
+            else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) ExecuteMoveLeft();
+            else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) ExecuteMoveRight();
         }
+        private bool CanReceiveInput()
+        {
+            if (!isPlaying || !isFocused || currentPlayerInstance == null || isShaking)
+                return false;
 
+            if (currentPlayerInstance.IsMoving) return false;
+            foreach (var ent in activeEntities) if (ent.IsMoving) return false;
+
+            return true;
+        }
         private void TryMove(PathDirection playerDir, Vector2Int playerOffset)
         {
             Vector2Int playerOldPos = currentPlayerInstance.CurrentGridPos;
@@ -222,6 +241,43 @@ namespace Game.Minigames.Maze
             }
         }
 
+        public void ExecuteMoveUp()
+        {
+            if (!CanReceiveInput()) return;
+            TryMove(PathDirection.Up, new Vector2Int(0, 1));
+            AnimateButtonPress(btnUp);
+        }
+
+        public void ExecuteMoveDown()
+        {
+            if (!CanReceiveInput()) return;
+            TryMove(PathDirection.Down, new Vector2Int(0, -1));
+            AnimateButtonPress(btnDown);
+        }
+
+        public void ExecuteMoveLeft()
+        {
+            if (!CanReceiveInput()) return;
+            TryMove(PathDirection.Left, new Vector2Int(-1, 0));
+            AnimateButtonPress(btnLeft);
+        }
+
+        public void ExecuteMoveRight()
+        {
+            if (!CanReceiveInput()) return;
+            TryMove(PathDirection.Right, new Vector2Int(1, 0));
+            AnimateButtonPress(btnRight);
+        }
+
+        private void AnimateButtonPress(Button btn)
+        {
+            if (btn == null) return;
+
+            btn.transform.DOKill();
+            btn.transform.localScale = Vector3.one;
+
+            btn.transform.DOPunchScale(new Vector3(-0.2f, -0.2f, 0f), 0.15f, 1);
+        }
         private PathDirection GetOppositeDirection(PathDirection dir)
         {
             if (dir == PathDirection.Up) return PathDirection.Down;
