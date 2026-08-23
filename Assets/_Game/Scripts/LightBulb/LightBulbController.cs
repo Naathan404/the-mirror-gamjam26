@@ -25,7 +25,7 @@ public class LightBulbController : MonoBehaviour
     private bool _isCharging = false;
     private Coroutine _chargingRoutine;
 
-    public bool IsBatteryFull => _batteryChargingProcess >= _batteryLife - 0.001f;
+    public bool IsBatteryFull => _batteryChargingProcess >= _batteryLife - 0.005f;
 
     public event Action<float> OnBatteryProgressChanged;
 
@@ -104,6 +104,7 @@ public class LightBulbController : MonoBehaviour
         _batteryChargingProcess = 0f;
 
         GameEvents.RaiseBatteryChargeCompleted();
+        AudioController.Instance.PlaySFX(SoundName.ChargeCompleted);
 
         _chargingRoutine = null;
     }

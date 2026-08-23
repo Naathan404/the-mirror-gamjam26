@@ -34,10 +34,10 @@ namespace Game.Managers
         private string[] _loseText = new string[]
         {
             "Wake Up", 
-            "Return", 
+            "Return?", 
             "Again?", 
             "Open your eyes", 
-            "Come back"
+            "Come back?"
         };
 
         #region Base
@@ -121,7 +121,7 @@ namespace Game.Managers
                     _replayButton.GetComponentInChildren<TextMeshProUGUI>().text = _loseText[Random.Range(0, _loseText.Length)];
                     cvg.alpha = 0f;
                     _replayButton.gameObject.SetActive(true);
-                    cvg.DOFade(1f, 1f);
+                    cvg.DOFade(1f, 3f);
                 });
         }
 
