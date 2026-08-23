@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Hint_vi-VN
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: vi-VN
+  m_SharedData: {fileID: 11400000, guid: 64c68c4648b023e4887d0975c44ba371, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 5881413632
+    m_Localized: "Sau l\u01B0ng... N\xD3 \u0111ang nh\xECn"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 407171448832
+    m_Localized: "S\xE1ng l\xE0 S\u1ED1ng"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1098413719552
+    m_Localized: "Quay l\u1EA1i! B\xF3ng t\u1ED1i \u0111ang nu\u1ED1t ch\u1EEDng..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 544497156096
+    m_Localized: "B\u1EADt \u0111\xE8nn l\xEAn"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1628666019840
+    m_Localized: "Kh\xF4ng th\u1EC3 tr\u1ED1n d\u01B0\u1EDBi b\xE0n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1922464432128
+    m_Localized: "N\u1EA1p \u0111i\u1EC7n NGAY! Tr\u01B0\u1EDBc khi qu\xE1 mu\u1ED9n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2207630966784
+    m_Localized: "\u0110\xE8n \u0111\xE3 CH\u1EBET... Ng\u01B0\u01A1i c\u0169ng v\u1EADt!
+      S\u1EA1c \u0111i"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2589337796608
+    m_Localized: "C\u1EA7n ch\xFAt n\u0103ng l\u01B0\u1EE3ng... N\u1EA1p \u0111i"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4531359268864
+    m_Localized: "Ch\xECa kh\xF3a trong c\xE1i h\u1ED9p"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4780492537856
+    m_Localized: "M\u1ED9t c\u1EE5c gi\u1EA5y... m\u1ED9t m\xE3 s\u1ED1"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5106750668800
+    m_Localized: "KH\xD3A kh\xF4ng th\u1EC3 th\u1EA5y trong g\u01B0\u01A1ng"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5412100194304
+    m_Localized: "Nh\u1EEFng h\xECnh d\u1EA1ng... m\xE0u"
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

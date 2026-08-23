@@ -23,6 +23,14 @@ MonoBehaviour:
     m_Key: title_setting
     m_Metadata:
       m_Items: []
+  - m_Id: 218417073176576
+    m_Key: title_tutor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 222487926226944
+    m_Key: tutor
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items:
     - rid: 2427472599298867511
@@ -44,6 +52,14 @@ MonoBehaviour:
           - en
           - vi-VN
         - m_KeyId: 9547595857920
+          m_TableCodes:
+          - en
+          - vi-VN
+        - m_KeyId: 218417073176576
+          m_TableCodes:
+          - en
+          - vi-VN
+        - m_KeyId: 222487926226944
           m_TableCodes:
           - en
           - vi-VN

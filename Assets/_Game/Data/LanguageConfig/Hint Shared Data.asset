@@ -10,55 +10,67 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
-  m_Name: UIText Shared Data
+  m_Name: Hint Shared Data
   m_EditorClassIdentifier: 
-  m_TableCollectionName: UIText
-  m_TableCollectionNameGuidString: c7c3f1b4621e45443a6ca63b1e3d5938
+  m_TableCollectionName: Hint
+  m_TableCollectionNameGuidString: 64c68c4648b023e4887d0975c44ba371
   m_Entries:
-  - m_Id: 66090647552
-    m_Key: setting
+  - m_Id: 5881413632
+    m_Key: light_watch
     m_Metadata:
       m_Items: []
-  - m_Id: 223620317184
-    m_Key: exit
+  - m_Id: 407171448832
+    m_Key: light_life
     m_Metadata:
       m_Items: []
-  - m_Id: 459700912128
-    m_Key: master
+  - m_Id: 544497156096
+    m_Key: light_flash
     m_Metadata:
       m_Items: []
-  - m_Id: 573286858752
-    m_Key: bgm
+  - m_Id: 1098413719552
+    m_Key: light_dark
     m_Metadata:
       m_Items: []
-  - m_Id: 633735168000
-    m_Key: sfx
+  - m_Id: 1628666019840
+    m_Key: light_table
     m_Metadata:
       m_Items: []
-  - m_Id: 1199416754176
-    m_Key: lang
+  - m_Id: 1922464432128
+    m_Key: charge_late
     m_Metadata:
       m_Items: []
-  - m_Id: 201440627736576
-    m_Key: tut
+  - m_Id: 2207630966784
+    m_Key: charge_dead
     m_Metadata:
       m_Items: []
-  - m_Id: 216072604041216
-    m_Key: tut_menu
+  - m_Id: 2589337796608
+    m_Key: charge_power
     m_Metadata:
       m_Items: []
-  - m_Id: 207210632114176
-    m_Key: lazors
+  - m_Id: 4531359268864
+    m_Key: game_key
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4780492537856
+    m_Key: game_paper
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5106750668800
+    m_Key: game_mirror
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5412100194304
+    m_Key: game_shape
     m_Metadata:
       m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
-    rid: 2427472599298867506
+    rid: 2427472611195486312
   references:
     version: 2
     RefIds:
-    - rid: 2427472599298867506
+    - rid: 2427472611195486312
       type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
       data:
-        m_CustomEpoch: 1787425321348
+        m_CustomEpoch: 1787469748663

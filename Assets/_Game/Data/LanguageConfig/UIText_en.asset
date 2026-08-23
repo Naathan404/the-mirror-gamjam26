@@ -35,11 +35,19 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 633735168000
-    m_Localized: SFX
+    m_Localized: Sound Effect
     m_Metadata:
       m_Items: []
   - m_Id: 1199416754176
     m_Localized: Language
+    m_Metadata:
+      m_Items: []
+  - m_Id: 201440627736576
+    m_Localized: Tutorial Hint
+    m_Metadata:
+      m_Items: []
+  - m_Id: 216072604041216
+    m_Localized: Tutorial
     m_Metadata:
       m_Items: []
   - m_Id: 207210632114176
