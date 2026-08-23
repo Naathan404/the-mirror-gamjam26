@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80728c4221ad66e478508f5f157116c7, type: 3}
   m_Name: WiresConfig_3
   m_EditorClassIdentifier: 
-  _wireCount: 22
+  _wireCount: 21
   _hiddenCount: 6
   _forcedDeductionCount: 2
   _wireColors:
