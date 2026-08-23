@@ -1,5 +1,6 @@
 using DG.Tweening;
 using Game.Core;
+using Game.Effect;
 using UnityEngine;
 
 public class ChargeButton : MonoBehaviour
@@ -42,7 +43,7 @@ public class ChargeButton : MonoBehaviour
         Vector3 pos = transform.position;
         AudioController.Instance.PlaySFX(SoundName.Button3DClick);
 
-        if ( _lightController.IsBatteryFull)
+        if ( _lightController.IsBatteryFull || _isBatteryFull)
         {
             _renderer.material = _yellowMAT;
             transform.DOKill();
@@ -55,6 +56,9 @@ public class ChargeButton : MonoBehaviour
             return;
         }
 
+        AudioController.Instance.PlaySFX(SoundName.Charge);
+        FilterController.Instance.FlashVignette(Color.white, 0.8f, 0.5f);
+        FilterController.Instance.FlashScreen(Color.white);
 
         transform.DOKill();
         transform.DOMove(pos + _moveOffset, _moveduration / 2f).SetEase(Ease.InOutSine).OnComplete(() =>
@@ -75,11 +79,15 @@ public class ChargeButton : MonoBehaviour
     {
         if (_renderer != null)
             _renderer.material = _redMAT;
+
+        _isBatteryFull = false;
     }
 
     private void HandleBatteryChargeCompleted()
     {
         if (_renderer != null)
             _renderer.material = _greenMAT;
+        
+        _isBatteryFull = true;
     }
 }

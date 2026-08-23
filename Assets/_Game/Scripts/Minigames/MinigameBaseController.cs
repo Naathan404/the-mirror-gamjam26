@@ -1,5 +1,6 @@
 using DG.Tweening;
 using Game.Core;
+using Game.Effect;
 using Game.Systems.Lock;
 using Mono.Cecil.Cil;
 using System.Collections;
@@ -30,18 +31,14 @@ namespace Game.Minigames
         [Header("Phần thưởng (Mảnh giấy chứa Số)")]
         [Tooltip("Prefab của tờ giấy nhỏ chứa mật mã")]
         public GameObject digitPaperPrefab;
-        [Tooltip("Vùng mặt bàn (BoxCollider) để tờ giấy rơi xuống và người chơi kéo thả")]
         public BoxCollider deskSpawnArea;
 
-        // Dữ liệu dùng chung
         protected int secretDigit = -1;
         protected bool isPlaying = false;
         protected bool isFocused = true;
 
-        // Biến cờ khóa tương tác khi đang chạy hiệu ứng Win
         protected bool isCompleting = false;
 
-        // ================= ĐĂNG KÝ EVENT =================
         protected virtual void Start()
         {
             //GameEvents.OnPasscodeGenerated += HandlePasscodeGenerated;
@@ -68,7 +65,6 @@ namespace Game.Minigames
             GameEvents.OnDifficultyIncreased -= HandleDifficultyIncreased;
         }
 
-        // ================= XỬ LÝ VÒNG ĐỜI CHUNG =================
         private void FetchSecretCode()
         {
             if (PasscodeController.Instance == null)
@@ -92,7 +88,6 @@ namespace Game.Minigames
             {
                 Debug.Log($"[{minigameType}] Ván này không được bốc trúng. Tự động đi ngủ!");
 
-                // Vô hiệu hóa hoàn toàn GameObject này khỏi Scene để không bị lỗi tương tác
                 gameObject.SetActive(false);
             }
         }
@@ -138,37 +133,33 @@ namespace Game.Minigames
             isPlaying = false;
             isCompleting = false;
 
-            // Hủy các hiệu ứng DOTween đang chạy dở trên visualRoot (nếu có)
             if (visualRoot != null) DOTween.Kill(visualRoot.transform);
 
             visualRoot.SetActive(false);
 
             OnGameClosed();
             GameEvents.RaiseMinigameProgressReset(minigameType);
+            AudioController.Instance.PlaySFX(SoundName.ButtonClick);
         }
 
-        // ================= API CHO CLASS CON GỌI KHI THẮNG =================
 
         protected void CompleteMinigame()
         {
             if (!isPlaying || isCompleting) return;
+            
             StartCoroutine(CompleteRoutine());
         }
 
-        // Coroutine chạy hiệu ứng Win
         private IEnumerator CompleteRoutine()
         {
             isCompleting = true;
             Debug.Log($"[{minigameType}] Giải xong! Đang chạy hiệu ứng...");
 
-            // 1. Hiệu ứng giật DOTween (Rung lắc visualRoot)
             if (visualRoot != null)
             {
-                // Rung trong 0.5s, lực rung 0.2, vibrato 20
                 visualRoot.transform.DOShakePosition(0.5f, new Vector3(0.2f, 0.2f, 0f), 20, 90f, false, true);
             }
 
-            // Đợi hiệu ứng giật xong (cộng thêm 0.1s cho chắc)
             yield return new WaitForSeconds(0.6f);
 
             if (!HasAssignedPasscode())
@@ -178,10 +169,8 @@ namespace Game.Minigames
                 yield break;
             }
 
-            // 2. Sinh ra mảnh giấy chứa con số
             SpawnDigitPaper();
 
-            // 3. Bắn event đóng game và nộp mã số
             Debug.Log($"[{minigameType}] Đã nhả giấy. Nộp mã {secretDigit}");
             GameEvents.RaiseMinigameCompleted(minigameType, new KeyCode(secretDigit, Shape, KColor));
             GameEvents.RaiseMinigameClosed(minigameType);
@@ -203,29 +192,19 @@ namespace Game.Minigames
             // Sinh giấy ở mặt bàn
             GameObject paper = Instantiate(digitPaperPrefab, deskSpawnArea.transform);
 
-            // ==========================================
-            // XỬ LÝ RANDOM TỌA ĐỘ TRONG VÙNG BOX COLLIDER
-            // ==========================================
-            // Lấy thông số tâm và kích thước của BoxCollider (Local Space)
             Vector3 center = deskSpawnArea.center;
             Vector3 size = deskSpawnArea.size;
 
-            // Tính tọa độ ngẫu nhiên (Nhân 0.8f để giấy rớt tụ vào trong một chút, không bị lẹm ra mép bàn)
             float randomX = Random.Range(center.x - (size.x / 2f) * 0.2f, center.x + (size.x / 2f) * 0.2f);
             float randomY = Random.Range(center.y - (size.y / 2f) * 0.2f, center.y + (size.y / 2f) * 0.2f);
 
-            // Gán vị trí ngẫu nhiên, giữ Z = -0.1f để giấy nổi lên mặt bàn
             paper.transform.localPosition = new Vector3(randomX, randomY, -0.1f);
 
-            // Lắc góc xoay ngẫu nhiên cho tờ giấy rơi tự nhiên
             paper.transform.localRotation = Quaternion.Euler(0f, 0f, Random.Range(-20f, 20f));
 
-            // ==========================================
 
-            // Tìm script trên mảnh giấy và truyền con số mật mã vào
             if (paper.TryGetComponent(out DigitPaper paperScript))
             {
-                // unique layer để giấy nọ đè giấy kia
                 int uniqueLayer = 50 + Random.Range(1, 10);
                 Color targetColor = minigameColor;
                 paperScript.Initialize(secretDigit.ToString(), uniqueLayer, deskSpawnArea, targetColor);
@@ -244,7 +223,10 @@ namespace Game.Minigames
         protected virtual void OnGameClosed() { }
         protected virtual void OnFailed()
         {
+            GameEvents.RaiseMinigameClosed(minigameType);
             GameEvents.RaiseMinigameFailed(_increaseEntityStateChangeAccelaration);
+            AudioController.Instance.PlaySFX(SoundName.Minigame_Fail);
+            FilterController.Instance.FlashVignette(Color.white, 1f, 2f);
         }
     }
 }

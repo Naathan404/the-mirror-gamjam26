@@ -209,10 +209,10 @@ namespace Game.Minigames.Maze
             // 5. XỬ LÝ HẬU QUẢ THẮNG / THUA
             if (collisionDetected)
             {
-                AudioController.Instance.PlaySFX(SoundName.Maze_Fail);
                 FilterController.Instance.FlashScreen(FilterController.Instance.HazardColor, 0.5f);
                 Camera.main.transform.DOShakePosition(0.5f, 1f, 15, 90f);
                 mazeRenderer.paperQuad.DOShakePosition(0.3f, 0.5f, 10, 90f);
+                OnFailed();
                 StartCoroutine(FailAndRestartRoutine());
             }
             else if (playerMoved && playerNextPos == currentMazeData.EndPos)
@@ -257,9 +257,6 @@ namespace Game.Minigames.Maze
 
             mazeRenderer.paperQuad.localPosition = originalLocalPos;
             isShaking = false;
-
-            // Xóa sổ và sinh map mới hoàn toàn
-            OnGameStart();
         }
 
         private void ClearEntities()
