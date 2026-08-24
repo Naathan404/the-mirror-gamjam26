@@ -17,6 +17,7 @@ public class LightBulbController : MonoBehaviour
 
     [Header("Effects")]
     [SerializeField] private LightFlashEffect _lightFlashEffect;
+    [SerializeField] private Transform _cameraShakeTarget;
 
     [Header("Visual")]
 
@@ -33,7 +34,7 @@ public class LightBulbController : MonoBehaviour
     {
         _batteryCount = 1;
         _batteryChargingProcess = _batteryLife;
-        OnBatteryProgressChanged?.Invoke(_batteryChargingProcess);
+        OnBatteryProgressChanged?.Invoke(1f);
 
         GameEvents.OnLightFlashed += TurnOnLight;
         GameEvents.OnBatteryChargeStarted += StartChargeBattery;
@@ -57,9 +58,16 @@ public class LightBulbController : MonoBehaviour
 
         if (_lightFlashEffect != null)
         {
-            FilterController.Instance.FlashScreen(FilterController.Instance.FlashColor);
-            //_lightFlashEffect.PlayLightFlash();
-            Camera.main.transform.DOShakePosition(0.5f, 0.35f, 12, 45f);
+            if (FilterController.Instance != null)
+            {
+                FilterController.Instance.FlashScreen(FilterController.Instance.FlashColor);
+            }
+
+            if (_cameraShakeTarget != null)
+            {
+                _cameraShakeTarget.DOKill();
+                _cameraShakeTarget.DOShakePosition(0.5f, 0.35f, 12, 45f);
+            }
         }
     }
 

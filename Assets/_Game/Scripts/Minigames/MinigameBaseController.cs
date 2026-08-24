@@ -2,9 +2,7 @@ using DG.Tweening;
 using Game.Core;
 using Game.Effect;
 using Game.Systems.Lock;
-using Mono.Cecil.Cil;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using KeyCode = Game.Core.KeyCode;
 

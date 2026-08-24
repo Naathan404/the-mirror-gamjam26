@@ -14,24 +14,45 @@ public class ViewMirrorController : MonoBehaviour
     private void Start()
     {
         GameEvents.OnEntityStateChanged += HandleChangeBackground;
+        GameEvents.OnGameLost += ResetBackground;
     }
 
     private void OnDestroy()
     {
         GameEvents.OnEntityStateChanged -= HandleChangeBackground;
+        GameEvents.OnGameLost -= ResetBackground;
     }
     #endregion
 
 
     private void HandleChangeBackground(int state)
     {
-        if (state > GameConstants.ENTITY_MAX_STATE) return;
-        if (state == 0)
+        if (_background == null || _viewMirrorBackgrounds == null || _viewMirrorBackgrounds.Length == 0)
         {
-            Debug.Log("Jumpscare");
             return;
         }
 
-        _background.sprite = _viewMirrorBackgrounds[state - 1];
+        if (state > GameConstants.ENTITY_MAX_STATE || state <= 0)
+        {
+            return;
+        }
+
+        int backgroundIndex = state - 1;
+        if (backgroundIndex >= _viewMirrorBackgrounds.Length)
+        {
+            return;
+        }
+
+        _background.sprite = _viewMirrorBackgrounds[backgroundIndex];
+    }
+
+    private void ResetBackground()
+    {
+        if (_background == null || _viewMirrorBackgrounds == null || _viewMirrorBackgrounds.Length == 0)
+        {
+            return;
+        }
+
+        _background.sprite = _viewMirrorBackgrounds[_viewMirrorBackgrounds.Length - 1];
     }
 }

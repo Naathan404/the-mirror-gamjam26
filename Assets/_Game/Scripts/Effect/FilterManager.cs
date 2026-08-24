@@ -105,7 +105,7 @@ namespace Game.Effect
             DOTween.Kill(_vignette);
 
             _vignette.color.value = color;
-            _vignette.intensity.value = 1f;
+            _vignette.intensity.value = 2f;
 
             DOTween.To(
                 () => _vignette.intensity.value, 
@@ -120,8 +120,9 @@ namespace Game.Effect
         {
             if (_vignette == null) return;
             DOTween.Kill(_vignette);
-
-            _vignette.intensity.value = 1f;
+            
+            _vignette.color.value = Color.black;
+            _vignette.intensity.value = 2f;
 
             DOTween.To(
                 () => _vignette.intensity.value,

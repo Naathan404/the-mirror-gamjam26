@@ -570,11 +570,11 @@ MonoBehaviour:
   _slides:
   - CanvasGroup: {fileID: 480188867}
     FadeInDuration: 0.6
-    HoldDuration: 2
+    HoldDuration: 2.5
     FadeOutDuration: 0.5
   - CanvasGroup: {fileID: 829428150}
     FadeInDuration: 0.6
-    HoldDuration: 2
+    HoldDuration: 2.5
     FadeOutDuration: 0.6
   _nextSceneName: MenuScene
   _allowSkipOnClick: 0
