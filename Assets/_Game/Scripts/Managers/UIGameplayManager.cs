@@ -1,3 +1,4 @@
+using System.Collections;
 using DG.Tweening;
 using Game.Cameras;
 using Game.Core;
@@ -6,7 +7,7 @@ using Game.Utils;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Localization; // [THÊM] Thư viện Localization
+using UnityEngine.Localization;
 
 namespace Game.Managers
 {
@@ -23,6 +24,8 @@ namespace Game.Managers
         [SerializeField] private CanvasGroup _loseCanvasGroup;
         [SerializeField] private float _loseAppearDuration = 1f;
         [SerializeField] private RectTransform _replayButton;
+        [SerializeField] private CanvasGroup _replayButtonCanvasGroup;
+        [SerializeField] private TextMeshProUGUI _replayButtonText;
 
         [Header("Lose Text Config")]
         [Tooltip("Danh sách các câu ngẫu nhiên khi thua. Nhấn + để thêm, rồi chọn Table/Key tương ứng.")]
@@ -34,17 +37,11 @@ namespace Game.Managers
 
         [Header("Flash Light Button")]
         [SerializeField] private Button _lightButton;
+        [SerializeField] private Image _lightButtonImage;
         [SerializeField] private Sprite _activateSprite;
         [SerializeField] private Sprite _deactivateSprite;
 
-        private string[] _loseText = new string[]
-        {
-            "Wake Up", 
-            "Return?", 
-            "Again?", 
-            "Open your eyes", 
-            "Come back?"
-        };
+        private Coroutine _showReplayButtonRoutine;
 
         #region Base
         private void Start()
@@ -60,9 +57,25 @@ namespace Game.Managers
 
             HandleBatteryChargeCompleted();
 
-            _losePanel.gameObject.SetActive(false);
-            _replayButton.gameObject.SetActive(false);
-            _loseCanvasGroup.alpha = 0f;
+            if (_losePanel != null)
+            {
+                _losePanel.gameObject.SetActive(false);
+            }
+
+            if (_replayButton != null)
+            {
+                _replayButton.gameObject.SetActive(false);
+            }
+
+            if (_loseCanvasGroup != null)
+            {
+                _loseCanvasGroup.alpha = 0f;
+            }
+
+            if (_replayButtonCanvasGroup != null)
+            {
+                _replayButtonCanvasGroup.alpha = 0f;
+            }
 
             if (_keyUIGroup != null)
             {
@@ -124,26 +137,70 @@ namespace Game.Managers
         private void ShowLosePanel()
         {
             HideAllPanels();
-            FilterController.Instance.PlayEyeClosedVignetteEffect(Color.black, _loseAppearDuration);
-            _losePanel.gameObject.SetActive(true);
-            _loseCanvasGroup.DOFade(1f, _loseAppearDuration).SetEase(Ease.OutQuart)
-                .OnComplete(() =>
-                {
-                    _replayButton.TryGetComponent<CanvasGroup>(out var cvg);
+            HideInventoryPanel();
 
-                    string randomText = "";
-                    if (_loseTexts != null && _loseTexts.Length > 0)
-                    {
-                        int randomIndex = Random.Range(0, _loseTexts.Length);
-                        randomText = _loseTexts[randomIndex].GetLocalizedString();
-                    }
+            if (FilterController.Instance != null)
+            {
+                FilterController.Instance.PlayEyeClosedVignetteEffect(Color.black, _loseAppearDuration);
+            }
 
-                    _replayButton.GetComponentInChildren<TextMeshProUGUI>().text = randomText;
+            if (_losePanel != null)
+            {
+                _losePanel.gameObject.SetActive(true);
+            }
 
-                    cvg.alpha = 0f;
-                    _replayButton.gameObject.SetActive(true);
-                    cvg.DOFade(1f, 3f);
-                });
+            if (_loseCanvasGroup != null)
+            {
+                _loseCanvasGroup.DOKill();
+                _loseCanvasGroup.alpha = 0f;
+                _loseCanvasGroup.DOFade(1f, _loseAppearDuration).SetEase(Ease.OutQuart).SetUpdate(true);
+            }
+
+            if (_showReplayButtonRoutine != null)
+            {
+                StopCoroutine(_showReplayButtonRoutine);
+            }
+
+            _showReplayButtonRoutine = StartCoroutine(ShowReplayButtonRoutine());
+        }
+
+        private IEnumerator ShowReplayButtonRoutine()
+        {
+            yield return new WaitForSecondsRealtime(_loseAppearDuration);
+
+            SetReplayButtonText();
+            ShowReplayButton();
+            _showReplayButtonRoutine = null;
+        }
+
+        private void ShowReplayButton()
+        {
+            if (_replayButton == null)
+            {
+                return;
+            }
+
+            _replayButton.gameObject.SetActive(true);
+
+            if (_replayButtonCanvasGroup == null)
+            {
+                return;
+            }
+
+            _replayButtonCanvasGroup.DOKill();
+            _replayButtonCanvasGroup.alpha = 0f;
+            _replayButtonCanvasGroup.DOFade(1f, 3f).SetUpdate(true);
+        }
+
+        private void SetReplayButtonText()
+        {
+            if (_replayButtonText == null || _loseTexts == null || _loseTexts.Length == 0)
+            {
+                return;
+            }
+
+            int randomIndex = Random.Range(0, _loseTexts.Length);
+            _replayButtonText.text = _loseTexts[randomIndex].GetLocalizedString();
         }
 
         private void ShowKeyOnUI()
@@ -172,14 +229,31 @@ namespace Game.Managers
         public void LightFlash()
         {
             GameEvents.RaiseLightFlashed();
-            _lightButton.interactable = false;
-            _lightButton.GetComponent<Image>().sprite = _deactivateSprite;
+
+            if (_lightButton != null)
+            {
+                _lightButton.interactable = false;
+            }
+
+            SetLightButtonSprite(_deactivateSprite);
         }
 
         private void HandleBatteryChargeCompleted()
         {
-            _lightButton.interactable = true;
-            _lightButton.GetComponent<Image>().sprite = _activateSprite;
+            if (_lightButton != null)
+            {
+                _lightButton.interactable = true;
+            }
+
+            SetLightButtonSprite(_activateSprite);
+        }
+
+        private void SetLightButtonSprite(Sprite sprite)
+        {
+            if (_lightButtonImage != null)
+            {
+                _lightButtonImage.sprite = sprite;
+            }
         }
 
         public void Replay()

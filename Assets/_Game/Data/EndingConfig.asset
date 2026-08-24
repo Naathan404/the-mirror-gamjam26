@@ -48,7 +48,7 @@ MonoBehaviour:
       m_FallbackState: 0
       m_WaitForCompletion: 0
       m_LocalVariables: []
-    soundName: 37
+    soundName: 44
     delayBeforeShow: 0
     showDuration: 4
     triggerJumpscareAfter: 0
@@ -61,7 +61,7 @@ MonoBehaviour:
       m_FallbackState: 0
       m_WaitForCompletion: 0
       m_LocalVariables: []
-    soundName: 37
+    soundName: 44
     delayBeforeShow: 0
     showDuration: 5
     triggerJumpscareAfter: 0
@@ -74,7 +74,7 @@ MonoBehaviour:
       m_FallbackState: 0
       m_WaitForCompletion: 0
       m_LocalVariables: []
-    soundName: 37
+    soundName: 44
     delayBeforeShow: 0
     showDuration: 1
     triggerJumpscareAfter: 1
