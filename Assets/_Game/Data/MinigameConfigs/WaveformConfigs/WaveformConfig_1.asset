@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: WaveformConfig_1
   m_EditorClassIdentifier: 
   WaveComponentCount: 2
-  DomainHalfWidth: 5
-  AmplitudeRange: {x: 0.3, y: 1.2}
+  DomainHalfWidth: 6
+  AmplitudeRange: {x: 0.3, y: 1.3}
   FrequencyRange: {x: 0.5, y: 2.5}
   AmplitudeStep: 0.15
   FrequencyStep: 0.2
-  MatchErrorTolerance: 0.45
+  MatchErrorTolerance: 0.43
   SampleResolution: 80
   MaxMistakes: 2
   ResetDialsOnRegenerate: 1

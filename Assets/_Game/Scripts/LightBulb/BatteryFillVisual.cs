@@ -9,6 +9,7 @@ namespace Game.LightFlash
         [Header("References")]
         [SerializeField] private LightBulbController _lightBulbController;
         [SerializeField] private Transform _fillTransform;
+        [SerializeField] private MeshFilter _fillMeshFilter;
         [SerializeField] private Renderer _fillRenderer;
 
         [Header("Fill Settng")]
@@ -27,6 +28,7 @@ namespace Game.LightFlash
 
         private MaterialPropertyBlock _mpb;
         private Tween _emissionTween;
+        private Tween _fullChargeScaleTween;
 
         private static readonly int BaseColor = Shader.PropertyToID("_BaseColor");
         private Color _originalColor;
@@ -44,19 +46,16 @@ namespace Game.LightFlash
             _baseScale = _fillTransform.localScale;
             _baseLocalPos = _fillTransform.localPosition;
 
-            var renderer = _fillTransform.GetComponent<Renderer>();
-            if (renderer != null)
+            if (_fillMeshFilter != null && _fillMeshFilter.sharedMesh != null)
             {
-                MeshFilter mf = _fillTransform.GetComponent<MeshFilter>();
-                if (mf != null && mf.sharedMesh != null)
-                {
-                    Vector3 localExtents = Vector3.Scale(mf.sharedMesh.bounds.extents, _baseScale);
-                    _extentOnAxis = Vector3.Dot(localExtents, _fillAxis.normalized);
-                }
+                Vector3 localExtents = Vector3.Scale(_fillMeshFilter.sharedMesh.bounds.extents, _baseScale);
+                _extentOnAxis = Vector3.Dot(localExtents, _fillAxis.normalized);
             }
 
             if (_fillRenderer != null)
+            {
                 _mpb = new MaterialPropertyBlock();
+            }
         }
 
         private void Start()
@@ -75,35 +74,63 @@ namespace Game.LightFlash
             GameEvents.OnBatteryChargeCompleted -= PlayFullChargeEffect;
 
             _emissionTween?.Kill();
+            _fullChargeScaleTween?.Kill();
         }
 
         private void UpdateFill(float progress01)
         {
-            progress01 = Mathf.Clamp01(progress01);
+            ApplyFill(Mathf.Clamp01(progress01));
+        }
+
+        private void ApplyFill(float progress01)
+        {
+            _fullChargeScaleTween?.Kill();
+            _fillTransform.DOKill();
 
             Vector3 axisNorm = _fillAxis.normalized;
             float targetScaleOnAxis = progress01 * _maxScaleOnAxis;
 
             Vector3 newScale = _baseScale;
-            if (axisNorm.x != 0) newScale.x = targetScaleOnAxis;
-            if (axisNorm.y != 0) newScale.y = targetScaleOnAxis;
-            if (axisNorm.z != 0) newScale.z = targetScaleOnAxis;
-            _fillTransform.localScale = newScale;
-
-            if (_pivotIsCenter)
+            if (axisNorm.x != 0f)
             {
-                float scaleRatio = _maxScaleOnAxis > 0 ? targetScaleOnAxis / _maxScaleOnAxis : 0f;
-                float offset = _extentOnAxis * (1f - scaleRatio);
-                _fillTransform.localPosition = _baseLocalPos - axisNorm * offset;
+                newScale.x = targetScaleOnAxis;
             }
+
+            if (axisNorm.y != 0f)
+            {
+                newScale.y = targetScaleOnAxis;
+            }
+
+            if (axisNorm.z != 0f)
+            {
+                newScale.z = targetScaleOnAxis;
+            }
+
+            _fillTransform.localScale = newScale;
+            _fillTransform.localPosition = CalculateFillPosition(axisNorm, targetScaleOnAxis);
+        }
+
+        private Vector3 CalculateFillPosition(Vector3 axisNorm, float targetScaleOnAxis)
+        {
+            if (!_pivotIsCenter)
+            {
+                return _baseLocalPos;
+            }
+
+            float scaleRatio = _maxScaleOnAxis > 0f ? targetScaleOnAxis / _maxScaleOnAxis : 0f;
+            float offset = _extentOnAxis * (1f - scaleRatio);
+            return _baseLocalPos - axisNorm * offset;
         }
 
         private void PlayFullChargeEffect()
         {
-            _fillTransform.DOPunchScale(Vector3.one * 0.15f, 0.3f, 8, 0.8f);
+            ApplyFill(1f);
+            PlayFullChargeScaleEffect();
 
             if (_fillRenderer == null || _mpb == null)
+            {
                 return;
+            }
 
             if (!_colorCached)
             {
@@ -120,6 +147,14 @@ namespace Game.LightFlash
                 1f,
                 _emissionFadeDuration
             );
+        }
+
+        private void PlayFullChargeScaleEffect()
+        {
+            _fullChargeScaleTween?.Kill();
+            _fullChargeScaleTween = _fillTransform
+                .DOPunchScale(Vector3.one * 0.15f, 0.3f, 8, 0.8f)
+                .OnComplete(() => ApplyFill(1f));
         }
 
         private void SetBaseColor(Color c)
