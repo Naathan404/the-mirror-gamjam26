@@ -171,7 +171,16 @@ namespace Game.Managers
         {
             yield return new WaitForSecondsRealtime(_loseAppearDuration);
 
-            SetReplayButtonText();
+            if (_replayButtonText != null && _loseTexts != null && _loseTexts.Length > 0)
+            {
+                int randomIndex = Random.Range(0, _loseTexts.Length);
+
+                var asyncOp = _loseTexts[randomIndex].GetLocalizedStringAsync();
+                yield return asyncOp;
+
+                _replayButtonText.text = asyncOp.Result;
+            }
+
             ShowReplayButton();
             _showReplayButtonRoutine = null;
         }
@@ -195,16 +204,16 @@ namespace Game.Managers
             _replayButtonCanvasGroup.DOFade(1f, 3f).SetUpdate(true);
         }
 
-        private void SetReplayButtonText()
-        {
-            if (_replayButtonText == null || _loseTexts == null || _loseTexts.Length == 0)
-            {
-                return;
-            }
+        //private void SetReplayButtonText()
+        //{
+        //    if (_replayButtonText == null || _loseTexts == null || _loseTexts.Length == 0)
+        //    {
+        //        return;
+        //    }
 
-            int randomIndex = Random.Range(0, _loseTexts.Length);
-            _replayButtonText.text = _loseTexts[randomIndex].GetLocalizedString();
-        }
+        //    int randomIndex = Random.Range(0, _loseTexts.Length);
+        //    _replayButtonText.text = _loseTexts[randomIndex].GetLocalizedString();
+        //}
 
         private void ShowKeyOnUI()
         {
