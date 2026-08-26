@@ -160,14 +160,17 @@ namespace Game.UI
             for (int i = 0; i < _endingConfig.endingLines.Count; i++)
             {
                 Game.Configs.EndingLine line = _endingConfig.endingLines[i];
-                if (line == null)
-                {
-                    continue;
-                }
+                if (line == null) continue;
 
                 yield return new WaitForSecondsRealtime(line.delayBeforeShow);
 
-                ShowEndingLine(line);
+                // Đợi tải Localization xong mới hiển thị
+                var asyncOp = line.localizedText.GetLocalizedStringAsync();
+                yield return asyncOp;
+                string loadedText = asyncOp.Result;
+
+                ShowEndingLine(line, loadedText);
+
                 yield return new WaitForSecondsRealtime(line.showDuration);
 
                 if (line.triggerJumpscareAfter)
@@ -203,16 +206,15 @@ namespace Game.UI
             }
         }
 
-        private void ShowEndingLine(Game.Configs.EndingLine line)
+        private void ShowEndingLine(Game.Configs.EndingLine line, string text)
         {
-            if (_endingText == null)
-            {
-                return;
-            }
+            if (_endingText == null) return;
 
             DOTween.Kill(TEXT_GLITCH_TWEEN_ID);
             _endingText.DOKill();
-            _endingText.text = GetLocalizedText(line.localizedText);
+
+            _endingText.text = text;
+
             _endingText.color = Color.white;
             _endingText.alpha = 0f;
             _endingText.DOFade(1f, 1f).SetUpdate(true);
