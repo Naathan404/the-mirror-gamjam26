@@ -3,6 +3,7 @@ using Game.Core;
 using System.Collections.Generic;
 using KeyCode = Game.Core.KeyCode;
 using Game.Utils;
+using System.Linq;
 
 namespace Game.Systems.Lock
 {
@@ -72,17 +73,14 @@ namespace Game.Systems.Lock
         public void GenerateNewPasscode()
         {
             minigameDigitMap.Clear();
+            List<int> uniqueDigits = Enumerable.Range(0, 10).OrderBy(x => Random.value).ToList();
             for (int i = 0; i < GameConstants.NUMBER_OF_MINIGAMES; i++)
             {
-                minigameDigitMap.Add(minigameTypes[i], new KeyCode(Random.Range(0, 10), keyShapes[i], keyColors[i]));
+                int code = uniqueDigits[i];
+                minigameDigitMap.Add(minigameTypes[i], new KeyCode(code, keyShapes[i], keyColors[i]));
             }
 
-
-            // Cập nhật lên Inspector ngay sau khi tạo
             SyncDictionaryToLists();
-
-            // Không bắn event nữa, vì các minigame sẽ có thể không nhận được khi chưa bật lên, thay bằng làm lấy số minigameDigitMap trực tiếp từ PasscodeController.Instance.GetCurrentPasscodeMap() trong các minigame
-            //GameEvents.RaisePasscodeGenerated(minigameDigitMap); // Lưu ý: Cần đổi kiểu dữ liệu Event này sang Dictionary<MinigameType, int> nhé
         }
 
         public Dictionary<MinigameType, KeyCode> GetCurrentPasscodeMap()
@@ -92,9 +90,6 @@ namespace Game.Systems.Lock
 
         private void HandleMinigameCompleted(MinigameType minigameType, KeyCode digit)
         {
-            // Đặt trạm gác BÊN NGOÀI lệnh if để xem tín hiệu có tới cửa không
-            Debug.Log($"[PasscodeController] ⚡ ĐÃ NHẬN TÍN HIỆU TỪ MÊ CUNG {minigameType} VỚI SỐ {digit}!");
-
             if (!collectedDigits.ContainsKey(minigameType))
             {
                 collectedDigits.Add(minigameType, digit);

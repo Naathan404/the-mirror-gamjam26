@@ -40,7 +40,7 @@ namespace Game.Minigames
         protected virtual void Start()
         {
             //GameEvents.OnPasscodeGenerated += HandlePasscodeGenerated;
-            GameEvents.OnLightFlashed += HandleLightFlashed;
+            // GameEvents.OnLightFlashed += HandleLightFlashed;
             GameEvents.OnMinigameOpened += HandleMinigameOpened;
             GameEvents.OnMinigameClosed += HandleMinigameClosed;
             GameEvents.OnViewChangeFinished += HandleViewChangeFinished;
@@ -55,7 +55,7 @@ namespace Game.Minigames
         protected virtual void OnDestroy()
         {
             //GameEvents.OnPasscodeGenerated -= HandlePasscodeGenerated;
-            GameEvents.OnLightFlashed -= HandleLightFlashed;
+            // GameEvents.OnLightFlashed -= HandleLightFlashed;
             GameEvents.OnMinigameOpened -= HandleMinigameOpened;
             GameEvents.OnMinigameClosed -= HandleMinigameClosed;
             GameEvents.OnViewChangeFinished -= HandleViewChangeFinished;

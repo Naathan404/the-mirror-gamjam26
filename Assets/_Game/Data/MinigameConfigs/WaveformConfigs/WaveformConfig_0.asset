@@ -15,7 +15,7 @@ MonoBehaviour:
   WaveComponentCount: 2
   DomainHalfWidth: 4
   AmplitudeRange: {x: 0.3, y: 1.2}
-  FrequencyRange: {x: 0.5, y: 1.5}
+  FrequencyRange: {x: 0.5, y: 1.2}
   AmplitudeStep: 0.18
   FrequencyStep: 0.25
   MatchErrorTolerance: 0.32
