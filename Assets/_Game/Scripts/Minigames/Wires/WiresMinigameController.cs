@@ -64,7 +64,7 @@ namespace Game.Minigames.Wires
         private LineRenderer _draggingLine;
         private int _connectedCount = 0;
         private int _mistakeCount = 0;
-        private int _maxMistakeCount = 1;
+        private int _maxMistakeCount = 0;
 
         private readonly List<WireSocket> _leftSockets = new();
         private readonly List<WireSocket> _rightSockets = new();

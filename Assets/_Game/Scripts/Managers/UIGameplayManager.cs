@@ -146,6 +146,7 @@ namespace Game.Managers
 
             if (_losePanel != null)
             {
+                _losePanel.transform.SetAsLastSibling();
                 _losePanel.gameObject.SetActive(true);
             }
 
@@ -153,6 +154,8 @@ namespace Game.Managers
             {
                 _loseCanvasGroup.DOKill();
                 _loseCanvasGroup.alpha = 0f;
+                _loseCanvasGroup.interactable = true;
+                _loseCanvasGroup.blocksRaycasts = true;
                 _loseCanvasGroup.DOFade(1f, _loseAppearDuration).SetEase(Ease.OutQuart).SetUpdate(true);
             }
 

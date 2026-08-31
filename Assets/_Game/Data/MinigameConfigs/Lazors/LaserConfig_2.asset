@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25ca57dc42337ce44b043533ef79eb45, type: 3}
   m_Name: LaserConfig_2
   m_EditorClassIdentifier: 
-  gridSize: 18
+  gridSize: 19
   bulbCount: 11
   requiredMirrorCount: 16
   decoyMirrorCount: 40

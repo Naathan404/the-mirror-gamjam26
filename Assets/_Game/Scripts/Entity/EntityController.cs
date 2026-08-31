@@ -16,20 +16,27 @@ namespace Game.Entity
         [Header("Time scale Settings")]
         [SerializeField] private List<TimeViewScale> _timeScaleViews;
 
-        [Header("Timer Settings")]
-        [SerializeField] private float _maxTimerTime = 100f;
-        [SerializeField] private float _currentTimeScale;
-        [SerializeField] private float _timer = 0f;
-        [SerializeField] private bool _resetTimeWhenJumpState = true;
+        [Header("Move Probability Settings")]
+        [SerializeField] private float _baseMoveInterval = 9f;     // x: giây giữa mỗi lần roll ở base
+        [SerializeField] private float _minMoveInterval = 3f;    // floor, tránh roll dồn dập vô lý
+        [SerializeField] private float _baseMoveChance = 0.15f;    // a: xác suất cơ bản
+        [SerializeField] private float _moveChanceCap = 0.5f;
+        [SerializeField] private float _moveChancePerMinigame = 0.05f; // +a mỗi minigame hoàn thành
+
+        [Header("Insurance Settings")]
+        [SerializeField] private float _baseInsuranceTime = 120f; // bảo hiểm: quá 2 phút không move -> chắc chắn move
+        [SerializeField] private float _insuranceTimeStep = 10f;
 
         [Header("RampRate Settings")]
-        [SerializeField] private float _awayRampRate = 0.02f;
-        [SerializeField] private float _awayRampCap = 1.8f;
+        [SerializeField] private float _awayRampRate = 0.008f; // giảm nhẹ so với 0.02 cũ
+        [SerializeField] private float _awayRampCap = 1.25f;    // giảm nhẹ so với 1.8 cũ
         [SerializeField] private float _timerAwayFromMirror = 0f;
 
         [Header("State Settings")]
-        [SerializeField] private int _jumpStepWhenGotLightFlashed = 2;
+        [SerializeField] private int _minJumpStepWhenGotLightFlashed = 2;
+        [SerializeField] private int _maxJumpStepWhenGotLightFlashed = 2;
         [SerializeField] private float _accelaration = 1.15f;
+        [SerializeField] private bool _resetTimeWhenJumpState = true;
 
         [Header("Accelaration Caps")]
         [SerializeField] private float _flashAccelCap = 2.5f;
@@ -44,25 +51,23 @@ namespace Game.Entity
         [SerializeField] public int CurrentState { get; private set; }
         [SerializeField] private float _flashAccelaration = 1f;
         [SerializeField] private float _mistakeAccelaration = 1f;
+        [SerializeField] private int _minigamesCompleted = 0;
+        [SerializeField] private float _rollTimer = 0f;
+        [SerializeField] private float _timeSinceLastMove = 0f;
 
 
         private View _currentView = View.Mirror;
         private bool _gameOverBuffer = false;
-        
+
         #region Base
         private void Start()
         {
-            CurrentState = GameConstants.ENTITY_MAX_STATE;
-            _currentTimeScale = GetTimeScaleByView(GameConstants.START_VIEW);
             CurrentState = GameConstants.ENTITY_START_STATE;
-
             GameEvents.RaiseEntityStateChanged(CurrentState);
 
-            // register event
             GameEvents.OnViewChangeFinished += HandleViewChanged;
             GameEvents.OnLightFlashed += HandleLightFlashed;
             GameEvents.OnMinigameFailed += HandleMinigameFailed;
-
             GameEvents.OnMinigameCompleted += HandleMinigameCompleted;
         }
 
@@ -71,7 +76,6 @@ namespace Game.Entity
             GameEvents.OnViewChangeFinished -= HandleViewChanged;
             GameEvents.OnLightFlashed -= HandleLightFlashed;
             GameEvents.OnMinigameFailed -= HandleMinigameFailed;
-
             GameEvents.OnMinigameCompleted -= HandleMinigameCompleted;
         }
         #endregion
@@ -79,7 +83,7 @@ namespace Game.Entity
         #region States change
         private void Update()
         {
-            UpdateTimer();
+            UpdateRoll();
 #if UNITY_EDITOR
             if (Input.GetKeyDown(UnityEngine.KeyCode.Space))
             {
@@ -90,7 +94,7 @@ namespace Game.Entity
 #endif
         }
 
-        private void UpdateTimer()
+        private void UpdateRoll()
         {
             if (_gameOverBuffer)
             {
@@ -103,7 +107,7 @@ namespace Game.Entity
                 return;
             }
 
-            if (GameManager.Instance.CurrentState == GameState.GameOver) 
+            if (GameManager.Instance.CurrentState == GameState.GameOver)
                 return;
 
             if (_currentView != View.Mirror)
@@ -111,30 +115,45 @@ namespace Game.Entity
                 _timerAwayFromMirror += Time.deltaTime;
             }
 
-            _timer += Time.deltaTime * _currentTimeScale * GetAwayMultiplier();
+            _rollTimer += Time.deltaTime;
+            _timeSinceLastMove += Time.deltaTime;
 
-            if (_timer > _maxTimerTime)
+            float interval = GetCurrentInterval();
+            float insurance = GetInsuranceTime();
+            bool insuranceTriggered = _timeSinceLastMove >= insurance;
+
+            if (_rollTimer >= interval)
             {
-                _timer = -1f;
-                CurrentState--;
-                GameEvents.RaiseEntityStateChanged(CurrentState);
+                _rollTimer = 0f;
+                bool success = insuranceTriggered || UnityEngine.Random.value < GetCurrentChance();
+                if (success)
+                {
+                    AdvanceState();
+                }
+            }
+        }
 
+        private void AdvanceState()
+        {
+            CurrentState--;
+            _timeSinceLastMove = 0f;
+            GameEvents.RaiseEntityStateChanged(CurrentState);
+
+            if (_currentView == View.Mirror)
+            {
+                AudioController.Instance.PlaySFX(SoundName.Entity_ChangeState);
+            }
+
+            if (CurrentState == 0)
+            {
                 if (_currentView == View.Mirror)
                 {
-                    AudioController.Instance.PlaySFX(SoundName.Entity_ChangeState);
+                    GameEvents.RaiseJumpscareTriggered();
+                    GameManager.Instance.SetGameOver();
                 }
-
-                if (CurrentState == 0)
+                else
                 {
-                    if (_currentView == View.Mirror)
-                    {
-                        GameEvents.RaiseJumpscareTriggered();   
-                        GameManager.Instance.SetGameOver();
-                    }
-                    else
-                    {
-                        _gameOverBuffer = true;
-                    }
+                    _gameOverBuffer = true;
                 }
             }
         }
@@ -144,34 +163,32 @@ namespace Game.Entity
             float totalAccel = _flashAccelaration * _mistakeAccelaration;
             if (totalAccel >= _mercyAccelThreshold)
             {
-                return UnityEngine.Random.Range(_mercyJumpStepMin, _mercyJumpStepMax + 1); // 2 hoặc 3
+                return UnityEngine.Random.Range(_mercyJumpStepMin, _mercyJumpStepMax + 1);
             }
-            return _jumpStepWhenGotLightFlashed;
+            return UnityEngine.Random.Range(_minJumpStepWhenGotLightFlashed, _maxJumpStepWhenGotLightFlashed + 1);
         }
-        
+
         private void JumpToState(int state)
         {
-            CurrentState = state;
-            GameEvents.RaiseEntityStateChanged(state);
-            _currentTimeScale = GetTimeScaleByView(_currentView);
+            CurrentState = Mathf.Clamp(state, 0, GameConstants.ENTITY_MAX_STATE);
+            GameEvents.RaiseEntityStateChanged(CurrentState);
 
             if (_resetTimeWhenJumpState)
             {
-                _timer = 0f;
+                _rollTimer = 0f;
+                _timeSinceLastMove = 0f;
             }
         }
 
         private void SetFlashAccelaration(float factor)
         {
             if (factor <= 0) return;
-
             _flashAccelaration = Mathf.Min(_flashAccelaration * factor, _flashAccelCap);
         }
 
         private void SetMistakeAccelaration(float factor)
         {
             if (factor <= 0) return;
-
             _mistakeAccelaration = Mathf.Min(_mistakeAccelaration * factor, _mistakeAccelCap);
         }
 
@@ -180,12 +197,42 @@ namespace Game.Entity
             if (_currentView == View.Mirror) return 1f;
             return Mathf.Min(1f + _timerAwayFromMirror * _awayRampRate, _awayRampCap);
         }
+
+        private float GetIntervalMultiplierByView(View view)
+        {
+            foreach (var tv in _timeScaleViews)
+            {
+                if (tv.BaseView == view)
+                    return tv.TimeScale;
+            }
+            return 1f;
+        }
+
+        private float GetCurrentInterval()
+        {
+            float totalAccel = _flashAccelaration * _mistakeAccelaration;
+            float viewMultiplier = GetIntervalMultiplierByView(_currentView);
+            float awayMultiplier = GetAwayMultiplier();
+
+            float interval = _baseMoveInterval / (viewMultiplier * totalAccel * awayMultiplier);
+            return Mathf.Max(interval, _minMoveInterval);
+        }
+
+        private float GetInsuranceTime()
+        {
+            return _baseInsuranceTime - (_insuranceTimeStep * _minigamesCompleted);
+        }
+
+        private float GetCurrentChance()
+        {
+            float chance = _baseMoveChance + (_minigamesCompleted * _moveChancePerMinigame);
+            return Mathf.Min(chance, _moveChanceCap);
+        }
         #endregion
 
         #region Handle Events
         private void HandleViewChanged(View view)
         {
-            _currentTimeScale = GetTimeScaleByView(view);
             _currentView = view;
             if (view == View.Mirror)
             {
@@ -203,25 +250,12 @@ namespace Game.Entity
         private void HandleMinigameFailed(float accel)
         {
             SetMistakeAccelaration(accel);
-            _currentTimeScale = GetTimeScaleByView(_currentView);
         }
 
         private void HandleMinigameCompleted(MinigameType _, KeyCode __)
         {
-            _timer = 0f;
-        }
-        #endregion
-
-        #region Helpers
-        private float GetTimeScaleByView(View view)
-        {
-            float totalAccel = _flashAccelaration * _mistakeAccelaration;
-            foreach(var timeview in _timeScaleViews)
-            {
-                if (timeview.BaseView == view)
-                    return timeview.TimeScale * totalAccel;
-            }
-            return 1f * totalAccel;
+            _minigamesCompleted++;
+            _rollTimer = 0f; 
         }
         #endregion
     }
@@ -230,6 +264,6 @@ namespace Game.Entity
     public class TimeViewScale
     {
         public View BaseView = View.Mirror;
-        public float TimeScale = 1f;
+        public float TimeScale = 1f; 
     }
 }

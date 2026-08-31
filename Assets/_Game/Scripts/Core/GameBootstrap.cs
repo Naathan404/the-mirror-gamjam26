@@ -10,7 +10,8 @@ namespace Game.Core
         [SerializeField] private SoundName _soundName = SoundName.BGM_Gameplay_1;
         [SerializeField] private bool _playBgmOnAwake = false;
 
-        private void Awake()
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        private static void ClearStaleEventListeners()
         {
             GameEvents.ClearAllListeners();
         }

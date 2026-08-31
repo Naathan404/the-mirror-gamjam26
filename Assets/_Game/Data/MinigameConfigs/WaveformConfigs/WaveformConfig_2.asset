@@ -15,10 +15,10 @@ MonoBehaviour:
   WaveComponentCount: 3
   DomainHalfWidth: 6.5
   AmplitudeRange: {x: 0.2, y: 1.4}
-  FrequencyRange: {x: 1, y: 3}
+  FrequencyRange: {x: 0.5, y: 1.6}
   AmplitudeStep: 0.12
   FrequencyStep: 0.15
-  MatchErrorTolerance: 0.4
+  MatchErrorTolerance: 0.25
   SampleResolution: 90
   MaxMistakes: 2
   ResetDialsOnRegenerate: 1
