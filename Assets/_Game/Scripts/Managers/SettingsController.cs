@@ -1,8 +1,9 @@
 using Game.Effect;
-using Game.Managers;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
+using UnityEngine.Rendering;
 
 namespace Game.UI
 {
@@ -12,6 +13,19 @@ namespace Game.UI
         [SerializeField] private Slider _masterSlider;
         [SerializeField] private Slider _bgmSlider;
         [SerializeField] private Slider _sfxSlider;
+
+        [Header("Effect Setting")]
+        [SerializeField] private Slider _blurSlider;
+        [SerializeField] private Slider _scanlineSlider;
+        [SerializeField] private Slider _distortionSlider;
+        [SerializeField] private Material _crtMat;
+        [SerializeField] private Volume _volume;
+        private LensDistortion _lensDistortion;
+        private static readonly int BLUR_ID = Shader.PropertyToID("_Blur_Offset");
+        private static readonly int SCANLINE_ID = Shader.PropertyToID("_Number_Of_Scan_Lines");
+
+        [Header("Reset Buttons")]
+        [SerializeField] private Button _resetSetting;
 
         [Header("Language Buttons")]
         [SerializeField] private Button _btnEnglish;
@@ -31,10 +45,33 @@ namespace Game.UI
             float masterVol = PlayerPrefs.GetFloat("MasterVol", 1f);
             float bgmVol = PlayerPrefs.GetFloat("BGMVol", 1f);
             float sfxVol = PlayerPrefs.GetFloat("SFXVol", 1f);
+            float blurVal = PlayerPrefs.GetFloat("BLURVal", 0.0015f);
+            int scanline = PlayerPrefs.GetInt("SCANLINEVal", 400);
+            float distortion = PlayerPrefs.GetFloat("DISTORTIONVal", 0.3f);
 
             if (_masterSlider != null) _masterSlider.value = masterVol;
             if (_bgmSlider != null) _bgmSlider.value = bgmVol;
             if (_sfxSlider != null) _sfxSlider.value = sfxVol;
+
+            if (_blurSlider != null) _blurSlider.value = blurVal;
+            if (_scanlineSlider != null) _scanlineSlider.value = scanline;
+            if (_distortionSlider != null) _distortionSlider.value = distortion;
+
+            if (_volume != null && _volume.profile.TryGet(out _lensDistortion))
+            {
+                _lensDistortion.intensity.overrideState = true;
+            }
+            else
+            {
+                Debug.LogError("Chưa gán Volume hoặc chưa thêm Lens Distortion vào Volume Profile!");
+            }
+
+            SetMasterVolume(masterVol);
+            SetBGMVolume(bgmVol);
+            SetSFXVolume(sfxVol);
+            SetBlurValue(blurVal);
+            SetScanlineValue(scanline);
+            SetDistortionValue(distortion);
 
             _currentLanguageId = PlayerPrefs.GetInt("Language", 0);
             UpdateLanguageUI();
@@ -52,11 +89,35 @@ namespace Game.UI
             if (_bgmSlider != null) _bgmSlider.onValueChanged.AddListener(SetBGMVolume);
             if (_sfxSlider != null) _sfxSlider.onValueChanged.AddListener(SetSFXVolume);
 
+            if (_blurSlider != null) _blurSlider.onValueChanged.AddListener(SetBlurValue);
+            if (_scanlineSlider != null) _scanlineSlider.onValueChanged.AddListener(SetScanlineValue);
+            if (_distortionSlider != null) _distortionSlider.onValueChanged.AddListener(SetDistortionValue);
+
+            if (_resetSetting != null) _resetSetting.onClick.AddListener(ResetSetting);
+
             if (_btnEnglish != null) _btnEnglish.onClick.AddListener(() => SetLanguage(0));
             if (_btnVietnamese != null) _btnVietnamese.onClick.AddListener(() => SetLanguage(1));
 
             if (_tutorialToggle != null)
                 _tutorialToggle.onValueChanged.AddListener(SetTutorialState);
+        }
+
+        private void ResetSetting()
+        {
+            SetMasterVolume(1f);
+            SetBGMVolume(1f);
+            SetSFXVolume(1f);
+            SetBlurValue(0.0015f);
+            SetScanlineValue(400);
+            SetDistortionValue(0.3f);
+
+            if (_masterSlider != null) _masterSlider.value = 1f;
+            if (_bgmSlider != null) _bgmSlider.value = 1f;
+            if (_sfxSlider != null) _sfxSlider.value = 1f;
+
+            if (_blurSlider != null) _blurSlider.value = 0.0015f;
+            if (_scanlineSlider != null) _scanlineSlider.value = 400;
+            if (_distortionSlider != null) _distortionSlider.value = 0.3f;
         }
 
         public void CloseSettings()
@@ -83,6 +144,28 @@ namespace Game.UI
             if (AudioController.Instance != null) AudioController.Instance.SetSFXVolume(value);
             PlayerPrefs.SetFloat("SFXVol", value);
         }
+
+        private void SetBlurValue(float value)
+        {
+            value = Mathf.Clamp(value, 0f, 0.05f);
+            _crtMat.SetFloat(BLUR_ID, value);
+            PlayerPrefs.SetFloat("BLURVal", value);
+        }
+
+        private void SetScanlineValue(float value)
+        {
+            int normalized = Mathf.RoundToInt(value);
+            normalized = Mathf.Clamp(normalized, 0, 1000);
+            _crtMat.SetInt(SCANLINE_ID, normalized);
+            PlayerPrefs.SetInt("SCANLINEVal", normalized);
+        }
+
+        private void SetDistortionValue(float value)
+        {
+            _lensDistortion.intensity.value = Mathf.Clamp(value, 0.1f, 0.6f);
+            PlayerPrefs.SetFloat("DISTORTIONVal", value);
+        }
+
         private void SetLanguage(int languageId)
         {
             if (_currentLanguageId == languageId) return;

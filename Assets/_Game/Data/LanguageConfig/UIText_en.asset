@@ -35,7 +35,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 633735168000
-    m_Localized: Sound Effect
+    m_Localized: SFX
     m_Metadata:
       m_Items: []
   - m_Id: 1199416754176
@@ -52,6 +52,26 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 207210632114176
     m_Localized: Fire
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3077893112393728
+    m_Localized: Blur
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3083073090416640
+    m_Localized: scanline
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3083303408037888
+    m_Localized: Distortion
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3083561852661760
+    m_Localized: Difficulty
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3092009575182336
+    m_Localized: Reset
     m_Metadata:
       m_Items: []
   references:

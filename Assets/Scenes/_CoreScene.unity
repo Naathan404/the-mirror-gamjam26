@@ -2152,17 +2152,6 @@ BoxCollider:
   m_CorrespondingSourceObject: {fileID: 8475119651200239880, guid: 0c5612ef16e689649ad82579fa2278b0, type: 3}
   m_PrefabInstance: {fileID: 1360928687}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1385246152 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3340798669239659300, guid: 9999766d65f618142b4c33a8e4d06a0e, type: 3}
-  m_PrefabInstance: {fileID: 4419137757444164581}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1435460729
 GameObject:
   m_ObjectHideFlags: 0
@@ -4660,7 +4649,7 @@ PrefabInstance:
     - target: {fileID: 4889662869157057856, guid: 32ab76fb80f8363468b8f841d0be52d3, type: 3}
       propertyPath: _globalVolume
       value: 
-      objectReference: {fileID: 1385246152}
+      objectReference: {fileID: 0}
     - target: {fileID: 6909425812368233040, guid: 32ab76fb80f8363468b8f841d0be52d3, type: 3}
       propertyPath: m_Name
       value: '[---Filter Manager---]'
