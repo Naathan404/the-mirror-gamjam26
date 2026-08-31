@@ -284,10 +284,25 @@ MonoBehaviour:
   _historyRowPrefab: {fileID: 3931220860883633490, guid: 53de4dfb74865314e95f31ea11df2e6a, type: 3}
   _maxVisibleHistoryRows: 5
   _historyContainer: {fileID: 1561452036692194875}
-  _historyRowSpacing: 0.02
+  _historyRowSpacing: 0.08
   _horizontalPaddingRatio: 0.2
-  _topPaddingRatio: 0.15
+  _topPaddingRatio: 0.075
   _bottomPaddingRatio: 0.3
+  _slotPopStartScale: 0.55
+  _slotPopDuration: 0.18
+  _slotRemoveTargetScale: 0.2
+  _slotRemoveDuration: 0.14
+  _submittedSlotPunchScale: 0.12
+  _submittedSlotPunchDuration: 0.2
+  _submittedSlotStagger: 0.035
+  _actionButtonPunchScale: 0.1
+  _actionButtonPunchDuration: 0.16
+  _symbolSpawnStagger: 0.045
+  _feedbackPunchScale: 0.15
+  _feedbackPunchDuration: 0.22
+  _historySpawnStartScale: 0.78
+  _historySpawnDuration: 0.2
+  _historyMoveDuration: 0.2
 --- !u!1 &3306926726928849660
 GameObject:
   m_ObjectHideFlags: 0
@@ -1340,15 +1355,15 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 5361879805376855263, guid: 65e3e910e0db57a48a8c08d35a4b2133, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &7071927665276156100
@@ -1376,7 +1391,7 @@ Transform:
   m_GameObject: {fileID: 7071927665276156100}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.03, y: 1.48, z: -6.07}
+  m_LocalPosition: {x: 3.03, y: 1.48, z: -6.94}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

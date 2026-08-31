@@ -35,6 +35,14 @@ namespace Game.Minigames.Laser
         [SerializeField] private LineRenderer _laserLine;
         [SerializeField] private Color _laserColor = Color.red;
 
+        [Header("Visual FX - Additive")]
+        [SerializeField] private float _cellSpawnStagger = 0.012f;
+        [SerializeField] private float _fireButtonPunchScale = 0.10f;
+        [SerializeField] private float _fireButtonPunchDuration = 0.18f;
+        [SerializeField] private float _warningPunchScale = 0.16f;
+        [SerializeField] private float _warningPunchDuration = 0.22f;
+        [SerializeField] private float _successWaveStagger = 0.025f;
+
         [Header("Warnings")]
         [SerializeField] private List<GameObject> _mistakeWarnings;
         [SerializeField] private Color _mistakeColor;
@@ -50,6 +58,9 @@ namespace Game.Minigames.Laser
         private bool _isFiring = false;
         private bool _puzzleSolved = false;
         private Transform _cellRoot;
+
+        private Tween _fireButtonTween;
+        private readonly Dictionary<Transform, Tween> _warningTweens = new();
 
         #region  Base
         protected override void OnGameStart()
@@ -110,6 +121,7 @@ namespace Game.Minigames.Laser
                 fireHit.collider == _fireButtonCollider)
             {
                 AudioController.Instance.PlaySFX(SoundName.Lazors_Gun);
+                PlayFireButtonEffect();
                 StartCoroutine(FireLaserRoutine());
                 return;
             }
@@ -281,6 +293,9 @@ namespace Game.Minigames.Laser
 
                         cellObj.SetMirrorOrientation(scrambled);
                     }
+
+                    // Additive spawn VFX only. Logic/type/orientation phía trên giữ nguyên.
+                    cellObj.PlaySpawnEffect((x + y) * _cellSpawnStagger);
 
                     _cells[x, y] = cellObj;
                 }
@@ -545,11 +560,20 @@ namespace Game.Minigames.Laser
             if (succeeded)
             {
                 _puzzleSolved = true;
+                PlaySuccessWave(beamCells);
                 yield return new WaitForSeconds(0.3f);
                 CompleteMinigame();
             }
             else if (failed)
             {
+                if (beamCells.Count > 0)
+                {
+                    LaserCell impactCell = beamCells[beamCells.Count - 1];
+                    if (impactCell != null && impactCell.cellType == LaserCellType.Stone)
+                        impactCell.PlayBlockedEffect();
+                }
+
+                // GIỮ NGUYÊN toàn bộ fail feedback đang có.
                 AudioController.Instance.PlaySFX(SoundName.Laser_Block);
                 FilterController.Instance.FlashScreen(Color.gray, 0.3f);
                 Camera.main.transform.DOShakePosition(0.3f, 0.5f, 5, 45f);
@@ -582,9 +606,60 @@ namespace Game.Minigames.Laser
                     AudioController.Instance.PlaySFX(SoundName.Laser_Light);
                     cell.SetLit(true);
                 }
+                else
+                {
+                    cell.PlayBeamPassEffect();
+                }
                     
 
                 yield return new WaitForSeconds(delay);
+            }
+        }
+        #endregion
+
+        #region Visual FX - Additive
+        private void PlayFireButtonEffect()
+        {
+            if (_fireButtonCollider == null) return;
+
+            Transform target = _fireButtonCollider.transform;
+
+            _fireButtonTween?.Kill(true);
+            _fireButtonTween = target.DOPunchScale(
+                target.localScale * _fireButtonPunchScale,
+                _fireButtonPunchDuration,
+                5,
+                0.55f);
+        }
+
+        private void PlayWarningEffect(GameObject warning)
+        {
+            if (warning == null) return;
+
+            Transform target = warning.transform;
+
+            if (_warningTweens.TryGetValue(target, out Tween oldTween))
+                oldTween?.Kill(true);
+
+            Tween tween = target.DOPunchScale(
+                target.localScale * _warningPunchScale,
+                _warningPunchDuration,
+                6,
+                0.55f);
+
+            _warningTweens[target] = tween;
+        }
+
+        private void PlaySuccessWave(List<LaserCell> beamCells)
+        {
+            if (beamCells == null) return;
+
+            for (int i = 0; i < beamCells.Count; i++)
+            {
+                LaserCell cell = beamCells[i];
+                if (cell == null) continue;
+
+                cell.PlaySuccessEffect(i * _successWaveStagger);
             }
         }
         #endregion
@@ -601,6 +676,10 @@ namespace Game.Minigames.Laser
             {
                 _mistakeWarnings[i].gameObject.SetActive(true);
             }
+
+            int newestWarningIndex = _mistakeCount - 1;
+            if (newestWarningIndex >= 0 && newestWarningIndex < _mistakeWarnings.Count)
+                PlayWarningEffect(_mistakeWarnings[newestWarningIndex]);
 
             if (_mistakeCount >= maxMistakes)
             {
@@ -634,6 +713,12 @@ namespace Game.Minigames.Laser
 
         private void ClearGrid()
         {
+            _fireButtonTween?.Kill(true);
+
+            foreach (var pair in _warningTweens)
+                pair.Value?.Kill(true);
+            _warningTweens.Clear();
+
             if (_cells != null)
             {
                 foreach (LaserCell cell in _cells)
