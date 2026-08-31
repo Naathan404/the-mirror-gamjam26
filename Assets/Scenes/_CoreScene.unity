@@ -2398,6 +2398,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1360928688}
     - target: {fileID: 5628832079108742082, guid: 18f694bb1cfe9ec43bf00eba059f9963, type: 3}
+      propertyPath: clueSpawnStagger
+      value: 0.06
+      objectReference: {fileID: 0}
+    - target: {fileID: 5628832079108742082, guid: 18f694bb1cfe9ec43bf00eba059f9963, type: 3}
+      propertyPath: mosaicGroupDelay
+      value: 0.08
+      objectReference: {fileID: 0}
+    - target: {fileID: 5628832079108742082, guid: 18f694bb1cfe9ec43bf00eba059f9963, type: 3}
       propertyPath: _increaseEntityStateChangeAccelaration
       value: 1.1
       objectReference: {fileID: 0}
@@ -6377,6 +6385,14 @@ PrefabInstance:
       propertyPath: deskSpawnArea
       value: 
       objectReference: {fileID: 1360928688}
+    - target: {fileID: 9039856354818714398, guid: f3fc5e7239587d94cb0d9826b800a717, type: 3}
+      propertyPath: _cellSpawnStagger
+      value: 0.03
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039856354818714398, guid: f3fc5e7239587d94cb0d9826b800a717, type: 3}
+      propertyPath: _warningPunchScale
+      value: 0.2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6974,33 +6990,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Minigame_Mastermind
       objectReference: {fileID: 0}
-    - target: {fileID: 1248630188229889682, guid: 4846368734d7f4146934b8daf01a117c, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 5361879805376855263, guid: 65e3e910e0db57a48a8c08d35a4b2133, type: 3}
-    - target: {fileID: 1248630188229889682, guid: 4846368734d7f4146934b8daf01a117c, type: 3}
-      propertyPath: m_Color.a
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1248630188229889682, guid: 4846368734d7f4146934b8daf01a117c, type: 3}
-      propertyPath: m_WasSpriteAssigned
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1561452036692194875, guid: 4846368734d7f4146934b8daf01a117c, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -6.94
-      objectReference: {fileID: 0}
     - target: {fileID: 3262997628460509383, guid: 4846368734d7f4146934b8daf01a117c, type: 3}
       propertyPath: deskSpawnArea
       value: 
       objectReference: {fileID: 1360928688}
-    - target: {fileID: 3262997628460509383, guid: 4846368734d7f4146934b8daf01a117c, type: 3}
-      propertyPath: _topPaddingRatio
-      value: 0.075
-      objectReference: {fileID: 0}
-    - target: {fileID: 3262997628460509383, guid: 4846368734d7f4146934b8daf01a117c, type: 3}
-      propertyPath: _historyRowSpacing
-      value: 0.08
+    - target: {fileID: 5135708338167641519, guid: 4846368734d7f4146934b8daf01a117c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7180704233323641998, guid: 4846368734d7f4146934b8daf01a117c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7045,16 +7041,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 164887601101285156, guid: 4846368734d7f4146934b8daf01a117c, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 6004381871654965876, guid: 4846368734d7f4146934b8daf01a117c, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 8862583129652278053, guid: 4846368734d7f4146934b8daf01a117c, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4846368734d7f4146934b8daf01a117c, type: 3}
 --- !u!1001 &8970227843843564365
 PrefabInstance:

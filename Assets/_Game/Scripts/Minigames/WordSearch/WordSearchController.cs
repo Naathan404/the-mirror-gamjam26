@@ -7,6 +7,13 @@ namespace Game.Minigames.WordSearch
 {
     public class WordSearchController : MinigameBaseController
     {
+        private enum BoardRevealPattern
+        {
+            Rows,
+            Columns,
+            Mosaic
+        }
+
         [Header("Tham chiếu")]
         public WordSearchConfig config;
         public WordSearchLetterItem letterPrefab;
@@ -18,6 +25,13 @@ namespace Game.Minigames.WordSearch
 
         [Tooltip("Tạo một Empty Object, Add BoxCollider (Chỉnh size bọc lấy vùng bàn), đánh dấu IsTrigger")]
         public BoxCollider clueSpawnArea;
+
+        [Header("Visual FX - Additive")]
+        [Tooltip("Mặc định Mosaic để tránh kiểu reveal chéo đã dùng nhiều ở các minigame khác.")]
+        [SerializeField] private BoardRevealPattern boardRevealPattern = BoardRevealPattern.Mosaic;
+        [SerializeField] private float revealBandDelay = 0.045f;
+        [SerializeField] private float mosaicGroupDelay = 0.055f;
+        [SerializeField] private float clueSpawnStagger = 0.045f;
 
         private List<WordSearchLetterItem> allLetters = new List<WordSearchLetterItem>();
         private List<WordSearchClueItem> spawnedClues = new List<WordSearchClueItem>(); // List mới để quản lý
@@ -104,7 +118,42 @@ namespace Game.Minigames.WordSearch
                     newLetter.OnLetterPointerUp += HandlePointerUp;
 
                     allLetters.Add(newLetter);
+
+                    // VFX reveal không đi theo đường chéo:
+                    // Rows = từng hàng, Columns = từng cột,
+                    // Mosaic = 4 nhóm ô xen kẽ kiểu mosaic.
+                    newLetter.PlaySpawnEffect(GetBoardRevealDelay(r, c));
                 }
+            }
+        }
+
+        private float GetBoardRevealDelay(int row, int column)
+        {
+            switch (boardRevealPattern)
+            {
+                case BoardRevealPattern.Rows:
+                    // Cả một hàng hiện cùng lúc, rồi tới hàng kế tiếp.
+                    return row * revealBandDelay;
+
+                case BoardRevealPattern.Columns:
+                    // Cả một cột hiện cùng lúc, rồi tới cột kế tiếp.
+                    return column * revealBandDelay;
+
+                case BoardRevealPattern.Mosaic:
+                default:
+                    // Chia board thành 4 nhóm xen kẽ:
+                    // (even,even) -> (odd,odd) -> (even,odd) -> (odd,even)
+                    // Không tạo cảm giác quét từ góc chéo.
+                    int group;
+                    bool evenRow = (row & 1) == 0;
+                    bool evenColumn = (column & 1) == 0;
+
+                    if (evenRow && evenColumn) group = 0;
+                    else if (!evenRow && !evenColumn) group = 1;
+                    else if (evenRow) group = 2;
+                    else group = 3;
+
+                    return group * mosaicGroupDelay;
             }
         }
 
@@ -131,6 +180,9 @@ namespace Game.Minigames.WordSearch
         {
             currentDragList.Add(letter);
             letter.SetHighlightColor(config.highlightColor); // Nhuộm đen nhạt
+
+            // VFX additive, không đổi currentDragList hay màu highlight.
+            letter.PlaySelectionEffect();
         }
 
         private void HandlePointerUp(WordSearchLetterItem letter)
@@ -181,6 +233,9 @@ namespace Game.Minigames.WordSearch
                 {
                     item.ClearHighlight();
                     item.Shake(config.shakeDuration, config.shakeMagnitude);
+
+                    // Shake position cũ vẫn giữ nguyên; effect mới chỉ rung rotation + tint chữ.
+                    item.PlayWrongEffect();
                 }
 
                 AudioController.Instance.PlaySFX(SoundName.Word_Fail);
@@ -312,6 +367,9 @@ namespace Game.Minigames.WordSearch
                 newClue.Initialize(activeWords[i], uniqueSortingBase, clueSpawnArea);
 
                 spawnedClues.Add(newClue);
+
+                // Clue chỉ pop/fade tại vị trí random sẵn có, không bay từ góc hay đổi position.
+                newClue.PlaySpawnEffect(i * clueSpawnStagger);
             }
         }
 

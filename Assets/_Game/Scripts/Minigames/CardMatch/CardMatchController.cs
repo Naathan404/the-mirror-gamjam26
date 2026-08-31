@@ -14,6 +14,10 @@ namespace Game.Minigames.CardMatch
         [Tooltip("Kéo object Paper BG vào đây")]
         public Renderer paperBackground;
 
+        [Header("Visual FX - Additive")]
+        [SerializeField] private float _spawnStagger = 0.025f;
+        [SerializeField] private float _successStagger = 0.035f;
+
         private List<CardItem> allCards = new List<CardItem>();
         private CardItem firstCard;
         private CardItem secondCard;
@@ -60,10 +64,10 @@ namespace Game.Minigames.CardMatch
                 Vector2 extents = sr.sprite.bounds.extents;
                 Vector3[] corners = new Vector3[4]
                 {
-            new Vector3(-extents.x, -extents.y, 0),
-            new Vector3(extents.x, -extents.y, 0),
-            new Vector3(-extents.x, extents.y, 0),
-            new Vector3(extents.x, extents.y, 0)
+                    new Vector3(-extents.x, -extents.y, 0),
+                    new Vector3(extents.x, -extents.y, 0),
+                    new Vector3(-extents.x, extents.y, 0),
+                    new Vector3(extents.x, extents.y, 0)
                 };
 
                 float minX = float.MaxValue, maxX = float.MinValue;
@@ -127,6 +131,10 @@ namespace Game.Minigames.CardMatch
 
                 newCard.OnCardClicked += HandleCardClicked;
                 allCards.Add(newCard);
+
+                // VFX bổ sung: stagger visual khi spawn.
+                // Không thêm yield / không thay đổi thời điểm PreviewRoutine bắt đầu.
+                newCard.PlaySpawnEffect(i * _spawnStagger);
             }
 
             StartCoroutine(PreviewRoutine());
@@ -192,6 +200,8 @@ namespace Game.Minigames.CardMatch
 
                 if (pairsMatched >= totalPairs)
                 {
+                    // VFX bổ sung, không delay CompleteMinigame.
+                    PlaySuccessWave();
                     CompleteMinigame();
                 }
                 else
@@ -201,6 +211,11 @@ namespace Game.Minigames.CardMatch
             }
             else
             {
+                // VFX bổ sung trong đúng khoảng delay vốn đã tồn tại.
+                // Không thay đổi thời gian chờ hay thời điểm FlipDown.
+                firstCard.PlayMismatchEffect();
+                secondCard.PlayMismatchEffect();
+
                 yield return new WaitForSeconds(config.delayBeforeFlipBack);
                 firstCard.FlipDown();
                 secondCard.FlipDown();
@@ -211,6 +226,15 @@ namespace Game.Minigames.CardMatch
 
             firstCard = null;
             secondCard = null;
+        }
+
+        private void PlaySuccessWave()
+        {
+            for (int i = 0; i < allCards.Count; i++)
+            {
+                if (allCards[i] != null)
+                    allCards[i].PlaySuccessEffect(i * _successStagger);
+            }
         }
 
         private void ClearGrid()

@@ -149,6 +149,11 @@ namespace Game.Minigames.Maze
                 AudioController.Instance.PlaySFX(SoundName.Maze_Moving);
                 playerMoved = true;
             }
+            else
+            {
+                // VFX bổ sung: feedback khi player bấm vào tường. Không thay đổi logic di chuyển.
+                currentPlayerInstance.PlayBlockedEffect();
+            }
 
             // 2. TÍNH TOÁN NHÁP VỊ TRÍ CỦA THỰC THỂ (Chưa di chuyển vội)
             PathDirection enemyDir = GetOppositeDirection(playerDir);
@@ -167,6 +172,9 @@ namespace Game.Minigames.Maze
                 else
                 {
                     enemyNextPositions[i] = enemyOldPositions[i]; // Đụng tường thì đứng im
+
+                    // VFX bổ sung, entity vẫn đứng nguyên đúng như logic cũ.
+                    activeEntities[i].PlayBlockedEffect();
                 }
             }
 
@@ -201,6 +209,7 @@ namespace Game.Minigames.Maze
 
             // 4. CHÍNH THỨC DI CHUYỂN & KIỂM TRA ĐỤNG NGƯỜI CHƠI
             bool collisionDetected = false;
+            List<MazePlayer> collidingEntities = new List<MazePlayer>(); // chỉ dùng cho VFX
 
             for (int i = 0; i < activeEntities.Count; i++)
             {
@@ -218,16 +227,23 @@ namespace Game.Minigames.Maze
                 if (playerNextPos == nextPos)
                 {
                     collisionDetected = true;
+                    collidingEntities.Add(entity);
                 }
                 else if (playerNextPos == oldPos && nextPos == playerOldPos)
                 {
                     collisionDetected = true;
+                    collidingEntities.Add(entity);
                 }
             }
 
             // 5. XỬ LÝ HẬU QUẢ THẮNG / THUA
             if (collisionDetected)
             {
+                // VFX bổ sung trước các shake/flash cũ.
+                currentPlayerInstance.PlayHitEffect();
+                foreach (var entity in collidingEntities)
+                    if (entity != null) entity.PlayHitEffect();
+
                 FilterController.Instance.FlashScreen(FilterController.Instance.HazardColor, 0.5f);
                 Camera.main.transform.DOShakePosition(0.5f, 1f, 15, 90f);
                 mazeRenderer.paperQuad.DOShakePosition(0.3f, 0.5f, 10, 90f);
@@ -236,6 +252,8 @@ namespace Game.Minigames.Maze
             }
             else if (playerMoved && playerNextPos == currentMazeData.EndPos)
             {
+                // VFX bổ sung, không delay logic win.
+                currentPlayerInstance.PlaySuccessEffect();
                 AudioController.Instance.PlaySFX(SoundName.Maze_Success);
                 CompleteMinigame(); // Win
             }

@@ -58,6 +58,19 @@ MonoBehaviour:
   _bulbOnSprite: {fileID: 8547904252786869755, guid: 8d4c85244e0eb6447bc860fa6f3d2909, type: 3}
   _stoneSprite: {fileID: 6809053725490206649, guid: 8d4c85244e0eb6447bc860fa6f3d2909, type: 3}
   _mirrorSprite: {fileID: 38681482177589692, guid: 8d4c85244e0eb6447bc860fa6f3d2909, type: 3}
+  _spawnDuration: 0.18
+  _spawnStartAlpha: 0
+  _rotatePunchScale: 0.12
+  _rotatePunchDuration: 0.16
+  _beamPunchScale: 0.1
+  _beamPunchDuration: 0.12
+  _bulbPunchScale: 0.3
+  _bulbPunchDuration: 0.22
+  _blockedPunchScale: 0.2
+  _blockedPunchDuration: 0.2
+  _rotateFlashColor: {r: 1, g: 0.92, b: 0.55, a: 1}
+  _beamFlashColor: {r: 1, g: 1, b: 1, a: 1}
+  _blockedFlashColor: {r: 1, g: 0.45, b: 0.25, a: 1}
   IsLightUp: 0
 --- !u!212 &9142289111013406981
 SpriteRenderer:
