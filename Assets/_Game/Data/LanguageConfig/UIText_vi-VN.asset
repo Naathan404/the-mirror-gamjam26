@@ -83,8 +83,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 3196673423503360
-    m_Localized: "\u25CF = \u0110\xFAng v\u1ECB tr\xED + k\xFD hi\u1EC7u\n\u25CB
-      = \u0110\xFAng k\xFD hi\u1EC7u, sai v\u1ECB tr\xED"
+    m_Localized: "\u25CF=\u0110\xFAng v\u1ECB tr\xED + k\xFD hi\u1EC7u, \u25CB=\u0110\xFAng
+      k\xFD hi\u1EC7u, sai v\u1ECB tr\xED"
     m_Metadata:
       m_Items: []
   references:

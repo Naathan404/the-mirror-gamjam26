@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e07d093721a83147a0ca31b3199439f, type: 3}
   m_Name: MastermindConfig_3
   m_EditorClassIdentifier: 
-  CodeLength: 6
-  SymbolCount: 8
-  MaxAttempts: 16
+  CodeLength: 5
+  SymbolCount: 7
+  MaxAttempts: 100
   AllowDuplicateSymbols: 0
   SymbolSprites:
   - {fileID: 854736088671844643, guid: 412ec9ef52cc3c040a4e47553c65ec0a, type: 3}

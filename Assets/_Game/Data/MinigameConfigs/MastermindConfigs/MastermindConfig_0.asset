@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CodeLength: 3
   SymbolCount: 4
-  MaxAttempts: 12
-  AllowDuplicateSymbols: 0
+  MaxAttempts: 40
+  AllowDuplicateSymbols: 1
   SymbolSprites:
   - {fileID: 854736088671844643, guid: 412ec9ef52cc3c040a4e47553c65ec0a, type: 3}
   - {fileID: -669320231, guid: 412ec9ef52cc3c040a4e47553c65ec0a, type: 3}
