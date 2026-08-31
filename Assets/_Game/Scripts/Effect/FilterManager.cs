@@ -20,6 +20,12 @@ namespace Game.Effect
         private float _vignetteIntensity;
         private Color _vignetteColor;
 
+        public override void Awake()
+        {
+            base.Awake();
+            DontDestroyOnLoad(this.gameObject);
+        }
+
         private void Start()
         {
             if(_globalVolume != null)
