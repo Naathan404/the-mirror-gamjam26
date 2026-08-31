@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: MastermindConfig_2
   m_EditorClassIdentifier: 
   CodeLength: 5
-  SymbolCount: 7
-  MaxAttempts: 14
+  SymbolCount: 6
+  MaxAttempts: 80
   AllowDuplicateSymbols: 0
   SymbolSprites:
   - {fileID: 854736088671844643, guid: 412ec9ef52cc3c040a4e47553c65ec0a, type: 3}
