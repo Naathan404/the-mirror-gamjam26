@@ -71,6 +71,18 @@ MonoBehaviour:
     m_Key: reset
     m_Metadata:
       m_Items: []
+  - m_Id: 3160660458270720
+    m_Key: mastermind_delete
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3196438123048960
+    m_Key: mastermind_try
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3196673423503360
+    m_Key: mastermind_legend
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

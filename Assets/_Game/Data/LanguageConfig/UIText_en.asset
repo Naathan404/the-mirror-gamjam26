@@ -74,6 +74,19 @@ MonoBehaviour:
     m_Localized: Reset
     m_Metadata:
       m_Items: []
+  - m_Id: 3160660458270720
+    m_Localized: Delete
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3196438123048960
+    m_Localized: Check
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3196673423503360
+    m_Localized: "\u25CF = Correct symbol and position\n\u25CB = Correct symbol,
+      wrong position"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

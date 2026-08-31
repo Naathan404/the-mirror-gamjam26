@@ -50,7 +50,8 @@ namespace Game.Systems.Lock
             MinigameType.Wires,
             MinigameType.WordSearch,
             MinigameType.Lazors,
-            MinigameType.Waveform
+            MinigameType.Waveform,
+            MinigameType.Mastermind
         };
 
         private void OnEnable()
