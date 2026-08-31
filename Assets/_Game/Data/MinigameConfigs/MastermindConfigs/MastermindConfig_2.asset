@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e07d093721a83147a0ca31b3199439f, type: 3}
+  m_Name: MastermindConfig_2
+  m_EditorClassIdentifier: 
+  CodeLength: 5
+  SymbolCount: 7
+  MaxAttempts: 14
+  AllowDuplicateSymbols: 0
+  SymbolSprites:
+  - {fileID: 854736088671844643, guid: 412ec9ef52cc3c040a4e47553c65ec0a, type: 3}
+  - {fileID: -669320231, guid: 412ec9ef52cc3c040a4e47553c65ec0a, type: 3}
+  - {fileID: 1950833653, guid: 412ec9ef52cc3c040a4e47553c65ec0a, type: 3}
+  - {fileID: 1025086112, guid: 412ec9ef52cc3c040a4e47553c65ec0a, type: 3}
+  - {fileID: -1373159360, guid: 412ec9ef52cc3c040a4e47553c65ec0a, type: 3}
+  - {fileID: 178712349, guid: 412ec9ef52cc3c040a4e47553c65ec0a, type: 3}
+  - {fileID: 290590517, guid: 412ec9ef52cc3c040a4e47553c65ec0a, type: 3}
+  - {fileID: -507645753, guid: 412ec9ef52cc3c040a4e47553c65ec0a, type: 3}

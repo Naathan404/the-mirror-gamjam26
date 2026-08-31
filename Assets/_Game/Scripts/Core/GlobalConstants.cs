@@ -69,7 +69,8 @@ namespace Game.Core
         Wires,
         WordSearch,
         Lazors,
-        Waveform
+        Waveform,
+        Mastermind,
     }
 
     public enum ColorId
