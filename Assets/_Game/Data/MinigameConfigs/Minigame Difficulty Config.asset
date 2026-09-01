@@ -48,4 +48,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c3bdbdb73ff5add4d9f1c31630c4c8ca, type: 2}
   - {fileID: 11400000, guid: 3a2c6583e57215d4999311b1925d389f, type: 2}
   _enableDebug: 0
-  _debugDifficultLevel: 3
+  _debugDifficultLevel: 0

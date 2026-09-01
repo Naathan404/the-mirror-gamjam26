@@ -44,7 +44,7 @@ namespace Game.Minigames.Maze
         {
             ClearEntities();
 
-            currentMazeData = MazeGenerator.Generate(mazeConfig.mazeWidth, mazeConfig.mazeHeight);
+            currentMazeData = MazeGenerator.Generate(mazeConfig.mazeWidth, mazeConfig.mazeHeight, mazeConfig.loopChance);
             mazeRenderer.RenderMaze(currentMazeData);
 
             if (currentPlayerInstance == null)
