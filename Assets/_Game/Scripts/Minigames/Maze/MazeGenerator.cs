@@ -25,7 +25,7 @@ namespace Game.Minigames.Maze
         /// <summary>
         /// Sinh mê cung ngẫu nhiên dựa trên thuật toán DFS Backtracking
         /// </summary>
-        public static MazeData Generate(int width, int height)
+        public static MazeData Generate(int width, int height, float loopChance = 0.1f)
         {
             MazeData data = new MazeData(width, height);
 
@@ -70,7 +70,38 @@ namespace Game.Minigames.Maze
                 }
             }
 
+            AddLoops(data, width, height, loopChance);
+
             return data;
+        }
+
+        private static void AddLoops(MazeData data, int width, int height, float loopChance)
+        {
+            for(int x = 0; x < width; x++)
+            {
+                for(int y = 0; y < height; y++)
+                {
+                    Vector2Int pos = new Vector2Int(x, y);
+
+                    foreach(var move in Moves)
+                    {
+                        Vector2Int next = pos + move.offset;
+
+                        if (next.x < 0 || next.x >= width || next.y < 0 || next.y >= height)
+                            continue;
+
+                        bool alreadyConnected = (data.Grid[x, y] & (int)move.direction) != 0;
+
+                        if (alreadyConnected) continue;
+
+                        if (Random.value <= loopChance)
+                        {
+                            data.SetCell(x, y, data.Grid[x, y] | (int)move.direction);
+                            data.SetCell(next.x, next.y, data.Grid[next.x, next.y] | (int)move.opposite);
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>
