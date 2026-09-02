@@ -16,7 +16,7 @@ namespace Game.Minigames
         public int maxEdgesPerNode = 3;
 
         [Header("Cấu hình Giải đố")]
-        [Tooltip("Số lần game tự bấm ngầm để xáo trộn (Càng cao càng cần nhiều bước để giải)")]
-        public int shuffleSteps = 4;
+        [Tooltip("Số bước giải tối thiểu ban đầu")]
+        public int minimunStepsToSolve = 4;
     }
 }

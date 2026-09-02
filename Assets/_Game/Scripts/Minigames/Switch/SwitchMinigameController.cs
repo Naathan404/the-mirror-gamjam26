@@ -24,7 +24,7 @@ namespace Game.Minigames
 
         [Header("Visual FX - Additive")]
         [SerializeField] private float _nodeSpawnStagger = 0.05f;
-        [SerializeField] private float _wireSpawnStagger = 0.02f; 
+        [SerializeField] private float _wireSpawnStagger = 0.02f;
         private SwitchConfig _currentConfig;
 
         private List<SwitchNode> _nodes = new List<SwitchNode>();
@@ -262,39 +262,37 @@ namespace Game.Minigames
 
         private void ScramblePuzzle()
         {
-            foreach (var node in _nodes)
+            int targetSteps = Mathf.Min(_currentConfig.minimunStepsToSolve, _nodes.Count);
+            int maxAttempts = 100;
+
+            for (int attempt = 0; attempt < maxAttempts; attempt++)
             {
-                node.SetState(true, false);
-            }
-
-            List<SwitchNode> availableNodes = new List<SwitchNode>(_nodes);
-
-            int steps = Mathf.Min(_currentConfig.shuffleSteps, _nodes.Count);
-
-            for (int i = 0; i < steps; i++)
-            {
-                int randomIndex = UnityEngine.Random.Range(0, availableNodes.Count);
-                SwitchNode randomNode = availableNodes[randomIndex];
-                availableNodes.RemoveAt(randomIndex);
-
-                randomNode.SetState(!randomNode.IsOn, false);
-                foreach (var neighbor in _graph[randomNode])
+                foreach (var node in _nodes)
                 {
-                    neighbor.SetState(!neighbor.IsOn, false);
+                    node.SetState(true, false);
+                }
+
+                List<SwitchNode> availableNodes = new List<SwitchNode>(_nodes);
+                for (int i = 0; i < targetSteps; i++)
+                {
+                    int randomIndex = UnityEngine.Random.Range(0, availableNodes.Count);
+                    SwitchNode randomNode = availableNodes[randomIndex];
+                    availableNodes.RemoveAt(randomIndex);
+
+                    randomNode.SetState(!randomNode.IsOn, false);
+                    foreach (var neighbor in _graph[randomNode])
+                    {
+                        neighbor.SetState(!neighbor.IsOn, false);
+                    }
+                }
+
+                if (GetMinimumStepsToSolve() == targetSteps)
+                {
+                    return;
                 }
             }
 
-            bool isAllOn = true;
-            foreach (var node in _nodes)
-            {
-                if (!node.IsOn)
-                {
-                    isAllOn = false;
-                    break;
-                }
-            }
-
-            if (isAllOn && _nodes.Count > 0)
+            if (GetMinimumStepsToSolve() == 0 && _nodes.Count > 0)
             {
                 SwitchNode forcedNode = _nodes[UnityEngine.Random.Range(0, _nodes.Count)];
                 forcedNode.SetState(!forcedNode.IsOn, false);
@@ -303,6 +301,62 @@ namespace Game.Minigames
                     neighbor.SetState(!neighbor.IsOn, false);
                 }
             }
+        }
+
+        private int GetMinimumStepsToSolve()
+        {
+            int n = _nodes.Count;
+            if (n > 31) return -1; // Vượt quá giới hạn bit của kiểu int
+
+            int[] toggleMasks = new int[n];
+            for (int i = 0; i < n; i++)
+            {
+                toggleMasks[i] |= (1 << i);
+                foreach (var neighbor in _graph[_nodes[i]])
+                {
+                    int j = _nodes.IndexOf(neighbor);
+                    toggleMasks[i] |= (1 << j);
+                }
+            }
+
+            int startState = 0;
+            for (int i = 0; i < n; i++)
+            {
+                if (!_nodes[i].IsOn)
+                {
+                    startState |= (1 << i);
+                }
+            }
+
+            if (startState == 0) return 0;
+
+            Queue<int> queue = new Queue<int>();
+            Dictionary<int, int> distances = new Dictionary<int, int>();
+
+            queue.Enqueue(startState);
+            distances[startState] = 0;
+
+            while (queue.Count > 0)
+            {
+                int current = queue.Dequeue();
+                int currentDist = distances[current];
+
+                for (int i = 0; i < n; i++)
+                {
+                    int nextState = current ^ toggleMasks[i];
+
+                    if (!distances.ContainsKey(nextState))
+                    {
+                        distances[nextState] = currentDist + 1;
+
+                        if (nextState == 0) return distances[nextState];
+
+                        queue.Enqueue(nextState);
+                    }
+                }
+            }
+
+            return -1;
         }
 
         private IEnumerator SpawnEffectRoutine()
@@ -377,6 +431,7 @@ namespace Game.Minigames
         private void CheckWinCondition()
         {
             bool allOn = true;
+            Debug.Log("[SWITCH] Số bước tối thiểu để thắng: " + GetMinimumStepsToSolve());
             foreach (var node in _nodes)
             {
                 if (!node.IsOn)
