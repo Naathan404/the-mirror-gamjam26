@@ -31,6 +31,8 @@ namespace Game.Cameras
         private Quaternion _startRotation;
         private Quaternion _targetRotation;
         private float _transitionTimer;
+
+        private bool _isJumpscare = false;
         #endregion
 
         #region Base
@@ -62,12 +64,35 @@ namespace Game.Cameras
             if (t >= 1f)
             {
                 IsTransitioning = false;
-                GameEvents.RaiseViewChangeFinished(CurrentView);
+                if (!_isJumpscare)
+                    GameEvents.RaiseViewChangeFinished(CurrentView);
             }
         }
         #endregion
 
         #region Buttons
+        public void SwitchToMirrorImmediately()
+        {
+            if (_mirrorTarget == null)
+            {
+                Debug.LogError("[CameraviewController] Missing target to switch view");
+                return;
+            }
+
+            if (_lookInputDurationTransition && IsTransitioning) return;
+
+            if (!IsTransitioning && CurrentView == View.Mirror) return;
+
+            AudioController.Instance.PlaySFX(SoundName.View_Change);
+            _startRotation = _cameraTransform.rotation;
+            _targetRotation = _mirrorTarget.rotation;
+            _transitionTimer = 0f;
+            IsTransitioning = true;
+            CurrentView = View.Mirror;
+
+            _isJumpscare = true;
+        }
+
         public void SwitchToMirror()
         {
             //AudioController.Instance.PlaySFX(SoundName.ButtonClick);
