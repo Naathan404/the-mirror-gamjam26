@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d7b51f537259e04eb647896fc75c802, type: 3}
   m_Name: WaveformConfig_2
   m_EditorClassIdentifier: 
-  WaveComponentCount: 3
-  DomainHalfWidth: 6
+  WaveComponentCount: 4
+  DomainHalfWidth: 7
   AmplitudeRange: {x: 0.2, y: 1.4}
-  FrequencyRange: {x: 0.5, y: 1.4}
+  FrequencyRange: {x: 0.5, y: 1.7}
   AmplitudeStep: 0.05
   FrequencyStep: 0.1
-  MatchErrorTolerance: 0.2
+  MatchErrorTolerance: 0.15
   SampleResolution: 90
-  MaxMistakes: 2
+  MaxMistakes: 4
   ResetDialsOnRegenerate: 1

@@ -15,12 +15,12 @@ namespace Game.Minigames.Waveform
             return sum;
         }
 
-        public static float CalculateError(SineComponent[] target, SineComponent[] player, float xMin, float xMax, int resolution)
+        public static float CalculateError(SineComponent[] target, SineComponent[] player, float domainHalfWidth, int resolution)
         {
             float totalError = 0f;
-            for(int i = 0; i < resolution; i++)
+            for (int i = 0; i < resolution; i++)
             {
-                float x = Mathf.Lerp(xMin, xMax, i / (float)(resolution - 1));
+                float x = Mathf.Lerp(-domainHalfWidth, domainHalfWidth, i / (float)(resolution - 1));
                 float diff = EvaluaSum(target, x) - EvaluaSum(player, x);
                 totalError += diff * diff; // RMS-style
             }
@@ -38,12 +38,21 @@ namespace Game.Minigames.Waveform
             {
                 res[i] = new SineComponent
                 {
-                    Amplitude = UnityEngine.Random.Range(config.AmplitudeRange.x, config.AmplitudeRange.y),
-                    Frequency = UnityEngine.Random.Range(config.FrequencyRange.x, config.FrequencyRange.y),
+                    Amplitude = SnapToStep(
+                        UnityEngine.Random.Range(config.AmplitudeRange.x, config.AmplitudeRange.y),
+                        config.AmplitudeRange.x, config.AmplitudeStep),
+                    Frequency = SnapToStep(
+                        UnityEngine.Random.Range(config.FrequencyRange.x, config.FrequencyRange.y),
+                        config.FrequencyRange.x, config.FrequencyStep),
                     Phase = UnityEngine.Random.Range(0f, Mathf.PI * 2f)
                 };
             }
             return res;
+        }
+
+        private static float SnapToStep(float value, float rangeStart, float step)
+        {
+            return rangeStart + Mathf.Round((value - rangeStart) / step) * step;
         }
     }
 }
