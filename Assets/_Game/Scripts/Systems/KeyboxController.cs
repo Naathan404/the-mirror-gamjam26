@@ -110,6 +110,7 @@ namespace Game.Systems.Lock
             AddPasscodeDigit(minigameDigitMap, MinigameType.Lazors);
             AddPasscodeDigit(minigameDigitMap, MinigameType.Waveform);
             AddPasscodeDigit(minigameDigitMap, MinigameType.Mastermind);
+            AddPasscodeDigit(minigameDigitMap, MinigameType.Switch);
 
             if (targetPasscode.Count < GameConstants.NUMBER_OF_MINIGAMES)
             {

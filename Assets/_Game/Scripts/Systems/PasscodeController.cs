@@ -7,7 +7,6 @@ using System.Linq;
 
 namespace Game.Systems.Lock
 {
-    // 1. TẠO STRUCT ĐỂ UNITY HIỂN THỊ ĐƯỢC CẶP KEY-VALUE
     [System.Serializable]
     public struct MinigameDigitPair
     {
@@ -15,14 +14,33 @@ namespace Game.Systems.Lock
         public KeyCode KeyCode;
     }
 
+    [System.Serializable]
+    public struct MinigameToggle
+    {
+        public MinigameType Minigame;
+        public bool IsEnabled;
+    }
+
     public class PasscodeController : MonoSingleton<PasscodeController>
     {
         public int requiredDigits = 4;
 
+        [Header("Cấu hình Game xuất hiện (Check để cho phép)")]
+        public List<MinigameToggle> minigamePool = new List<MinigameToggle>()
+        {
+            new MinigameToggle { Minigame = MinigameType.Maze, IsEnabled = true },
+            new MinigameToggle { Minigame = MinigameType.CardMatch, IsEnabled = true },
+            new MinigameToggle { Minigame = MinigameType.Wires, IsEnabled = true },
+            new MinigameToggle { Minigame = MinigameType.WordSearch, IsEnabled = true },
+            new MinigameToggle { Minigame = MinigameType.Lazors, IsEnabled = true },
+            new MinigameToggle { Minigame = MinigameType.Waveform, IsEnabled = true },
+            new MinigameToggle { Minigame = MinigameType.Mastermind, IsEnabled = true },
+            new MinigameToggle { Minigame = MinigameType.Switch, IsEnabled = true }
+        };
+
         private Dictionary<MinigameType, KeyCode> minigameDigitMap = new();
         private Dictionary<MinigameType, KeyCode> collectedDigits = new();
 
-        // 2. LIST ĐỂ PHẢN CHIẾU LÊN INSPECTOR (Chỉ dùng để xem)
         [Header("Góc nhìn trộm (Debug View)")]
         public List<MinigameDigitPair> debugMinigameDigitMap = new List<MinigameDigitPair>();
         public List<MinigameDigitPair> debugCollectedDigits = new List<MinigameDigitPair>();
@@ -40,19 +58,10 @@ namespace Game.Systems.Lock
             KeyColor.Red,
             KeyColor.Blue,
             KeyColor.Yellow,
-            KeyColor.Green 
+            KeyColor.Green
         };
 
-        private List<MinigameType> minigameTypes = new List<MinigameType>()
-        {
-            MinigameType.Maze,
-            MinigameType.CardMatch,
-            MinigameType.Wires,
-            MinigameType.WordSearch,
-            MinigameType.Lazors,
-            MinigameType.Waveform,
-            MinigameType.Mastermind
-        };
+        private List<MinigameType> minigameTypes = new List<MinigameType>();
 
         private void OnEnable()
         {
@@ -63,11 +72,20 @@ namespace Game.Systems.Lock
         {
             GameEvents.OnMinigameCompleted -= HandleMinigameCompleted;
         }
+
         private void Start()
         {
+            minigameTypes = minigamePool.Where(g => g.IsEnabled).Select(g => g.Minigame).ToList();
+
+            if (minigameTypes.Count < GameConstants.NUMBER_OF_MINIGAMES)
+            {
+                Debug.LogError($"[PasscodeController] CẢNH BÁO: Bạn chỉ bật {minigameTypes.Count} game, nhưng GameConstants yêu cầu sinh {GameConstants.NUMBER_OF_MINIGAMES} game!");
+            }
+
             keyShapes = ShuffleHelper.Shuffle(keyShapes);
             keyColors = ShuffleHelper.Shuffle(keyColors);
             minigameTypes = ShuffleHelper.Shuffle(minigameTypes);
+
             GenerateNewPasscode();
         }
 
@@ -75,7 +93,10 @@ namespace Game.Systems.Lock
         {
             minigameDigitMap.Clear();
             List<int> uniqueDigits = Enumerable.Range(0, 10).OrderBy(x => Random.value).ToList();
-            for (int i = 0; i < GameConstants.NUMBER_OF_MINIGAMES; i++)
+
+            int gamesToGenerate = Mathf.Min(GameConstants.NUMBER_OF_MINIGAMES, minigameTypes.Count);
+
+            for (int i = 0; i < gamesToGenerate; i++)
             {
                 int code = uniqueDigits[i];
                 minigameDigitMap.Add(minigameTypes[i], new KeyCode(code, keyShapes[i], keyColors[i]));
@@ -96,26 +117,13 @@ namespace Game.Systems.Lock
                 collectedDigits.Add(minigameType, digit);
                 Debug.Log($"[PasscodeController] 🔑 Đã lưu thành công số {digit} vào danh sách.");
                 SyncDictionaryToLists();
-
-                //if (collectedDigits.Count >= requiredDigits)
-                //{
-                //    Unlock();
-                //}
             }
             else
             {
-                // Nếu chui vào đây, nghĩa là game bị nộp đúp hoặc báo cáo 2 lần
                 Debug.LogWarning($"[PasscodeController] ❌ TỪ CHỐI LƯU: Game {minigameType} đã nộp mã trước đó rồi!");
             }
         }
 
-        private void Unlock()
-        {
-            Debug.Log("[PasscodeController] 🎉 ĐÃ ĐỦ 3 MÃ SỐ! ĐANG BẮN LỆNH MỞ KHÓA!");
-            GameEvents.RaiseLockUnlocked();
-        }
-
-        // 3. HÀM ĐỒNG BỘ: Chép data từ Dictionary sang List để Inspector thấy được
         private void SyncDictionaryToLists()
         {
             debugMinigameDigitMap.Clear();

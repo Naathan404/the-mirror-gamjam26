@@ -87,6 +87,10 @@ MonoBehaviour:
       position"
     m_Metadata:
       m_Items: []
+  - m_Id: 3863273226059776
+    m_Localized: Turn on all the lights
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

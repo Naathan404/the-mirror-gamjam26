@@ -71,6 +71,7 @@ namespace Game.Core
         Lazors,
         Waveform,
         Mastermind,
+        Switch
     }
 
     public enum ColorId
