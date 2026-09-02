@@ -20,5 +20,5 @@ MonoBehaviour:
   FrequencyStep: 0.2
   MatchErrorTolerance: 0.28
   SampleResolution: 75
-  MaxMistakes: 2
+  MaxMistakes: 4
   ResetDialsOnRegenerate: 1
