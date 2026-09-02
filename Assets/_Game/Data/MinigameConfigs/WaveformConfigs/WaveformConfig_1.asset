@@ -18,7 +18,7 @@ MonoBehaviour:
   FrequencyRange: {x: 0.5, y: 1.5}
   AmplitudeStep: 0.05
   FrequencyStep: 0.125
-  MatchErrorTolerance: 0.2
+  MatchErrorTolerance: 0.18
   SampleResolution: 80
   MaxMistakes: 4
   ResetDialsOnRegenerate: 1
