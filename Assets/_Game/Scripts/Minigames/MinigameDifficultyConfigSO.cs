@@ -35,6 +35,9 @@ namespace Game.Minigames
         [Header("Masterminds")]
         [SerializeField] private MastermindConfig[] _mastermindConfigs = new MastermindConfig[GameConstants.NUMBER_OF_MINIGAMES];
 
+        [Header("Switch")]
+        [SerializeField] private SwitchConfig[] _switchConfigs = new SwitchConfig[GameConstants.NUMBER_OF_MINIGAMES];
+
 #if UNITY_EDITOR
         [Header("Debug")]
         [SerializeField] private bool _enableDebug = false;
@@ -53,6 +56,7 @@ namespace Game.Minigames
                 var t when t == typeof(LaserConfigSO) => _lazorsConfigs,
                 var t when t == typeof(WaveformConfigSO) => _waveFormConfigs,
                 var t when t == typeof(MastermindConfig) => _mastermindConfigs,
+                var t when t == typeof(SwitchConfig) => _switchConfigs,
                 _ => null
             };
 
