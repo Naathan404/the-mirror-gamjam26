@@ -1038,14 +1038,6 @@ PrefabInstance:
       propertyPath: deskSpawnArea
       value: 
       objectReference: {fileID: 1360928688}
-    - target: {fileID: 4067999053047390420, guid: 3281f5afa1cd974478215737ea036316, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: -1922979618149193216, guid: 214eea3306db66d449c87651c5fcbae1, type: 3}
-    - target: {fileID: 4162130549954534917, guid: 3281f5afa1cd974478215737ea036316, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5533935052466573044, guid: 3281f5afa1cd974478215737ea036316, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1093,7 +1085,19 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 418497009157795364, guid: 3281f5afa1cd974478215737ea036316, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 5695285446311523350, guid: 3281f5afa1cd974478215737ea036316, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 3958671975792614763, guid: 3281f5afa1cd974478215737ea036316, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 3912207432524068551, guid: 3281f5afa1cd974478215737ea036316, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 3281f5afa1cd974478215737ea036316, type: 3}
 --- !u!1 &639546696
 GameObject:

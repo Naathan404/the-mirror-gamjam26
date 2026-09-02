@@ -19,10 +19,10 @@ namespace Game.Minigames.Maze
         [Tooltip("Prefab của thực thể (Có thể dùng lại MazePlayer nhưng đổi màu đen/đỏ)")]
         public MazePlayer entityPrefab;
         [Header("Nút điều khiển UI")]
-        public Button btnUp;
-        public Button btnDown;
-        public Button btnLeft;
-        public Button btnRight;
+        public Collider btnUp;
+        public Collider btnDown;
+        public Collider btnLeft;
+        public Collider btnRight;
 
         private MazeData currentMazeData;
         private MazePlayer currentPlayerInstance;
@@ -33,10 +33,6 @@ namespace Game.Minigames.Maze
         protected override void Start()
         {
             base.Start();
-            if (btnUp != null) btnUp.onClick.AddListener(ExecuteMoveUp);
-            if (btnDown != null) btnDown.onClick.AddListener(ExecuteMoveDown);
-            if (btnLeft != null) btnLeft.onClick.AddListener(ExecuteMoveLeft);
-            if (btnRight != null) btnRight.onClick.AddListener(ExecuteMoveRight);
         }
 
         // 1. CHẠY KHI GAME MỞ LÊN (HOẶC RESET BẢN ĐỒ MỚI)
@@ -125,6 +121,11 @@ namespace Game.Minigames.Maze
             else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) ExecuteMoveDown();
             else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) ExecuteMoveLeft();
             else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) ExecuteMoveRight();
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                HandleMouseClick();
+            }
         }
         private bool CanReceiveInput()
         {
@@ -135,6 +136,19 @@ namespace Game.Minigames.Maze
             foreach (var ent in activeEntities) if (ent.IsMoving) return false;
 
             return true;
+        }
+
+        private void HandleMouseClick()
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            if (Physics.Raycast(ray, out RaycastHit hit, 100f))
+            {
+                if (btnUp != null && hit.collider == btnUp) ExecuteMoveUp();
+                else if (btnDown != null && hit.collider == btnDown) ExecuteMoveDown();
+                else if (btnLeft != null && hit.collider == btnLeft) ExecuteMoveLeft();
+                else if (btnRight != null && hit.collider == btnRight) ExecuteMoveRight();
+            }
         }
         private void TryMove(PathDirection playerDir, Vector2Int playerOffset)
         {
@@ -263,38 +277,36 @@ namespace Game.Minigames.Maze
         {
             if (!CanReceiveInput()) return;
             TryMove(PathDirection.Up, new Vector2Int(0, 1));
-            AnimateButtonPress(btnUp);
+            if (btnUp != null) AnimateButtonPress(btnUp.transform);
         }
 
         public void ExecuteMoveDown()
         {
             if (!CanReceiveInput()) return;
             TryMove(PathDirection.Down, new Vector2Int(0, -1));
-            AnimateButtonPress(btnDown);
+            if (btnDown != null) AnimateButtonPress(btnDown.transform);
         }
 
         public void ExecuteMoveLeft()
         {
             if (!CanReceiveInput()) return;
             TryMove(PathDirection.Left, new Vector2Int(-1, 0));
-            AnimateButtonPress(btnLeft);
+            if (btnLeft != null) AnimateButtonPress(btnLeft.transform);
         }
 
         public void ExecuteMoveRight()
         {
             if (!CanReceiveInput()) return;
             TryMove(PathDirection.Right, new Vector2Int(1, 0));
-            AnimateButtonPress(btnRight);
+            if (btnRight != null) AnimateButtonPress(btnRight.transform);
         }
 
-        private void AnimateButtonPress(Button btn)
+        private void AnimateButtonPress(Transform btnTransform)
         {
-            if (btn == null) return;
-
-            btn.transform.DOKill();
-            btn.transform.localScale = Vector3.one;
-
-            btn.transform.DOPunchScale(new Vector3(-0.2f, -0.2f, 0f), 0.15f, 1);
+            if (btnTransform == null) return;
+            btnTransform.DOKill();
+            btnTransform.localScale = Vector3.one;
+            btnTransform.DOPunchScale(new Vector3(-0.2f, -0.2f, 0f), 0.15f, 1);
         }
         private PathDirection GetOppositeDirection(PathDirection dir)
         {
