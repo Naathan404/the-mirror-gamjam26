@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using DG.Tweening;
+using Game.Cameras;
 using Game.Core;
 using Game.Effect;
 using Game.Managers;
@@ -55,6 +56,9 @@ namespace Game.Entity
         [SerializeField] private float _rollTimer = 0f;
         [SerializeField] private float _timeSinceLastMove = 0f;
 
+        [Header("Camera View")]
+        [SerializeField] private CameraviewController _cameraViewController;
+
 
         private View _currentView = View.Mirror;
         private bool _gameOverBuffer = false;
@@ -98,13 +102,30 @@ namespace Game.Entity
         {
             if (_gameOverBuffer)
             {
-                if (_currentView == View.Mirror)
+                // if (_currentView != View.Behind)
+                // {
+                //     GameEvents.RaiseJumpscareTriggered();
+                //     GameManager.Instance.SetGameOver();
+                //     _gameOverBuffer = false;
+                // }
+                if (_cameraViewController != null)
                 {
+                    _cameraViewController.SwitchToMirrorImmediately();      
                     GameEvents.RaiseJumpscareTriggered();
                     GameManager.Instance.SetGameOver();
                     _gameOverBuffer = false;
+                    return;
                 }
-                return;
+                else
+                {
+                    if (_currentView == View.Mirror)
+                    {
+                        GameEvents.RaiseJumpscareTriggered();
+                        GameManager.Instance.SetGameOver();
+                        _gameOverBuffer = false;
+                    }
+                    return;
+                }
             }
 
             if (GameManager.Instance.CurrentState == GameState.GameOver)

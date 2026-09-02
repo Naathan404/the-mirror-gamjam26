@@ -2,6 +2,7 @@ using System.Collections;
 using DG.Tweening;
 using Game.Core;
 using Game.Effect;
+using Game.Managers;
 using UnityEngine;
 
 namespace Game.Entity
@@ -16,6 +17,9 @@ namespace Game.Entity
         [Header("Timing")]
         [SerializeField] private float _startDelay = 0.5f;
         [SerializeField] private float _holdDuration = 1.5f;
+
+        [Header("UI")]
+        [SerializeField] private UIGameplayManager _uiGameplayManager;
 
         private bool _isPlaying;
 
@@ -53,7 +57,8 @@ namespace Game.Entity
         private IEnumerator PlayJumpscareRoutine()
         {
             _isPlaying = true;
-
+            if (_uiGameplayManager != null)
+                _uiGameplayManager.HideAllPanels();
             yield return new WaitForSecondsRealtime(_startDelay);
 
             SetJumpscareVisualActive(true);
