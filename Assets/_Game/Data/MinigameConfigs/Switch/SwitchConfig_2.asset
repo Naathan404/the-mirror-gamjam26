@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: SwitchConfig_2
   m_EditorClassIdentifier: 
   nodeCount: 10
-  minNodeDistance: 5
+  minNodeDistance: 7
   maxEdgesPerNode: 5
   minimunStepsToSolve: 7
