@@ -83,17 +83,12 @@ namespace Game.Minigames
 
             // KẾT NỐI LOGIC ĐỒ THỊ
             GenerateLogicEdges();
-
-            // THUẬT TOÁN LỰC ĐẨY TỰ ĐỘNG GỠ RỐI
-            ApplyForceDirectedLayout();
-
-            // VẼ DÂY NỐI VISUAL 
-            DrawVisualWires();
-
-            // XÁO TRỘN ĐỀ BÀI 
             ScramblePuzzle();
+            CheckWinCondition();
 
             // Hiệu ứng
+            ApplyForceDirectedLayout();
+            DrawVisualWires();
             StartCoroutine(SpawnEffectRoutine());
         }
 
@@ -263,36 +258,71 @@ namespace Game.Minigames
         private void ScramblePuzzle()
         {
             int targetSteps = Mathf.Min(_currentConfig.minimunStepsToSolve, _nodes.Count);
-            int maxAttempts = 100;
+            int maxAttemptsPerGraph = 100; 
+            int maxGraphRegenerations = 20;
 
-            for (int attempt = 0; attempt < maxAttempts; attempt++)
+            for (int graphAttempt = 0; graphAttempt < maxGraphRegenerations; graphAttempt++)
             {
-                foreach (var node in _nodes)
+                if (graphAttempt > 0)
                 {
-                    node.SetState(true, false);
+                    foreach (var node in _nodes)
+                    {
+                        if (_graph.ContainsKey(node))
+                        {
+                            _graph[node].Clear();
+                        }
+                    }
+
+                    GenerateLogicEdges();
                 }
 
-                List<SwitchNode> availableNodes = new List<SwitchNode>(_nodes);
-                for (int i = 0; i < targetSteps; i++)
-                {
-                    int randomIndex = UnityEngine.Random.Range(0, availableNodes.Count);
-                    SwitchNode randomNode = availableNodes[randomIndex];
-                    availableNodes.RemoveAt(randomIndex);
+                int bestStepsFound = -1;
+                Dictionary<SwitchNode, bool> bestNodeStates = new Dictionary<SwitchNode, bool>();
 
-                    randomNode.SetState(!randomNode.IsOn, false);
-                    foreach (var neighbor in _graph[randomNode])
+                for (int attempt = 0; attempt < maxAttemptsPerGraph; attempt++)
+                {
+                    foreach (var node in _nodes)
                     {
-                        neighbor.SetState(!neighbor.IsOn, false);
+                        node.SetState(true, false);
+                    }
+
+                    List<SwitchNode> availableNodes = new List<SwitchNode>(_nodes);
+                    int currentShuffleSteps = Mathf.Min(targetSteps, availableNodes.Count);
+
+                    for (int i = 0; i < currentShuffleSteps; i++)
+                    {
+                        int randomIndex = UnityEngine.Random.Range(0, availableNodes.Count);
+                        SwitchNode randomNode = availableNodes[randomIndex];
+                        availableNodes.RemoveAt(randomIndex);
+
+                        randomNode.SetState(!randomNode.IsOn, false);
+                        foreach (var neighbor in _graph[randomNode])
+                        {
+                            neighbor.SetState(!neighbor.IsOn, false);
+                        }
+                    }
+
+                    int currentMinSteps = GetMinimumStepsToSolve();
+
+                    if (currentMinSteps == targetSteps)
+                    {
+                        return;
+                    }
+
+                    if (currentMinSteps > bestStepsFound)
+                    {
+                        bestStepsFound = currentMinSteps;
+                        bestNodeStates.Clear();
+                        foreach (var node in _nodes)
+                        {
+                            bestNodeStates[node] = node.IsOn;
+                        }
                     }
                 }
 
-                if (GetMinimumStepsToSolve() == targetSteps)
-                {
-                    return;
-                }
             }
 
-            if (GetMinimumStepsToSolve() == 0 && _nodes.Count > 0)
+            if (_nodes.Count > 0 && GetMinimumStepsToSolve() == 0)
             {
                 SwitchNode forcedNode = _nodes[UnityEngine.Random.Range(0, _nodes.Count)];
                 forcedNode.SetState(!forcedNode.IsOn, false);
