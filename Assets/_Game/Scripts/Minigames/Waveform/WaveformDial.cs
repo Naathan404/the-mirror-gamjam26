@@ -16,10 +16,18 @@ namespace Game.Minigames.Waveform
         private WaveformConfigSO _config;
 
         public event System.Action<WaveformDial> OnValueChanged;
+        public event System.Action<WaveformDial> OnFocusEnter;
+        public event System.Action<WaveformDial> OnFocusExit;
 
         public float CurrentValue => _currentValue;
         public int WaveIndex => _waveIndex;
         public ParamType Type => _paramType;
+
+        [Header("Hover Feedback")]
+        [SerializeField] private float _hoverScale = 1.15f;
+        [SerializeField] private float _hoverScaleDuration = 0.15f;
+
+
 
         public void Init(WaveformConfigSO config, float initValue)
         {
@@ -49,6 +57,18 @@ namespace Game.Minigames.Waveform
             Adjust(delta > 0 ? 1 : (delta < 0 ? -1 : 0));
         }
 
+        private void OnMouseEnter()
+        {
+            transform.DOScale(_hoverScale, _hoverScaleDuration).SetEase(Ease.OutBack);
+            OnFocusEnter?.Invoke(this);
+        }
+
+        private void OnMouseExit()
+        {
+            transform.DOScale(1f, _hoverScaleDuration).SetEase(Ease.OutQuad);
+            OnFocusExit?.Invoke(this);
+        }
+        
         public void Adjust(float direction)
         {
             float step = _paramType == ParamType.Amplitude ? _config.AmplitudeStep : _config.FrequencyStep;

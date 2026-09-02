@@ -44,6 +44,7 @@ namespace Game.Minigames.Waveform
         private int _mistakeCount;
 
         private float xMin, xMax;
+        private int _isolateIndex = -1;
 
         private System.Action<WaveformDial>[] _dialHandlers;
 
@@ -68,7 +69,12 @@ namespace Game.Minigames.Waveform
         protected override void OnGameClosed()
         {
             base.OnGameClosed();
-            foreach (var dial in _dials) dial.OnValueChanged -= OnDialChanged;
+            foreach (var dial in _dials)
+            {
+                dial.OnValueChanged -= OnDialChanged;
+                dial.OnFocusEnter -= OnDialFocusEnter;
+                dial.OnFocusExit -= OnDialFocusExit;
+            }
         }
         #endregion
 
@@ -84,6 +90,12 @@ namespace Game.Minigames.Waveform
             {
                 dial.OnValueChanged -= OnDialChanged;
                 dial.OnValueChanged += OnDialChanged;
+
+                dial.OnFocusEnter -= OnDialFocusEnter;
+                dial.OnFocusEnter += OnDialFocusEnter;
+
+                dial.OnFocusExit -= OnDialFocusExit;
+                dial.OnFocusExit += OnDialFocusExit;
             }
         }
 
@@ -116,7 +128,12 @@ namespace Game.Minigames.Waveform
                 _dials[idx++] = freqDial;
             }
 
-            foreach (var dial in _dials) dial.OnValueChanged += OnDialChanged;
+            foreach (var dial in _dials)
+            {
+                dial.OnValueChanged += OnDialChanged;
+                dial.OnFocusEnter += OnDialFocusEnter;
+                dial.OnFocusExit += OnDialFocusExit;
+            }
 
             RebindDialListeners();
         }
@@ -130,6 +147,9 @@ namespace Game.Minigames.Waveform
 
         private void Generate()
         {
+            _isolateIndex = -1;
+            _targetRenderer.HideGhost();
+            _playerRenderer.HideGhost();
             if (_dials == null || _dials.Length != _config.WaveComponentCount * 2)
                 SpawnDials();
             else
@@ -179,7 +199,7 @@ namespace Game.Minigames.Waveform
         #region interact
         public void OnConfirmPressed()
         {
-            float error = WaveformMath.CalculateError(_target, _player, xMin, xMax, _config.SampleResolution);
+            float error = WaveformMath.CalculateError(_target, _player, _config.DomainHalfWidth, _config.SampleResolution);
 
             if (error <= _config.MatchErrorTolerance)
             {
@@ -221,7 +241,44 @@ namespace Game.Minigames.Waveform
                 wave.Frequency = dial.CurrentValue;
             _player[dial.WaveIndex] = wave;
 
+            RedrawBoth();
+
+            if (_isolateIndex == dial.WaveIndex)
+                UpdateGhosts();
+        }
+
+        private void OnDialFocusEnter(WaveformDial dial)
+        {
+            _isolateIndex = dial.WaveIndex;
+            UpdateGhosts();
+        }
+
+        private void OnDialFocusExit(WaveformDial dial)
+        {
+            if (_isolateIndex != dial.WaveIndex) return;
+            _isolateIndex = -1;
+            _targetRenderer.HideGhost();
+            _playerRenderer.HideGhost();
+        }
+
+        private void UpdateGhosts()
+        {
+            if (_isolateIndex < 0) return;
+
+            float targetRowY = GetLocalRowY(_targetRowAnchor);
             float playerRowY = GetLocalRowY(_playerRowAnchor);
+            float fixedAmp = _config.AmplitudeRange.y;
+
+            _targetRenderer.ShowGhost(_target[_isolateIndex], _background.transform, xMin, xMax, _config.DomainHalfWidth, targetRowY, _rowHalfHeight, fixedAmp);
+            _playerRenderer.ShowGhost(_player[_isolateIndex], _background.transform, xMin, xMax, _config.DomainHalfWidth, playerRowY, _rowHalfHeight, fixedAmp);
+        }
+
+        private void RedrawBoth()
+        {
+            float targetRowY = GetLocalRowY(_targetRowAnchor);
+            float playerRowY = GetLocalRowY(_playerRowAnchor);
+
+            _targetRenderer.Draw(_target, _background.transform, xMin, xMax, _config.DomainHalfWidth, targetRowY, _rowHalfHeight);
             _playerRenderer.Draw(_player, _background.transform, xMin, xMax, _config.DomainHalfWidth, playerRowY, _rowHalfHeight);
         }
         #endregion
