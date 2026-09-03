@@ -20,6 +20,7 @@ namespace Game.Managers
         [SerializeField] private GameObject _inventoryPanel;
         [Header("Settings Panel")]
         [SerializeField] private GameObject _settingsPanel;
+        [SerializeField] private GameObject _rulePanel;
         [Header("Blocker")]
         [Tooltip("Kéo thả khối RaycastBlocker trong Camera vào đây")]
         [SerializeField] private GameObject _raycastBlocker;
@@ -31,6 +32,8 @@ namespace Game.Managers
         [SerializeField] private RectTransform _replayButton;
         [SerializeField] private CanvasGroup _replayButtonCanvasGroup;
         [SerializeField] private TextMeshProUGUI _replayButtonText;
+        [SerializeField] private RectTransform _quitButton;
+        [SerializeField] private CanvasGroup _quitButtonCanvasGroup;
 
         [Header("Lose Text Config")]
         [Tooltip("Danh sách các câu ngẫu nhiên khi thua. Nhấn + để thêm, rồi chọn Table/Key tương ứng.")]
@@ -72,6 +75,11 @@ namespace Game.Managers
                 _settingsPanel.SetActive(false);
             }
 
+            if (_rulePanel != null)
+            {
+                _rulePanel.SetActive(false);
+            }
+
             if (_raycastBlocker != null)
             {
                 _raycastBlocker.SetActive(false);
@@ -90,6 +98,16 @@ namespace Game.Managers
             if (_replayButtonCanvasGroup != null)
             {
                 _replayButtonCanvasGroup.alpha = 0f;
+            }
+
+            if (_quitButton != null)
+            {
+                _quitButton.gameObject.SetActive(false);
+            }
+
+            if (_quitButtonCanvasGroup != null)
+            {
+                _quitButtonCanvasGroup.alpha = 0f;
             }
 
             if (_keyUIGroup != null)
@@ -124,7 +142,14 @@ namespace Game.Managers
 
             if (Input.GetKeyDown(UnityEngine.KeyCode.Escape))
             {
-                ToggleSettings();
+                if (_rulePanel != null && _rulePanel.activeSelf)
+                {
+                    CloseRule();
+                }
+                else
+                {
+                    ToggleSettings();
+                }
             }
         }
         #endregion
@@ -192,6 +217,25 @@ namespace Game.Managers
                 ToggleSettings();
             }
         }
+        public void OpenRule()
+        {
+            if (_settingsPanel != null) _settingsPanel.SetActive(false);
+
+            if (_rulePanel != null)
+            {
+                _rulePanel.transform.SetAsLastSibling(); 
+                _rulePanel.SetActive(true);
+            }
+        }
+
+        public void CloseRule()
+        {
+            if (AudioController.Instance != null)
+                AudioController.Instance.PlaySFX(SoundName.ButtonClick);
+
+            if (_rulePanel != null) _rulePanel.SetActive(false);
+            if (_settingsPanel != null) _settingsPanel.SetActive(true);
+        }
         #endregion
 
         #region Lose Panel & Inventory
@@ -248,27 +292,33 @@ namespace Game.Managers
                 _replayButtonText.text = asyncOp.Result;
             }
 
-            ShowReplayButton();
+            ShowLoseButtons();
             _showReplayButtonRoutine = null;
         }
 
-        private void ShowReplayButton()
+        private void ShowLoseButtons()
         {
-            if (_replayButton == null)
+            if (_replayButton != null)
             {
-                return;
+                _replayButton.gameObject.SetActive(true);
+                if (_replayButtonCanvasGroup != null)
+                {
+                    _replayButtonCanvasGroup.DOKill();
+                    _replayButtonCanvasGroup.alpha = 0f;
+                    _replayButtonCanvasGroup.DOFade(1f, 3f).SetUpdate(true);
+                }
             }
 
-            _replayButton.gameObject.SetActive(true);
-
-            if (_replayButtonCanvasGroup == null)
+            if (_quitButton != null)
             {
-                return;
+                _quitButton.gameObject.SetActive(true);
+                if (_quitButtonCanvasGroup != null)
+                {
+                    _quitButtonCanvasGroup.DOKill();
+                    _quitButtonCanvasGroup.alpha = 0f;
+                    _quitButtonCanvasGroup.DOFade(1f, 3f).SetUpdate(true);
+                }
             }
-
-            _replayButtonCanvasGroup.DOKill();
-            _replayButtonCanvasGroup.alpha = 0f;
-            _replayButtonCanvasGroup.DOFade(1f, 3f).SetUpdate(true);
         }
 
         private void ShowKeyOnUI()
