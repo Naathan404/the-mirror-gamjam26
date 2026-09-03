@@ -19,7 +19,7 @@ MonoBehaviour:
     m_Items: []
   m_TableData:
   - m_Id: 66090647552
-    m_Localized: Take control
+    m_Localized: Setting
     m_Metadata:
       m_Items: []
   - m_Id: 223620317184
@@ -89,6 +89,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 3863273226059776
     m_Localized: Turn on all the lights
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4142995274133504
+    m_Localized: difficulty
     m_Metadata:
       m_Items: []
   references:

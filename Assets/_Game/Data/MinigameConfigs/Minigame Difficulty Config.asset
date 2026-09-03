@@ -52,5 +52,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0337eeef479f55b4698d624a7e55543e, type: 2}
   - {fileID: 11400000, guid: 08f754e8209c5f149a0b13d5b7800728, type: 2}
   - {fileID: 11400000, guid: 4cce2438ad708d84596ddce0402b3793, type: 2}
-  _enableDebug: 1
-  _debugDifficultLevel: 3
+  _enableDebug: 0
+  _debugDifficultLevel: 1
