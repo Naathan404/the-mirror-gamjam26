@@ -670,7 +670,7 @@ namespace Game.Minigames.Laser
             _mistakeCount++;
             
 
-            int maxMistakes = _config != null ? _config.maxMistakes : 2;
+            int maxMistakes = _config != null ? _config.maxMistakes : 1;
 
             for (int i = 0; i < _mistakeCount; i++)
             {

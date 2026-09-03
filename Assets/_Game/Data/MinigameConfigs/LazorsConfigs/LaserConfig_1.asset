@@ -18,6 +18,6 @@ MonoBehaviour:
   decoyMirrorCount: 30
   stoneCount: 15
   minStraightBetweenTurn: 2
-  maxMistakes: 2
+  maxMistakes: 1
   fallbackCellSize: 0.6
   laserTravelTimePerCell: 0.05
