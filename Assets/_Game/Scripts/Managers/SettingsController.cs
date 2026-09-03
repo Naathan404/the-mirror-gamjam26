@@ -49,13 +49,13 @@ namespace Game.UI
             int scanline = PlayerPrefs.GetInt("SCANLINEVal", 400);
             float distortion = PlayerPrefs.GetFloat("DISTORTIONVal", 0.3f);
 
-            if (_masterSlider != null) _masterSlider.value = masterVol;
-            if (_bgmSlider != null) _bgmSlider.value = bgmVol;
-            if (_sfxSlider != null) _sfxSlider.value = sfxVol;
+            if (_masterSlider != null) _masterSlider.SetValueWithoutNotify(masterVol);
+            if (_bgmSlider != null) _bgmSlider.SetValueWithoutNotify(bgmVol);
+            if (_sfxSlider != null) _sfxSlider.SetValueWithoutNotify(sfxVol);
 
-            if (_blurSlider != null) _blurSlider.value = blurVal;
-            if (_scanlineSlider != null) _scanlineSlider.value = scanline;
-            if (_distortionSlider != null) _distortionSlider.value = distortion;
+            if (_blurSlider != null) _blurSlider.SetValueWithoutNotify(blurVal);
+            if (_scanlineSlider != null) _scanlineSlider.SetValueWithoutNotify(scanline);
+            if (_distortionSlider != null) _distortionSlider.SetValueWithoutNotify(distortion);
 
             if (_volume != null && _volume.profile.TryGet(out _lensDistortion))
             {
@@ -78,8 +78,7 @@ namespace Game.UI
 
             if (_tutorialToggle != null)
             {
-                // Nếu ổ cứng lưu là 1 thì On, 0 thì Off
-                _tutorialToggle.isOn = PlayerPrefs.GetInt("TutorialEnabled", 1) == 1;
+                _tutorialToggle.SetIsOnWithoutNotify(PlayerPrefs.GetInt("TutorialEnabled", 1) == 1);
             }
         }
 
@@ -125,7 +124,24 @@ namespace Game.UI
             if (AudioController.Instance != null)
                 AudioController.Instance.PlaySFX(SoundName.ButtonClick);
 
-            gameObject.SetActive(false);
+            if (Managers.UIGameplayManager.Instance != null)
+            {
+                Managers.UIGameplayManager.Instance.CloseSettings();
+            }
+            else
+            {
+                Menu.MenuController menuController = UnityEngine.Object.FindAnyObjectByType<Menu.MenuController>();
+
+                if (menuController != null)
+                {
+                    menuController.OnCloseSettings();
+                }
+                else
+                {
+                    gameObject.SetActive(false);
+                    Time.timeScale = 1f;
+                }
+            }
         }
         private void SetMasterVolume(float value)
         {

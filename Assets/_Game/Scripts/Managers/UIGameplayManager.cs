@@ -18,6 +18,11 @@ namespace Game.Managers
         [SerializeField] private GameObject _deskPanel;
         [SerializeField] private GameObject _behindPanel;
         [SerializeField] private GameObject _inventoryPanel;
+        [Header("Settings Panel")]
+        [SerializeField] private GameObject _settingsPanel;
+        [Header("Blocker")]
+        [Tooltip("Kéo thả khối RaycastBlocker trong Camera vào đây")]
+        [SerializeField] private GameObject _raycastBlocker;
 
         [Header("Lose Panel")]
         [SerializeField] private GameObject _losePanel;
@@ -62,6 +67,16 @@ namespace Game.Managers
                 _losePanel.gameObject.SetActive(false);
             }
 
+            if (_settingsPanel != null)
+            {
+                _settingsPanel.SetActive(false);
+            }
+
+            if (_raycastBlocker != null)
+            {
+                _raycastBlocker.SetActive(false);
+            }
+
             if (_replayButton != null)
             {
                 _replayButton.gameObject.SetActive(false);
@@ -98,6 +113,20 @@ namespace Game.Managers
             GameEvents.OnDoorInteracted -= HideKeyOnUI;
             GameEvents.OnBatteryChargeCompleted -= HandleBatteryChargeCompleted;
         }
+
+        private void Update()
+        {
+            if (GameManager.Instance.CurrentState == GameState.GameOver ||
+                GameManager.Instance.CurrentState == GameState.GameWon)
+            {
+                return;
+            }
+
+            if (Input.GetKeyDown(UnityEngine.KeyCode.Escape))
+            {
+                ToggleSettings();
+            }
+        }
         #endregion
 
         #region Panels
@@ -129,6 +158,38 @@ namespace Game.Managers
                 case View.Behind:
                     if (_behindPanel != null) _behindPanel.gameObject.SetActive(true);
                     break;
+            }
+        }
+
+        public void ToggleSettings()
+        {
+            if (_settingsPanel == null) return;
+
+            bool isOpening = !_settingsPanel.activeSelf;
+            _settingsPanel.SetActive(isOpening);
+
+            if (_raycastBlocker != null)
+            {
+                _raycastBlocker.SetActive(isOpening);
+            }
+            if (isOpening)
+            {
+                GameManager.Instance.PauseGame();
+
+                if (AudioController.Instance != null) AudioController.Instance.PlaySFX(SoundName.ButtonClick);
+            }
+            else
+            {
+                GameManager.Instance.ResumeGame();
+
+                if (AudioController.Instance != null) AudioController.Instance.PlaySFX(SoundName.ButtonClick);
+            }
+        }
+        public void CloseSettings()
+        {
+            if (_settingsPanel != null && _settingsPanel.activeSelf)
+            {
+                ToggleSettings();
             }
         }
         #endregion
@@ -165,6 +226,12 @@ namespace Game.Managers
             }
 
             _showReplayButtonRoutine = StartCoroutine(ShowReplayButtonRoutine());
+
+            if (_settingsPanel != null && _settingsPanel.activeSelf)
+            {
+                _settingsPanel.SetActive(false);
+                Time.timeScale = 1f;
+            }
         }
 
         private IEnumerator ShowReplayButtonRoutine()
@@ -203,17 +270,6 @@ namespace Game.Managers
             _replayButtonCanvasGroup.alpha = 0f;
             _replayButtonCanvasGroup.DOFade(1f, 3f).SetUpdate(true);
         }
-
-        //private void SetReplayButtonText()
-        //{
-        //    if (_replayButtonText == null || _loseTexts == null || _loseTexts.Length == 0)
-        //    {
-        //        return;
-        //    }
-
-        //    int randomIndex = Random.Range(0, _loseTexts.Length);
-        //    _replayButtonText.text = _loseTexts[randomIndex].GetLocalizedString();
-        //}
 
         private void ShowKeyOnUI()
         {

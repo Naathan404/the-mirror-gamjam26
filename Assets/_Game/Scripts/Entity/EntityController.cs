@@ -87,6 +87,9 @@ namespace Game.Entity
         #region States change
         private void Update()
         {
+            if (GameManager.Instance.CurrentState != GameState.Playing)
+                return;
+
             UpdateRoll();
 #if UNITY_EDITOR
             if (Input.GetKeyDown(UnityEngine.KeyCode.Space))

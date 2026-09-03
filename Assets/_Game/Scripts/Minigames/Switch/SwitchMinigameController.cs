@@ -135,22 +135,30 @@ namespace Game.Minigames
 
         private void ApplyForceDirectedLayout()
         {
-            if (_spawnAreaCollider == null) return;
+            if (_spawnAreaCollider == null || _nodes.Count == 0) return;
 
             Vector3 areaSize = _spawnAreaCollider.size;
             Vector3 areaCenter = _spawnAreaCollider.center;
-            float area = areaSize.x * areaSize.z;
-            float k = Mathf.Sqrt(area / _nodes.Count);
-            float temperature = areaSize.x / 5f;
+
+            float minX = areaCenter.x - (areaSize.x / 2f) + 0.3f;
+            float maxX = areaCenter.x + (areaSize.x / 2f) - 0.3f;
+            float minZ = areaCenter.z - (areaSize.z / 2f) + 0.3f;
+            float maxZ = areaCenter.z + (areaSize.z / 2f) - 0.3f;
+
+            float usableArea = (maxX - minX) * (maxZ - minZ);
+            float k = Mathf.Sqrt(usableArea / _nodes.Count) * 1.5f;
+            float temperature = areaSize.x / 3f;
 
             Vector3[] localPos = new Vector3[_nodes.Count];
+
             for (int i = 0; i < _nodes.Count; i++)
             {
-                localPos[i] = _spawnAreaCollider.transform.InverseTransformPoint(_nodes[i].transform.position);
-                localPos[i].y = areaCenter.y;
+                float randX = UnityEngine.Random.Range(minX, maxX);
+                float randZ = UnityEngine.Random.Range(minZ, maxZ);
+                localPos[i] = new Vector3(randX, areaCenter.y, randZ);
             }
 
-            for (int iter = 0; iter < 100; iter++)
+            for (int iter = 0; iter < 120; iter++)
             {
                 Vector3[] displacements = new Vector3[_nodes.Count];
 
@@ -161,12 +169,25 @@ namespace Game.Minigames
                         Vector3 delta = localPos[i] - localPos[j];
                         delta.y = 0;
                         float dist = delta.magnitude;
-                        if (dist < 0.001f) { delta = new Vector3(0.01f, 0, 0.01f); dist = delta.magnitude; }
+
+                        if (dist < 0.05f) { delta = new Vector3(UnityEngine.Random.Range(-1f, 1f), 0, UnityEngine.Random.Range(-1f, 1f)).normalized * 0.05f; dist = delta.magnitude; }
 
                         Vector3 force = (delta / dist) * (k * k / dist);
                         displacements[i] += force;
                         displacements[j] -= force;
                     }
+
+                    Vector3 toCenter = areaCenter - localPos[i];
+                    toCenter.y = 0;
+                    displacements[i] += toCenter * 0.03f;
+
+                    float wallMargin = k * 0.6f;
+                    float wallForce = k * 0.2f;
+
+                    float dLeft = localPos[i].x - minX; if (dLeft < wallMargin) displacements[i].x += (wallMargin - dLeft) * wallForce;
+                    float dRight = maxX - localPos[i].x; if (dRight < wallMargin) displacements[i].x -= (wallMargin - dRight) * wallForce;
+                    float dBottom = localPos[i].z - minZ; if (dBottom < wallMargin) displacements[i].z += (wallMargin - dBottom) * wallForce;
+                    float dTop = maxZ - localPos[i].z; if (dTop < wallMargin) displacements[i].z -= (wallMargin - dTop) * wallForce;
                 }
 
                 for (int i = 0; i < _nodes.Count; i++)
@@ -178,39 +199,110 @@ namespace Game.Minigames
 
                         Vector3 delta = localPos[i] - localPos[j];
                         delta.y = 0;
-                        float dist = delta.magnitude;
+                        float dist = Mathf.Max(delta.magnitude, 0.05f);
 
-                        Vector3 force = (delta / dist) * (dist * dist / k);
+                        Vector3 force = (delta / dist) * (dist * dist / (k * 1.2f));
                         displacements[i] -= force;
                         displacements[j] += force;
                     }
                 }
 
+                ApplyDisplacements(localPos, displacements, temperature, minX, maxX, minZ, maxZ, areaCenter.y);
+                temperature *= 0.95f;
+            }
+
+            // PHASE 2 & 3: ÉP KHOẢNG CÁCH & BẺ CONG 3 ĐIỂM THẲNG HÀNG
+            float safeDistance = k * 0.8f;
+            float lineSafeDist = k * 0.4f;
+            temperature = safeDistance / 2f;
+
+            for (int iter = 0; iter < 50; iter++)
+            {
+                Vector3[] displacements = new Vector3[_nodes.Count];
+
                 for (int i = 0; i < _nodes.Count; i++)
                 {
-                    Vector3 disp = displacements[i];
-                    float dist = disp.magnitude;
-                    if (dist > 0)
+                    for (int j = i + 1; j < _nodes.Count; j++)
                     {
-                        localPos[i] += (disp / dist) * Mathf.Min(dist, temperature);
+                        Vector3 delta = localPos[i] - localPos[j];
+                        delta.y = 0;
+                        float dist = delta.magnitude;
+
+                        if (dist < safeDistance)
+                        {
+                            if (dist < 0.01f) { delta = new Vector3(0.1f, 0, 0.1f); dist = delta.magnitude; }
+                            Vector3 force = (delta / dist) * (safeDistance - dist);
+                            displacements[i] += force;
+                            displacements[j] -= force;
+                        }
                     }
-
-                    float minX = areaCenter.x - (areaSize.x / 2f) + 0.3f;
-                    float maxX = areaCenter.x + (areaSize.x / 2f) - 0.3f;
-                    float minZ = areaCenter.z - (areaSize.z / 2f) + 0.3f;
-                    float maxZ = areaCenter.z + (areaSize.z / 2f) - 0.3f;
-
-                    localPos[i].x = Mathf.Clamp(localPos[i].x, minX, maxX);
-                    localPos[i].y = areaCenter.y;
-                    localPos[i].z = Mathf.Clamp(localPos[i].z, minZ, maxZ);
                 }
 
-                temperature *= 0.95f;
+                for (int i = 0; i < _nodes.Count; i++)
+                {
+                    for (int u = 0; u < _nodes.Count; u++)
+                    {
+                        foreach (var neighbor in _graph[_nodes[u]])
+                        {
+                            int v = _nodes.IndexOf(neighbor);
+                            if (u >= v) continue;
+                            if (i == u || i == v) continue;
+
+                            Vector3 closestPoint = GetClosestPointOnSegment(localPos[i], localPos[u], localPos[v]);
+                            Vector3 delta = localPos[i] - closestPoint;
+                            delta.y = 0;
+                            float dist = delta.magnitude;
+
+                            if (dist < lineSafeDist)
+                            {
+                                if (dist < 0.001f) { delta = new Vector3(UnityEngine.Random.Range(-1f, 1f), 0, UnityEngine.Random.Range(-1f, 1f)).normalized * 0.01f; dist = delta.magnitude; }
+
+                                Vector3 push = (delta / dist) * (lineSafeDist - dist);
+                                displacements[i] += push;
+
+                                displacements[u] -= push * 0.5f;
+                                displacements[v] -= push * 0.5f;
+                            }
+                        }
+                    }
+                }
+
+                ApplyDisplacements(localPos, displacements, temperature, minX, maxX, minZ, maxZ, areaCenter.y);
+                temperature *= 0.9f;
             }
 
             for (int i = 0; i < _nodes.Count; i++)
             {
                 _nodes[i].transform.position = _spawnAreaCollider.transform.TransformPoint(localPos[i]);
+            }
+        }
+
+        /// <summary>
+        /// Thuật toán tìm điểm nằm trên đoạn thẳng AB sao cho gần điểm P nhất
+        /// </summary>
+        private Vector3 GetClosestPointOnSegment(Vector3 p, Vector3 a, Vector3 b)
+        {
+            Vector3 ab = b - a;
+            float t = Vector3.Dot(p - a, ab) / Vector3.Dot(ab, ab);
+            t = Mathf.Clamp01(t);
+            return a + t * ab;
+        }
+
+        private void ApplyDisplacements(Vector3[] localPos, Vector3[] displacements, float temp, float minX, float maxX, float minZ, float maxZ, float fixY)
+        {
+            for (int i = 0; i < localPos.Length; i++)
+            {
+                Vector3 disp = displacements[i];
+                float dist = disp.magnitude;
+
+                if (dist > 0)
+                {
+                    localPos[i] += (disp / dist) * Mathf.Min(dist, temp);
+                }
+
+                localPos[i].x = Mathf.Clamp(localPos[i].x, minX, maxX);
+                localPos[i].y = fixY;
+                localPos[i].z = Mathf.Clamp(localPos[i].z, minZ, maxZ);
             }
         }
 
@@ -258,7 +350,7 @@ namespace Game.Minigames
         private void ScramblePuzzle()
         {
             int targetSteps = Mathf.Min(_currentConfig.minimunStepsToSolve, _nodes.Count);
-            int maxAttemptsPerGraph = 100; 
+            int maxAttemptsPerGraph = 100;
             int maxGraphRegenerations = 20;
 
             for (int graphAttempt = 0; graphAttempt < maxGraphRegenerations; graphAttempt++)
