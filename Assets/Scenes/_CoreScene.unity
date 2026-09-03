@@ -275,7 +275,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &17367976
 Transform:
   m_ObjectHideFlags: 0
@@ -8400,11 +8400,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 925442186233476040, guid: 3ff6b28bb591db94c847f853ec887af2, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -10.08
+      value: -9.31
       objectReference: {fileID: 0}
     - target: {fileID: 925442186233476040, guid: 3ff6b28bb591db94c847f853ec887af2, type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2695264666467110699, guid: 3ff6b28bb591db94c847f853ec887af2, type: 3}
+      propertyPath: _ghostMaxAlpha
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 2695264666467110699, guid: 3ff6b28bb591db94c847f853ec887af2, type: 3}
+      propertyPath: _surfaceOffset
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 2695264666467110699, guid: 3ff6b28bb591db94c847f853ec887af2, type: 3}
       propertyPath: _ghostLineRenderer
@@ -8428,7 +8436,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4485831628781479894, guid: 3ff6b28bb591db94c847f853ec887af2, type: 3}
       propertyPath: m_LocalScale.y
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4485831628781479894, guid: 3ff6b28bb591db94c847f853ec887af2, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8440,7 +8448,7 @@ PrefabInstance:
       objectReference: {fileID: 1360928688}
     - target: {fileID: 4730823605719979319, guid: 3ff6b28bb591db94c847f853ec887af2, type: 3}
       propertyPath: _mistakeWarnings.Array.size
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4730823605719979319, guid: 3ff6b28bb591db94c847f853ec887af2, type: 3}
       propertyPath: '_mistakeWarnings.Array.data[2]'
@@ -8450,6 +8458,14 @@ PrefabInstance:
       propertyPath: '_mistakeWarnings.Array.data[3]'
       value: 
       objectReference: {fileID: 1111015436}
+    - target: {fileID: 5386104994833210840, guid: 3ff6b28bb591db94c847f853ec887af2, type: 3}
+      propertyPath: _ghostMaxAlpha
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 5386104994833210840, guid: 3ff6b28bb591db94c847f853ec887af2, type: 3}
+      propertyPath: _surfaceOffset
+      value: 0.05
+      objectReference: {fileID: 0}
     - target: {fileID: 5386104994833210840, guid: 3ff6b28bb591db94c847f853ec887af2, type: 3}
       propertyPath: _ghostLineRenderer
       value: 
@@ -8468,7 +8484,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5735968465863972857, guid: 3ff6b28bb591db94c847f853ec887af2, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -11.49
+      value: -10.72
       objectReference: {fileID: 0}
     - target: {fileID: 5735968465863972857, guid: 3ff6b28bb591db94c847f853ec887af2, type: 3}
       propertyPath: m_ConstrainProportionsScale
