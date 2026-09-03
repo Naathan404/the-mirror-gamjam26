@@ -3,6 +3,7 @@ using Game.Utils;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 
 namespace Game.Effect
 {
@@ -17,8 +18,9 @@ namespace Game.Effect
         
         private ColorAdjustments _colorAdjustments;
         private Vignette _vignette;
-        private float _vignetteIntensity;
-        private Color _vignetteColor;
+        private float _defaultVignetteIntensity;
+        private Color _defaultVignetteColor;
+        private bool _isDefaultCached = false;
 
         public override void Awake()
         {
@@ -27,7 +29,24 @@ namespace Game.Effect
 
         private void Start()
         {
-            if(_globalVolume != null)
+            OnSceneLoaded(SceneManager.GetActiveScene(), LoadSceneMode.Single);
+        }
+
+        private void OnEnable()
+        {
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+
+        private void OnDisable()
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            _globalVolume = FindAnyObjectByType<Volume>();
+
+            if (_globalVolume != null)
             {
                 if (_globalVolume.profile.TryGet(out _colorAdjustments))
                 {
@@ -38,13 +57,22 @@ namespace Game.Effect
 
                 if (_globalVolume.profile.TryGet(out _vignette))
                 {
-                    _vignetteIntensity = _vignette.intensity.value;
-                    _vignetteColor = _vignette.color.value; 
+                    if (!_isDefaultCached)
+                    {
+                        _defaultVignetteIntensity = _vignette.intensity.value;
+                        _defaultVignetteColor = _vignette.color.value;
+                        _isDefaultCached = true;
+                    }
+                    else
+                    {
+                        _vignette.intensity.value = _defaultVignetteIntensity;
+                        _vignette.color.value = _defaultVignetteColor;
+                    }
                 }
             }
             else
             {
-                Debug.LogError("[FilterManager] Không tìm thấy _global volum");
+                Debug.LogWarning("[FilterController] Scene này không có Volume!");
             }
         }
 
@@ -88,7 +116,7 @@ namespace Game.Effect
             DOTween.To(
                 () => _vignette.intensity.value, 
                 x => _vignette.intensity.value = x, 
-                _vignetteIntensity, 
+                _defaultVignetteIntensity, 
                 flashDuration
             )
             .SetEase(Ease.OutQuad)
@@ -97,7 +125,7 @@ namespace Game.Effect
             DOTween.To(
                 () => _vignette.color.value, 
                 x => _vignette.color.value = x, 
-                _vignetteColor, 
+                _defaultVignetteColor, 
                 0.2f
             )
             .SetEase(Ease.OutQuad)
@@ -115,7 +143,7 @@ namespace Game.Effect
             DOTween.To(
                 () => _vignette.intensity.value, 
                 x => _vignette.intensity.value = x, 
-                _vignetteIntensity, 
+                _defaultVignetteIntensity, 
                 duration
             )
             .SetEase(Ease.InCubic);
@@ -132,7 +160,7 @@ namespace Game.Effect
             DOTween.To(
                 () => _vignette.intensity.value,
                 x => _vignette.intensity.value = x,
-                _vignetteIntensity,
+                _defaultVignetteIntensity,
                 duration
             )
             .SetEase(Ease.OutCubic);
@@ -148,8 +176,8 @@ namespace Game.Effect
             if (_vignette == null) return;
             DOTween.Kill(_vignette);
 
-            float targetIntensity = active ? 0.8f : _vignetteIntensity; 
-            Color targetColor = active ? Color.black : _vignetteColor;
+            float targetIntensity = active ? 0.8f : _defaultVignetteIntensity; 
+            Color targetColor = active ? Color.black : _defaultVignetteColor;
 
             DOTween.To(() => _vignette.intensity.value, x => _vignette.intensity.value = x, targetIntensity, duration)
                 .SetEase(Ease.OutQuad)

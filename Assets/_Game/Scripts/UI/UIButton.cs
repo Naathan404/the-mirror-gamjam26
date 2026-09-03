@@ -47,6 +47,27 @@ public class UIButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         GameEvents.OnViewChangeStarted -= HandleViewChanged;
     }
 
+    private void OnDisable()
+    {
+        this.transform.DOKill();
+        if (_canvasGroup != null) _canvasGroup.DOKill();
+        if (_targetGraphic != null) _targetGraphic.DOKill();
+
+        _isHighLight = false;
+
+        float targetScale = _isLocked ? _lockedScale : _normalScale;
+        float targetAlpha = _isLocked ? _lockedAlpha : _normalAlpha;
+        Color targetColor = _isLocked ? _lockedColor : _normalColor;
+
+        transform.localScale = targetScale * Vector2.one;
+
+        if (_canvasGroup != null)
+            _canvasGroup.alpha = targetAlpha;
+
+        if (_targetGraphic != null)
+            _targetGraphic.color = targetColor;
+    }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (_isLocked || _isHighLight) return;

@@ -4,6 +4,7 @@ using UnityEngine.Localization.Settings;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 using UnityEngine.Rendering;
+using Game.Managers;
 
 namespace Game.UI
 {
@@ -186,6 +187,36 @@ namespace Game.UI
                 }
             }
         }
+
+        public void BackToMenu()
+        {
+            CloseSettings();
+            if (Managers.UIGameplayManager.Instance != null)
+            {
+                Managers.UIGameplayManager.Instance.HideAllPanels();
+            }
+            SceneController.Instance.LoadMenuScene();
+        }
+
+        public void OpenRule()
+        {
+            if (AudioController.Instance != null)
+                AudioController.Instance.PlaySFX(SoundName.ButtonClick);
+
+            if (Managers.UIGameplayManager.Instance != null)
+            {
+                Managers.UIGameplayManager.Instance.OpenRule();
+            }
+            else
+            {
+                Menu.MenuController menuController = UnityEngine.Object.FindAnyObjectByType<Menu.MenuController>();
+                if (menuController != null)
+                {
+                    menuController.OnClickTutorial();
+                }
+            }
+        }
+
         private void SetMasterVolume(float value)
         {
             if (AudioController.Instance != null) AudioController.Instance.SetMasterVolume(value);

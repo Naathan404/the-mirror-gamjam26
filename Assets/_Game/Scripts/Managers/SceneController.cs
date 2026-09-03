@@ -17,10 +17,22 @@ namespace Game.Managers
 
         private bool _isLoading = false;
 
-        private void Start()
+        private void OnEnable()
         {
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+
+        private void OnDisable()
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            _isLoading = false;
             Invoke(nameof(AutoOpenEye), 0.1f);
         }
+
         private void AutoOpenEye()
         {
             if (FilterController.Instance != null)
@@ -43,6 +55,7 @@ namespace Game.Managers
         {
             TransitionAndLoad(() => SceneManager.LoadScene(_menuSceneName), transitionTime);
         }
+
         private void TransitionAndLoad(Action loadAction, float duration)
         {
             if (_isLoading) return;
@@ -52,10 +65,8 @@ namespace Game.Managers
 
             if (FilterController.Instance != null)
             {
-                // 1. Nhắm mắt lại từ từ
                 FilterController.Instance.PlayEyeClosedVignetteEffect(Color.black, t);
 
-                // 2. Đợi nhắm mắt xong hẳn (cộng thêm 0.1s cho an toàn) rồi mới Load
                 DOVirtual.DelayedCall(t + 0.1f, () => {
                     loadAction?.Invoke();
                 });
