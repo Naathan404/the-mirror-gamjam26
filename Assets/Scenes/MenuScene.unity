@@ -9728,6 +9728,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: '[---General---]'
       objectReference: {fileID: 0}
+    - target: {fileID: 4553686786696669681, guid: 9999766d65f618142b4c33a8e4d06a0e, type: 3}
+      propertyPath: _settingController
+      value: 
+      objectReference: {fileID: 1469653334}
     - target: {fileID: 8620872677239694836, guid: 9999766d65f618142b4c33a8e4d06a0e, type: 3}
       propertyPath: m_LocalPosition.x
       value: -9.440958
@@ -10499,7 +10503,6 @@ MonoBehaviour:
   _menuCanvasGroup: {fileID: 4539147760118964119}
   _settingsPanel: {fileID: 1469653330}
   _tutorialPanel: {fileID: 627776118}
-  _settingController: {fileID: 1469653334}
   _cameraTransform: {fileID: 648329163}
   _mirrorTarget: {fileID: 922893505}
   _shadowSprite: {fileID: 1919679353}

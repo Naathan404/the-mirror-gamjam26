@@ -1,5 +1,6 @@
 using System.Collections;
 using Game.Managers; // Gọi AudioController
+using Game.UI;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
 
@@ -9,6 +10,7 @@ namespace Game.Core
     {
         [SerializeField] private SoundName _soundName = SoundName.BGM_Gameplay_1;
         [SerializeField] private bool _playBgmOnAwake = false;
+        [SerializeField] private SettingsController _settingController;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void ClearStaleEventListeners()
@@ -18,6 +20,8 @@ namespace Game.Core
 
         private void Start()
         {
+            if (_settingController != null)
+                _settingController.WarmUp();
             int savedLang = PlayerPrefs.GetInt("Language", 0);
             StartCoroutine(InitLanguage(savedLang));
 
