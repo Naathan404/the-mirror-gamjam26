@@ -15,4 +15,4 @@ MonoBehaviour:
   nodeCount: 6
   minNodeDistance: 7
   maxEdgesPerNode: 3
-  minimunStepsToSolve: 5
+  minimunStepsToSolve: 4

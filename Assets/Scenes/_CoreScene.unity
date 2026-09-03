@@ -7371,7 +7371,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: fe62dbde53f481444bb84ad16915b2c7, type: 2}
     - target: {fileID: 8519944545625147641, guid: 4b697d594843f2741b5a6e65436d6b35, type: 3}
       propertyPath: _batteryLife
-      value: 16
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 8519944545625147641, guid: 4b697d594843f2741b5a6e65436d6b35, type: 3}
       propertyPath: _lightFlashEffect
@@ -7383,7 +7383,7 @@ PrefabInstance:
       objectReference: {fileID: 760071016}
     - target: {fileID: 8519944545625147641, guid: 4b697d594843f2741b5a6e65436d6b35, type: 3}
       propertyPath: _batteryLifeAddition
-      value: 1.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8676557448933440939, guid: 4b697d594843f2741b5a6e65436d6b35, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'

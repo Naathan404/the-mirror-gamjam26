@@ -23,7 +23,6 @@ namespace Game.Effect
         public override void Awake()
         {
             base.Awake();
-            DontDestroyOnLoad(this.gameObject);
         }
 
         private void Start()

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91bce82bed049cf45b1180d9da5b7dc7, type: 3}
   m_Name: SwitchConfig_3
   m_EditorClassIdentifier: 
-  nodeCount: 10
+  nodeCount: 9
   minNodeDistance: 7
   maxEdgesPerNode: 5
-  minimunStepsToSolve: 7
+  minimunStepsToSolve: 6
