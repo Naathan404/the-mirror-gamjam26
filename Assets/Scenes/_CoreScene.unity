@@ -641,6 +641,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3574918677392431343, guid: 61a3796945a32bb42b15b4f826d92c43, type: 3}
   m_PrefabInstance: {fileID: 2213143}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &315816898 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3927541595380023322, guid: 464d475a7f0834e4383d5ea276f9650c, type: 3}
+  m_PrefabInstance: {fileID: 2217836872205212241}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6aa6768ef908f144b9792971b8f968c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &384894480
 GameObject:
   m_ObjectHideFlags: 0
@@ -6244,6 +6255,10 @@ PrefabInstance:
       propertyPath: _playBgmOnAwake
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4553686786696669681, guid: 9999766d65f618142b4c33a8e4d06a0e, type: 3}
+      propertyPath: _settingController
+      value: 
+      objectReference: {fileID: 315816898}
     - target: {fileID: 8620872677239694836, guid: 9999766d65f618142b4c33a8e4d06a0e, type: 3}
       propertyPath: m_LocalPosition.x
       value: -9.440958
