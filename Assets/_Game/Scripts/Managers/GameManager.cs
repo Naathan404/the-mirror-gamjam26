@@ -1,6 +1,7 @@
 ﻿
 using Game.Core;
 using Game.Utils;
+using UnityEngine;
 
 namespace Game.Managers
 {
@@ -53,7 +54,7 @@ namespace Game.Managers
         #endregion
 
         #region eVENTS
-        private void HandleMinigameCompleted(MinigameType _, KeyCode ___)
+        private void HandleMinigameCompleted(MinigameType _, Core.KeyCode ___)
         {
             _minigamePassed++;
             GameEvents.RaiseDifficultyIncreased(_minigamePassed);
@@ -73,9 +74,10 @@ namespace Game.Managers
 
             if (HasRoomKey)
             {
-                CurrentState = GameState.GameWon; // Hoặc GameWon nếu Hưn có State này
-                // ĐÂY LÀ LÚC PHÁT LỆNH CHO UI CHẠY HIỆU ỨNG
+                CurrentState = GameState.GameWon; 
                 GameEvents.RaiseGameWon();
+                int level = PlayerPrefs.GetInt(GameConstants.ENTITY_AI_LEVEL, 0);
+                PlayerPrefs.SetInt(GameConstants.DIFFICULT_LEVEL_PASSED, level);
             }
             else
             {

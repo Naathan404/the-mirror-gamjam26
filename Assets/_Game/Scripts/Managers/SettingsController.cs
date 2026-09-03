@@ -39,6 +39,49 @@ namespace Game.UI
 
         private int _currentLanguageId = 0;
 
+        public void WarmUp()
+        {
+            // Cập nhật giá trị lên Slider UI
+            float masterVol = PlayerPrefs.GetFloat("MasterVol", 1f);
+            float bgmVol = PlayerPrefs.GetFloat("BGMVol", 1f);
+            float sfxVol = PlayerPrefs.GetFloat("SFXVol", 1f);
+            float blurVal = PlayerPrefs.GetFloat("BLURVal", 0.0015f);
+            int scanline = PlayerPrefs.GetInt("SCANLINEVal", 400);
+            float distortion = PlayerPrefs.GetFloat("DISTORTIONVal", 0.3f);
+
+            if (_masterSlider != null) _masterSlider.SetValueWithoutNotify(masterVol);
+            if (_bgmSlider != null) _bgmSlider.SetValueWithoutNotify(bgmVol);
+            if (_sfxSlider != null) _sfxSlider.SetValueWithoutNotify(sfxVol);
+
+            if (_blurSlider != null) _blurSlider.SetValueWithoutNotify(blurVal);
+            if (_scanlineSlider != null) _scanlineSlider.SetValueWithoutNotify(scanline);
+            if (_distortionSlider != null) _distortionSlider.SetValueWithoutNotify(distortion);
+
+            if (_volume != null && _volume.profile.TryGet(out _lensDistortion))
+            {
+                _lensDistortion.intensity.overrideState = true;
+            }
+            else
+            {
+                Debug.LogError("Chưa gán Volume hoặc chưa thêm Lens Distortion vào Volume Profile!");
+            }
+
+            SetMasterVolume(masterVol);
+            SetBGMVolume(bgmVol);
+            SetSFXVolume(sfxVol);
+            SetBlurValue(blurVal);
+            SetScanlineValue(scanline);
+            SetDistortionValue(distortion);
+
+            _currentLanguageId = PlayerPrefs.GetInt("Language", 0);
+            UpdateLanguageUI();
+
+            if (_tutorialToggle != null)
+            {
+                _tutorialToggle.SetIsOnWithoutNotify(PlayerPrefs.GetInt("TutorialEnabled", 1) == 1);
+            }
+        }
+
         private void OnEnable()
         {
             // Cập nhật giá trị lên Slider UI

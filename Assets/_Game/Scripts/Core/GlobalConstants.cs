@@ -9,6 +9,9 @@ namespace Game.Core
         public static int ENTITY_START_STATE = 6;
         public static View START_VIEW = View.Mirror;
 
+        public static string ENTITY_AI_LEVEL = "EntityAILevel";
+        public static string DIFFICULT_LEVEL_PASSED = "DifficultyLevelPassed";
+
         public static int NUMBER_OF_MINIGAMES = 4;
     }
     

@@ -14,6 +14,9 @@ namespace Game.Entity
     [DefaultExecutionOrder(-100)]
     public sealed class EntityController : MonoBehaviour
     {
+        [Header("AI Level Setting")]
+        [SerializeField] private EntityDifficultyConfigSO _aiLevelConfig;
+
         [Header("Time scale Settings")]
         [SerializeField] private List<TimeViewScale> _timeScaleViews;
 
@@ -73,6 +76,8 @@ namespace Game.Entity
             GameEvents.OnLightFlashed += HandleLightFlashed;
             GameEvents.OnMinigameFailed += HandleMinigameFailed;
             GameEvents.OnMinigameCompleted += HandleMinigameCompleted;
+
+            SetUpAiLevel(_aiLevelConfig.CurrentEntityAILevel);
         }
 
         private void OnDestroy()
@@ -81,6 +86,17 @@ namespace Game.Entity
             GameEvents.OnLightFlashed -= HandleLightFlashed;
             GameEvents.OnMinigameFailed -= HandleMinigameFailed;
             GameEvents.OnMinigameCompleted -= HandleMinigameCompleted;
+        }
+
+        private void SetUpAiLevel(EntityAILevel ai)
+        {
+            _baseMoveInterval = ai.BaseMoveInterval;
+            _baseMoveChance = ai.BaseMoveChange;
+            _moveChancePerMinigame = ai.MoveChancePerMinigamge;
+            _minMoveInterval = ai.MinMoveInterval;
+            _moveChanceCap = ai.MoveChangeCap;
+            _baseInsuranceTime = ai.BaseInsuranceTime;
+            _insuranceTimeStep = ai.InsuranceTimeStep;
         }
         #endregion
 

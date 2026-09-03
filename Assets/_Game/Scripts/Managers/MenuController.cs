@@ -1,6 +1,7 @@
 using DG.Tweening;
 using Game.Effect;
 using Game.Managers;
+using Game.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +13,7 @@ namespace Game.Menu
         [SerializeField] private CanvasGroup _menuCanvasGroup;
         [SerializeField] private GameObject _settingsPanel;
         [SerializeField] private GameObject _tutorialPanel;
+        [SerializeField] private SettingsController _settingController;
 
         [Header("Cinematic Elements")]
         [SerializeField] private Transform _cameraTransform;
@@ -31,6 +33,7 @@ namespace Game.Menu
         {
             _settingsPanel?.SetActive(false);
             _tutorialPanel?.SetActive(false);
+            _settingController.WarmUp();
             SetShadow(false, 0.4f);
         }
 
