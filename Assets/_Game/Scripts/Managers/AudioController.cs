@@ -17,10 +17,10 @@ public class AudioController : MonoSingleton<AudioController>
     [SerializeField] private string _masterVolumeParam = "MasterVolume";
 
     [FormerlySerializedAs("bgmVolumeParam")]
-    [SerializeField] private string _bgmVolumeParam = "BGMVolume";
+    [SerializeField] private string _bgmVolumeParam = "BGM_Volume";
 
     [FormerlySerializedAs("sfxVolumeParam")]
-    [SerializeField] private string _sfxVolumeParam = "SFXVolume";
+    [SerializeField] private string _sfxVolumeParam = "SFX_Volume";
 
     [SerializeField] private AudioSource _bgmSource;
     [SerializeField] private List<AudioSource> _sfxSource;
